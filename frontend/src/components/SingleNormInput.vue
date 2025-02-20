@@ -170,6 +170,7 @@ onMounted(async () => {
         />
       </InputField>
       <button
+        v-if="showSingleNormInput"
         aria-label="Einzelnorm löschen"
         class="mt-[25px] h-[50px] text-blue-800 focus:shadow-[inset_0_0_0_0.25rem] focus:shadow-blue-800 focus:outline-none"
         tabindex="0"

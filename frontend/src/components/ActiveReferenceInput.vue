@@ -305,6 +305,10 @@ watch(
           <div>
             <div class="flex gap-24">
               <TextButton
+                v-if="
+                  activeReference.referenceDocumentType !==
+                  ActiveReferenceDocumentType.ADMINISTRATIVE_REGULATION
+                "
                 aria-label="Weitere Einzelnorm"
                 button-type="tertiary"
                 :icon="IconAdd"
