@@ -1,0 +1,6 @@
+pre-commit:
+  parallel: true
+  scripts:
+    "trivy-secrets.sh":
+      runner: sh
+      tags: security
