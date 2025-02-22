@@ -1,6 +1,6 @@
 import type { FailedValidationServerResponse, ServiceResponse } from './httpClient'
 import type { Page } from '@/components/Pagination.vue'
-import DocumentUnit from '@/domain/documentUnit'
+import DocumentUnitDeprecatedClass, { type DocumentUnit } from '@/domain/documentUnit'
 import ActiveCitation from '@/domain/activeCitation'
 import RelatedDocumentation from '@/domain/relatedDocumentation'
 import errorMessages from '@/i18n/errors.json'
@@ -22,14 +22,6 @@ interface DocumentUnitService {
   ): Promise<ServiceResponse<Page<RelatedDocumentation>>>
 }
 
-const mapDocumentationUnit = (data: DocumentUnitResponse): DocumentUnit => {
-  return new DocumentUnit({
-    ...data.json,
-    id: data.id,
-    documentNumber: data.documentNumber,
-  })
-}
-
 const service: DocumentUnitService = {
   async getByDocumentNumber(documentNumber: string) {
     const response = await httpClient.get<DocumentUnitResponse>(
@@ -43,8 +35,6 @@ const service: DocumentUnitService = {
             ? errorMessages.DOCUMENT_UNIT_NOT_ALLOWED.title
             : errorMessages.DOCUMENT_UNIT_COULD_NOT_BE_LOADED.title,
       }
-    } else {
-      response.data.json = mapDocumentationUnit(response.data)
     }
     return response
   },
@@ -67,9 +57,9 @@ const service: DocumentUnitService = {
     return response
   },
 
-  async update(documentUnit: DocumentUnit) {
+  async update(documentUnit: DocumentUnitDeprecatedClass) {
     const response = await httpClient.put<
-      DocumentUnit,
+      DocumentUnitDeprecatedClass,
       DocumentUnitResponse | FailedValidationServerResponse
     >(
       `documentation-units/${documentUnit.documentNumber}`,
@@ -83,8 +73,6 @@ const service: DocumentUnitService = {
     )
 
     if (response.status == 200) {
-      const data = response.data as DocumentUnitResponse
-      data.json = mapDocumentationUnit(data)
     } else if (response.status >= 300) {
       response.error = {
         title:

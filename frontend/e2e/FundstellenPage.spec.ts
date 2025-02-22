@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import DocumentUnit from '../src/domain/documentUnit.js'
+import { type DocumentUnit } from '../src/domain/documentUnit.js'
 import Reference from '../src/domain/reference.js'
 import LegalPeriodical from '../src/domain/legalPeriodical.js'
 
@@ -120,12 +120,12 @@ test.describe('FundstellenPageSaveAndLoad', () => {
       })
       // Mock the GET request
       await page.route('/api/documentation-units/KSNR054920707', async (route) => {
-        const documentUnit = new DocumentUnit({
+        const documentUnit: DocumentUnit = {
           id: '8de5e4a0-6b67-4d65-98db-efe877a260c4',
           documentNumber: 'KSNR054920707',
           references: [],
           fieldsOfLaw: [],
-        })
+        }
         const json = {
           documentNumber: 'KSNR054920707',
           id: '8de5e4a0-6b67-4d65-98db-efe877a260c4',
@@ -154,12 +154,12 @@ test.describe('FundstellenPageSaveAndLoad', () => {
           legalPeriodicalRawValue: 'AA',
           legalPeriodical: legalPeriodical,
         })
-        const documentUnit = new DocumentUnit({
+        const documentUnit: DocumentUnit = {
           id: '8de5e4a0-6b67-4d65-98db-efe877a260c4',
           documentNumber: 'KSNR054920707',
           references: [reference],
           fieldsOfLaw: [],
-        })
+        }
         const json = {
           documentNumber: 'KSNR054920707',
           id: '8de5e4a0-6b67-4d65-98db-efe877a260c4',

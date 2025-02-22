@@ -7,10 +7,10 @@ import FlexContainer from '@/components/FlexContainer.vue'
 import NavbarSide from '@/components/NavbarSide.vue'
 import ErrorPage from '@/components/PageError.vue'
 import SideToggle from '@/components/SideToggle.vue'
-import DocumentUnit from '@/domain/documentUnit'
 import { type ResponseError } from '@/services/httpClient'
 import { useDocumentUnitStore } from '@/stores/documentUnitStore'
 import { useAdmVwvMenuItems } from '@/composables/useAdmVwvMenuItems'
+import type { DocumentUnit } from '@/domain/documentUnit'
 
 const props = defineProps<{
   documentNumber: string
@@ -19,7 +19,7 @@ const props = defineProps<{
 const store = useDocumentUnitStore()
 
 const { documentUnit } = storeToRefs(store) as {
-  documentUnit: Ref<DocumentUnit | undefined>
+  documentUnit: Ref<DocumentUnit>
 }
 
 const route = useRoute()
