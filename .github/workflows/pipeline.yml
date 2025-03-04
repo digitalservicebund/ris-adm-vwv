@@ -120,6 +120,29 @@ jobs:
     uses: ./.github/workflows/frontend-push-reports-to-ris-reports.yml
     secrets: inherit
 
+  #######################################
+  # Automerge if dependabot branch and all tests passing
+  #######################################
+
+  dependabot:
+    runs-on: ubuntu-latest
+    if: github.actor == 'dependabot[bot]' && ${{ !cancelled() && github.ref != 'refs/heads/main' }}
+    needs:
+      - frontend-checks
+      - backend-checks
+    steps:
+      - name: Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@d7267f607e9d3fb96fc2fbe83e0af444713e90b7
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+      - name: Auto-merge Dependabot PRs except major version updates
+        if: steps.metadata.outputs.update-type != 'version-update:semver-major'
+        run: gh pr merge --auto --merge "$PR_URL"
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
   #################
   # Deployment jobs
   #################
