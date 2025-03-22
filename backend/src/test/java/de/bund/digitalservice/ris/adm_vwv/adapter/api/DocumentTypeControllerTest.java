@@ -37,7 +37,7 @@ class DocumentTypeControllerTest {
     // given
     String searchQuery = "verwaltungs";
     given(
-      lookupTablesPort.findBySearchQuery(
+      lookupTablesPort.findDocumentTypes(
         new DocumentTypeQuery(searchQuery, new PageQuery(0, 2, "name", Sort.Direction.ASC, true))
       )
     ).willReturn(

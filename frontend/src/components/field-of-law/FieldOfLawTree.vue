@@ -33,6 +33,7 @@ async function expandNode(node: FieldOfLaw) {
   const itemsToReturn = new Map<string, FieldOfLaw>()
   if (props.nodeOfInterest) {
     itemsToReturn.set(node.identifier, node)
+    console.log('ancestors')
     const response = await nodeHelper.value.getAncestors(props.nodeOfInterest.identifier)
     for (const node of response) {
       itemsToReturn.set(node.identifier, node)
@@ -48,6 +49,7 @@ async function expandNodesUpTo(node: FieldOfLaw) {
   if (node.identifier == 'root') {
     itemsToReturn.set(node.identifier, node)
     for (const selected of props.modelValue) {
+      console.log('selected: ', selected)
       const response = await nodeHelper.value.getAncestors(selected.identifier)
       for (const node of response) {
         itemsToReturn.set(node.identifier, node)

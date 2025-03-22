@@ -1,18 +1,7 @@
-import type { ServiceResponse } from './httpClient'
+import httpClient, { type ServiceResponse } from './httpClient'
 import type { Page } from '@/components/Pagination.vue'
 import type { FieldOfLaw } from '@/domain/fieldOfLaw'
-import fieldsOfLawMocking from './fieldsOfLaw.json'
-
-const content: FieldOfLaw[] = fieldsOfLawMocking.map((fieldOfLaw) => {
-  return {
-    identifier: fieldOfLaw.identifier,
-    text: fieldOfLaw.text,
-    linkedFields: fieldOfLaw.linkedFields,
-    norms: [],
-    children: [],
-    hasChildren: fieldOfLaw.text == 'Arbeitsrecht',
-  }
-})
+import errorMessages from '@/i18n/errors.json'
 
 interface FieldOfLawService {
   getChildrenOf(identifier: string): Promise<ServiceResponse<FieldOfLaw[]>>
@@ -28,52 +17,33 @@ interface FieldOfLawService {
 
 const service: FieldOfLawService = {
   async getChildrenOf(identifier: string) {
-    console.log(identifier)
-
-    if (identifier != 'root')
-      return {
-        status: 200,
-        data: [
-          {
-            hasChildren: false,
-            identifier: 'AR-01',
-            text: 'Arbeitsvertrag: Abschluss, Klauseln, Arten, Betriebsübergang',
-            linkedFields: [],
-            norms: [
-              {
-                abbreviation: 'BGB',
-                singleNormDescription: '§ 611a',
-              },
-              {
-                abbreviation: 'GewO',
-                singleNormDescription: '§ 105',
-              },
-            ],
-            children: [],
-            parent: {
-              hasChildren: true,
-              identifier: 'AR',
-              text: 'Arbeitsrecht',
-              linkedFields: [],
-              norms: [],
-              children: [],
-              parent: undefined,
-            },
-          },
-        ],
+    const response = await httpClient.get<{ fieldsOfLaw: FieldOfLaw[] }>(
+      `lookup-tables/fields-of-law/${identifier}/children`,
+    )
+    if (response.status >= 300) {
+      response.error = {
+        title: errorMessages.FIELDS_OF_LAW_COULD_NOT_BE_LOADED.title.replace(
+          '${identifier}',
+          identifier,
+        ),
       }
+    }
+
+    if (response.error) return response
 
     return {
-      status: 200,
-      data: content,
+      status: response.status,
+      data: response.data?.fieldsOfLaw,
     }
   },
   async getTreeForIdentifier(identifier: string) {
-    console.log(identifier)
-    return {
-      status: 200,
-      data: content[0],
+    const response = await httpClient.get<FieldOfLaw>(`lookup-tables/fields-of-law/${identifier}`)
+    if (response.status >= 300) {
+      response.error = {
+        title: errorMessages.FIELD_OF_LAW_COULD_NOT_BE_LOADED.title,
+      }
     }
+    return response
   },
   async searchForFieldsOfLaw(
     page: number,
@@ -82,19 +52,15 @@ const service: FieldOfLawService = {
     identifier?: string,
     norm?: string,
   ) {
-    console.log(page, size, query, identifier, norm)
-    return {
-      status: 200,
-      data: {
-        content,
-        size: 0,
-        number: 0,
-        numberOfElements: 20,
-        first: true,
-        last: false,
-        empty: false,
-      },
+    const response = await httpClient.get<Page<FieldOfLaw>>(
+      `lookup-tables/fields-of-law?page=${page}&size=${size}&identifier=${identifier}&text=${query}&norm=${norm}`,
+    )
+    if (response.status >= 300) {
+      response.error = {
+        title: errorMessages.FIELD_OF_LAW_SEARCH_FAILED.title,
+      }
     }
+    return response
   },
 }
 

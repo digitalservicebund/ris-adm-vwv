@@ -70,8 +70,10 @@ watch(
   props,
   async () => {
     if (props.nodeOfInterest && props.isRoot) {
+      console.log('node with nodeOfInterest: ', props.node.identifier)
       children.value = await props.nodeHelper.getFilteredChildren(props.node, props.expandValues)
     } else if (props.isRoot) {
+      console.log('node: ', props.node.identifier)
       children.value = await props.nodeHelper.getChildren(props.node)
     }
   },

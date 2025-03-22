@@ -28,7 +28,7 @@ public class DocumentTypeController {
     @RequestParam(defaultValue = "true") boolean paged
   ) {
     PageQuery pageQuery = new PageQuery(page, size, sortBy, sortDirection, paged);
-    Page<DocumentType> resultPage = lookupTablesPort.findBySearchQuery(
+    Page<DocumentType> resultPage = lookupTablesPort.findDocumentTypes(
       new DocumentTypeQuery(searchQuery, pageQuery)
     );
     return ResponseEntity.ok(new DocumentTypeResponse(resultPage.getContent(), resultPage));
