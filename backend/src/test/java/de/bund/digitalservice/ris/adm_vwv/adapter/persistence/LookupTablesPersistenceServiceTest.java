@@ -7,7 +7,7 @@ import static org.mockito.BDDMockito.given;
 
 import de.bund.digitalservice.ris.adm_vwv.application.DocumentType;
 import de.bund.digitalservice.ris.adm_vwv.application.DocumentTypeQuery;
-import de.bund.digitalservice.ris.adm_vwv.application.PageQuery;
+import de.bund.digitalservice.ris.adm_vwv.application.PaginationDetails;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -39,7 +39,7 @@ class LookupTablesPersistenceServiceTest {
 
     // when
     Page<DocumentType> documentTypes = lookupTablesPersistenceService.findBySearchQuery(
-      new DocumentTypeQuery(null, new PageQuery(0, 10, "name", Sort.Direction.ASC, true))
+      new DocumentTypeQuery(null, new PaginationDetails(0, 10, "name", Sort.Direction.ASC, true))
     );
 
     // then
@@ -62,7 +62,10 @@ class LookupTablesPersistenceServiceTest {
 
     // when
     Page<DocumentType> documentTypes = lookupTablesPersistenceService.findBySearchQuery(
-      new DocumentTypeQuery("something", new PageQuery(0, 10, "name", Sort.Direction.ASC, true))
+      new DocumentTypeQuery(
+        "something",
+        new PaginationDetails(0, 10, "name", Sort.Direction.ASC, true)
+      )
     );
 
     // then

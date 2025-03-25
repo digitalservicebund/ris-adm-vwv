@@ -7,7 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import de.bund.digitalservice.ris.adm_vwv.application.DocumentType;
 import de.bund.digitalservice.ris.adm_vwv.application.DocumentTypeQuery;
 import de.bund.digitalservice.ris.adm_vwv.application.LookupTablesPort;
-import de.bund.digitalservice.ris.adm_vwv.application.PageQuery;
+import de.bund.digitalservice.ris.adm_vwv.application.PaginationDetails;
 import de.bund.digitalservice.ris.adm_vwv.config.SecurityConfiguration;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -35,10 +35,13 @@ class DocumentTypeControllerTest {
   @DisplayName("GET returns HTTP 200 and a JSON with two documentTypes with abbreviation and name")
   void getDocumentTypes() throws Exception {
     // given
-    String searchQuery = "verwaltungs";
+    String searchTerm = "verwaltungs";
     given(
-      lookupTablesPort.findBySearchQuery(
-        new DocumentTypeQuery(searchQuery, new PageQuery(0, 2, "name", Sort.Direction.ASC, true))
+      lookupTablesPort.findBySearchTerm(
+        new DocumentTypeQuery(
+          searchTerm,
+          new PaginationDetails(0, 2, "name", Sort.Direction.ASC, true)
+        )
       )
     ).willReturn(
       new PageImpl<>(
@@ -53,7 +56,7 @@ class DocumentTypeControllerTest {
     mockMvc
       .perform(
         get("/api/lookup-tables/document-types")
-          .param("searchQuery", searchQuery)
+          .param("searchQuery", searchTerm)
           .param("size", "2")
       )
       // then

@@ -15,7 +15,7 @@ public class LookupTablesService implements LookupTablesPort {
   private final LookupTablesPersistencePort lookupTablesPersistencePort;
 
   @Override
-  public Page<DocumentType> findBySearchQuery(@Nonnull DocumentTypeQuery query) {
+  public Page<DocumentType> findBySearchTerm(@Nonnull DocumentTypeQuery query) {
     return lookupTablesPersistencePort.findBySearchQuery(query);
   }
 }

@@ -3,7 +3,7 @@ package de.bund.digitalservice.ris.adm_vwv.adapter.api;
 import de.bund.digitalservice.ris.adm_vwv.application.DocumentType;
 import de.bund.digitalservice.ris.adm_vwv.application.DocumentTypeQuery;
 import de.bund.digitalservice.ris.adm_vwv.application.LookupTablesPort;
-import de.bund.digitalservice.ris.adm_vwv.application.PageQuery;
+import de.bund.digitalservice.ris.adm_vwv.application.PaginationDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
@@ -24,27 +24,33 @@ public class DocumentTypeController {
   /**
    * Return document types (optionally with search term, pagination, sorting)
    *
-   * @param searchQuery Keyword to restrict results to.
-   * @param page Which page of pagination to return?
-   * @param size How many elements per page in pagination?
-   * @param sortBy Sort by what property?
+   * @param searchTerm Keyword to restrict results to.
+   * @param paginationPageNumber Which page of pagination to return?
+   * @param paginationPageSize How many elements per page in pagination?
+   * @param sortByProperty Sort by what property?
    * @param sortDirection Sort ascending or descending?
-   * @param paged Search with pagination?
+   * @param usePagination Search with pagination?
    *
    * @return Response object with list of DocumentTypes and pagination information
    */
   @GetMapping("api/lookup-tables/document-types")
   public ResponseEntity<DocumentTypeResponse> getDocumentTypes(
-    @RequestParam(required = false) String searchQuery,
-    @RequestParam(defaultValue = "0") int page,
-    @RequestParam(defaultValue = "4") int size,
-    @RequestParam(defaultValue = "name") String sortBy,
+    @RequestParam(required = false) String searchTerm,
+    @RequestParam(defaultValue = "0") int paginationPageNumber,
+    @RequestParam(defaultValue = "4") int paginationPageSize,
+    @RequestParam(defaultValue = "name") String sortByProperty,
     @RequestParam(defaultValue = "ASC") Sort.Direction sortDirection,
-    @RequestParam(defaultValue = "true") boolean paged
+    @RequestParam(defaultValue = "true") boolean usePagination
   ) {
-    PageQuery pageQuery = new PageQuery(page, size, sortBy, sortDirection, paged);
-    Page<DocumentType> resultPage = lookupTablesPort.findBySearchQuery(
-      new DocumentTypeQuery(searchQuery, pageQuery)
+    PaginationDetails paginationDetails = new PaginationDetails(
+      paginationPageNumber,
+      paginationPageSize,
+      sortByProperty,
+      sortDirection,
+      usePagination
+    );
+    Page<DocumentType> resultPage = lookupTablesPort.findBySearchTerm(
+      new DocumentTypeQuery(searchTerm, paginationDetails)
     );
     return ResponseEntity.ok(new DocumentTypeResponse(resultPage.getContent(), resultPage));
   }
