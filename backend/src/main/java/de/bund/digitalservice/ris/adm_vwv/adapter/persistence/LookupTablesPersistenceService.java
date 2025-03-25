@@ -3,7 +3,7 @@ package de.bund.digitalservice.ris.adm_vwv.adapter.persistence;
 import de.bund.digitalservice.ris.adm_vwv.application.DocumentType;
 import de.bund.digitalservice.ris.adm_vwv.application.DocumentTypeQuery;
 import de.bund.digitalservice.ris.adm_vwv.application.LookupTablesPersistencePort;
-import de.bund.digitalservice.ris.adm_vwv.application.PageQuery;
+import de.bund.digitalservice.ris.adm_vwv.application.PaginationDetails;
 import javax.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,17 +23,17 @@ public class LookupTablesPersistenceService implements LookupTablesPersistencePo
 
   @Override
   public Page<DocumentType> findBySearchQuery(@Nonnull DocumentTypeQuery query) {
-    PageQuery pageQuery = query.pageQuery();
-    String searchQuery = query.searchQuery();
-    Sort sort = Sort.by(pageQuery.sortDirection(), pageQuery.sortBy());
-    Pageable pageable = pageQuery.paged()
-      ? PageRequest.of(pageQuery.page(), pageQuery.size(), sort)
+    PaginationDetails paginationDetails = query.paginationDetails();
+    String searchTerm = query.searchTerm();
+    Sort sort = Sort.by(paginationDetails.sortDirection(), paginationDetails.sortByProperty());
+    Pageable pageable = paginationDetails.usePagination()
+      ? PageRequest.of(paginationDetails.paginationPageNumber(), paginationDetails.paginationPageSize(), sort)
       : Pageable.unpaged(sort);
-    Page<DocumentTypeEntity> documentTypes = StringUtils.isBlank(searchQuery)
+    Page<DocumentTypeEntity> documentTypes = StringUtils.isBlank(searchTerm)
       ? documentTypesRepository.findAll(pageable)
       : documentTypesRepository.findByAbbreviationContainingIgnoreCaseOrNameContainingIgnoreCase(
-        searchQuery,
-        searchQuery,
+        searchTerm,
+        searchTerm,
         pageable
       );
 

@@ -7,5 +7,5 @@ import org.springframework.data.domain.Page;
  * Input port for document types.
  */
 public interface LookupTablesPort {
-  Page<DocumentType> findBySearchQuery(@Nonnull DocumentTypeQuery query);
+  Page<DocumentType> findBySearchTerm(@Nonnull DocumentTypeQuery query);
 }
