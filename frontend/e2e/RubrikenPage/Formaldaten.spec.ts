@@ -251,4 +251,30 @@ test.describe('RubrikenPage - Formatdaten', () => {
       await expect(zitierdatumElement).toHaveValue('15.01.2025')
     },
   )
+
+  test(
+    'Zitierdatum: incomplete date can be entered and persists through a reload',
+    { tag: ['@RISDEV-6296'] },
+    async ({ page }) => {
+      // given
+      await page.goto('/')
+      await page.getByText('Neue Dokumentationseinheit').click()
+      await page.waitForURL(/documentUnit/)
+      await page.getByText('Rubriken').click()
+
+      const zitierdatumElement = page.getByText('Zitierdatum')
+      await expect(zitierdatumElement).toHaveCount(1)
+
+      // when
+      await zitierdatumElement.fill('20')
+      // then
+      await expect(zitierdatumElement).toHaveValue('20')
+
+      // when
+      await page.getByRole('button', { name: 'Speichern', exact: true }).click()
+      await page.reload()
+      // then
+      await expect(zitierdatumElement).toHaveValue('20')
+    },
+  )
 })
