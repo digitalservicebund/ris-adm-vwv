@@ -26,7 +26,7 @@
     "@braintree/sanitize-url": "^7.1.1",
     "@digitalservice4germany/angie": "^2.0.1",
     "@digitalservice4germany/style-dictionary": "^2.0.0",
-    "@digitalservicebund/ris-ui": "^2.0.0",
+    "@digitalservicebund/ris-ui": "^3.3.0",
     "@guardian/prosemirror-invisibles": "^3.1.1",
     "@iconify-json/ic": "^1.2.2",
     "@iconify-json/material-symbols": "^1.2.17",
