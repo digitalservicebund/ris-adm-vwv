@@ -37,7 +37,7 @@ function renderComponent() {
   }
 }
 
-describe.skip('FieldsOfLaw', () => {
+describe('FieldsOfLaw', () => {
   const getChildrenOfRoot = () =>
     Promise.resolve({
       status: 200,
