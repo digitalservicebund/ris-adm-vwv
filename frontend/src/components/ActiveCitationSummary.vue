@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import ToolTip from './ToolTip.vue'
 import DocumentationUnitSummary from '@/components/DocumentationUnitSummary.vue'
-import TextButton from '@/components/input/TextButton.vue'
+import Button from 'primevue/button'
 import ActiveCitation from '@/domain/activeCitation'
 import IconBaselineContentCopy from '~icons/ic/baseline-content-copy'
 
@@ -21,16 +21,17 @@ async function copySummary() {
     <!-- Button group -->
     <div class="flex flex-row -space-x-2">
       <ToolTip text="Kopieren">
-        <TextButton
+        <Button
           id="category-import"
           aria-label="Rubriken-Import anzeigen"
-          button-type="ghost"
           data-testid="copy-summary"
-          :icon="IconBaselineContentCopy"
           size="small"
+          text
           @click="copySummary"
           @keypress.enter="copySummary"
-        />
+        >
+          <template #icon> <IconBaselineContentCopy /> </template>
+        </Button>
       </ToolTip>
     </div>
   </div>

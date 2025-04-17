@@ -2,7 +2,7 @@
 import type { Component, ComponentPublicInstance, Ref } from 'vue'
 import { computed, nextTick, ref, watch } from 'vue'
 import DefaultSummary from '@/components/DefaultSummary.vue'
-import TextButton from '@/components/input/TextButton.vue'
+import Button from 'primevue/button'
 import IconArrowDown from '~icons/ic/baseline-keyboard-arrow-down'
 import IconAdd from '~icons/material-symbols/add'
 import type EditableListItem from '@/domain/editableListItem'
@@ -246,15 +246,16 @@ watch(
       />
     </div>
 
-    <TextButton
+    <Button
       v-if="!editEntry"
-      aria-label="Weitere Angabe"
-      button-type="tertiary"
       class="my-24 first:mt-0"
-      :icon="IconAdd"
+      aria-label="Weitere Angabe"
+      severity="secondary"
       label="Weitere Angabe"
       size="small"
       @click="toggleDisplayDefaultValue(true)"
-    />
+    >
+      <template #icon><IconAdd /></template>
+    </Button>
   </div>
 </template>

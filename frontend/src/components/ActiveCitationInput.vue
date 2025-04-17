@@ -5,7 +5,7 @@ import SearchResultList, { type SearchResults } from './SearchResultList.vue'
 import ComboboxInput from '@/components/ComboboxInput.vue'
 import DateInput from '@/components/input/DateInput.vue'
 import InputField from '@/components/input/InputField.vue'
-import TextButton from '@/components/input/TextButton.vue'
+import Button from 'primevue/button'
 import TextInput from '@/components/input/TextInput.vue'
 import Pagination, { type Page } from '@/components/Pagination.vue'
 import { useValidationStore } from '@/composables/useValidationStore'
@@ -268,38 +268,37 @@ onMounted(() => {
     <div class="flex w-full flex-row justify-between">
       <div>
         <div class="flex gap-16">
-          <TextButton
+          <Button
             v-if="!activeCitation.hasForeignSource"
             aria-label="Nach Entscheidung suchen"
-            button-type="primary"
             label="Suchen"
             size="small"
             @click="search"
           />
-          <TextButton
-            aria-label="Aktivzitierung speichern"
-            button-type="tertiary"
+          <Button
             :disabled="activeCitation.isEmpty"
             label="Übernehmen"
             size="small"
+            aria-label="Aktivzitierung speichern"
+            severity="secondary"
             @click.stop="addActiveCitation"
           />
-          <TextButton
+          <Button
             v-if="!lastSavedModelValue.isEmpty"
             aria-label="Abbrechen"
-            button-type="ghost"
             label="Abbrechen"
             size="small"
+            text
             @click.stop="emit('cancelEdit')"
           />
         </div>
       </div>
-      <TextButton
+      <Button
         v-if="!lastSavedModelValue.isEmpty"
         aria-label="Eintrag löschen"
-        button-type="destructive"
         label="Eintrag löschen"
         size="small"
+        severity="danger"
         @click.stop="emit('removeEntry', true)"
       />
     </div>

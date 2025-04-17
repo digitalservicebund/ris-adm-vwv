@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import TextButton from '@/components/input/TextButton.vue'
+import Button from 'primevue/button'
 import { computed } from 'vue'
 import IconAdd from '~icons/material-symbols/add'
 
@@ -34,24 +34,25 @@ const buttonLabel = computed(() =>
         </li>
       </ul>
     </div>
-    <TextButton
+    <Button
       v-if="chips.length > 0"
       :aria-label="buttonLabel"
-      button-type="tertiary"
       class="self-start"
       :label="buttonLabel"
       size="small"
+      severity="secondary"
       @click.stop="emit('toggle')"
     />
-    <TextButton
+    <Button
       v-else
       :aria-label="buttonLabel"
-      button-type="tertiary"
       class="self-start"
       :label="buttonLabel"
       size="small"
-      :icon="IconAdd"
+      severity="secondary"
       @click.stop="emit('toggle')"
-    />
+    >
+      <template #icon> <IconAdd /> </template>
+    </Button>
   </div>
 </template>

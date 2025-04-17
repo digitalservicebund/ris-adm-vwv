@@ -4,7 +4,7 @@ import { DocumentUnitCategoriesEnum } from '@/components/enumDocumentUnitCategor
 import FieldOfLawSummary from '@/components/field-of-law/FieldOfLawSummary.vue'
 import InputField, { LabelPosition } from '@/components/input/InputField.vue'
 import RadioInput from '@/components/input/RadioInput.vue'
-import TextButton from '@/components/input/TextButton.vue'
+import Button from 'primevue/button'
 import { type FieldOfLaw } from '@/domain/fieldOfLaw'
 import IconAdd from '~icons/ic/baseline-add'
 
@@ -122,26 +122,27 @@ export enum InputMethod {
         </div>
 
         <div class="flex flex-row gap-8">
-          <TextButton
+          <Button
             v-if="isResetButtonVisible && inputMethod === InputMethod.SEARCH"
-            button-type="tertiary"
             label="Suche zurücksetzen"
             size="small"
+            severity="secondary"
             @click="emit('resetSearch')"
           />
-          <TextButton button-type="primary" label="Fertig" size="small" @click="exitEditMode" />
+          <Button label="Fertig" size="small" @click="exitEditMode" />
         </div>
       </div>
       <slot />
     </div>
 
-    <TextButton
+    <Button
       v-else
-      button-type="tertiary"
-      :icon="IconAdd"
       :label="expandButtonLabel"
+      severity="secondary"
       size="small"
       @click="enterEditMode"
-    />
+    >
+      <template #icon> <IconAdd /> </template>
+    </Button>
   </div>
 </template>

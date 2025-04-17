@@ -3,7 +3,7 @@ import { computed, ref, watch } from 'vue'
 import { type ValidationError } from './input/types'
 import ComboboxInput from '@/components/ComboboxInput.vue'
 import InputField, { LabelPosition } from '@/components/input/InputField.vue'
-import TextButton from '@/components/input/TextButton.vue'
+import Button from 'primevue/button'
 import SingleNormInput from '@/components/SingleNormInput.vue'
 import { useValidationStore } from '@/composables/useValidationStore'
 import LegalForce from '@/domain/legalForce'
@@ -318,40 +318,40 @@ watch(
         <div class="flex w-full flex-row justify-between">
           <div>
             <div class="flex gap-24">
-              <TextButton
+              <Button
                 v-if="
                   activeReference.referenceDocumentType !==
                   ActiveReferenceDocumentType.ADMINISTRATIVE_REGULATION
                 "
                 aria-label="Weitere Einzelnorm"
-                button-type="tertiary"
-                :icon="IconAdd"
+                severity="secondary"
                 label="Weitere Einzelnorm"
                 size="small"
                 @click.stop="addSingleNormEntry"
-              />
-              <TextButton
+              >
+                <template #icon><IconAdd /></template>
+              </Button>
+              <Button
                 aria-label="Verweis speichern"
-                button-type="primary"
                 label="Übernehmen"
                 size="small"
                 @click.stop="addNormReference"
               />
-              <TextButton
+              <Button
                 aria-label="Abbrechen"
-                button-type="ghost"
                 label="Abbrechen"
                 size="small"
+                text
                 @click.stop="cancelEdit"
               />
             </div>
           </div>
-          <TextButton
+          <Button
             v-if="!lastSavedModelValue.isEmpty"
             aria-label="Eintrag löschen"
-            button-type="destructive"
             label="Eintrag löschen"
             size="small"
+            severity="danger"
             @click.stop="removeNormReference"
           />
         </div>

@@ -2,7 +2,7 @@
 import { ref, toRaw } from 'vue'
 import IconBadge from '@/components/IconBadge.vue'
 import { useSaveToRemote } from '@/composables/useSaveToRemote'
-import TextButton from '@/components/input/TextButton.vue'
+import Button from 'primevue/button'
 import { useStatusBadge } from '@/composables/useStatusBadge'
 import { PublicationState } from '@/domain/publicationStatus'
 // import IconError from "~icons/ic/baseline-error"
@@ -74,7 +74,7 @@ const getErrorDetails = () => (lastSaveError.value?.title ? ': ' + lastSaveError
         <span>{{ formattedLastSavedOn }}</span>
         Uhr
       </p>
-      <TextButton data-testid="save-button" label="Speichern" size="small" @click="triggerSave" />
+      <Button data-testid="save-button" label="Speichern" size="small" @click="triggerSave" />
     </div>
   </div>
 </template>

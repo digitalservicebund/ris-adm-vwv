@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
-import TextButton from '@/components/input/TextButton.vue'
+import Button from 'primevue/button'
 import IconAdd from '~icons/material-symbols/add'
 
 const props = defineProps<{
@@ -34,16 +34,17 @@ watch(
 </script>
 
 <template>
-  <TextButton
+  <Button
     v-if="shouldShowButton"
-    button-type="tertiary"
     :class="classes"
-    data-testid="category-wrapper-button"
-    :icon="IconAdd"
     :label="label"
     size="small"
+    severity="secondary"
+    data-testid="category-wrapper-button"
     @click="toggle"
-  />
+  >
+    <template #icon><IconAdd /></template>
+  </Button>
   <div v-else data-testid="category-wrapper-component">
     <slot :reset="toggle" />
   </div>

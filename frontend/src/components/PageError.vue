@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import TextButton from '@/components/input/TextButton.vue'
+import Button from 'primevue/button'
+
 const router = useRouter()
 
 interface Props {
@@ -28,7 +29,7 @@ const props = withDefaults(defineProps<Props>(), {
       <strong>Haben Sie die Internetadresse kopiert?</strong><br />
       Überprüfen Sie, ob Sie die gesamte Adresse kopiert haben.
     </p>
-    <TextButton
+    <Button
       :aria-label="backButtonLabel"
       class="w-auto"
       :label="backButtonLabel"
