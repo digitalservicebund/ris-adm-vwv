@@ -252,7 +252,7 @@ export type InputModelProps =
 <template>
   <div ref="dropdownContainerRef" class="relative w-full">
     <div
-      class="space-between flex h-48 flex-row whitespace-nowrap bg-white px-16 py-12 shadow-button shadow-blue-800"
+      class="space-between shadow-blue flex h-48 flex-row bg-white px-16 py-12 whitespace-nowrap"
       :class="conditionalClasses"
     >
       <input
@@ -261,7 +261,7 @@ export type InputModelProps =
         v-model="inputText"
         :aria-label="ariaLabel"
         autocomplete="off"
-        class="w-full bg-transparent placeholder:font-font-family-sans placeholder:not-italic placeholder:text-gray-800 focus:outline-none"
+        class="placeholder:font-font-family-sans w-full bg-transparent placeholder:text-gray-800 placeholder:not-italic focus:outline-none"
         :placeholder="placeholder"
         :readonly="readOnly"
         tabindex="0"
