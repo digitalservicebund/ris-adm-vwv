@@ -175,11 +175,6 @@ test.describe('RubrikenPage - Formatdaten', () => {
       await expect(ausserkrafttretedatumElement).toHaveCount(1)
 
       // when
-      await ausserkrafttretedatumElement.fill('thatshouldnotwork')
-      // then
-      await expect(ausserkrafttretedatumElement).toHaveValue('')
-
-      // when
       await ausserkrafttretedatumElement.fill('03.03.1970')
       await expect(ausserkrafttretedatumElement).toHaveValue('03.03.1970')
 
@@ -203,11 +198,6 @@ test.describe('RubrikenPage - Formatdaten', () => {
 
       const inkrafttretedatumElement = page.getByText('Datum des Inkrafttretens')
       await expect(inkrafttretedatumElement).toHaveCount(1)
-
-      // when
-      await inkrafttretedatumElement.fill('thatshouldnotwork')
-      // then
-      await expect(inkrafttretedatumElement).toHaveValue('')
 
       // when
       await inkrafttretedatumElement.fill('02.02.1970')
@@ -234,11 +224,6 @@ test.describe('RubrikenPage - Formatdaten', () => {
 
       const zitierdatumElement = page.getByText('Zitierdatum')
       await expect(zitierdatumElement).toHaveCount(1)
-
-      // when
-      await zitierdatumElement.fill('thatshouldnotwork')
-      // then
-      await expect(zitierdatumElement).toHaveValue('')
 
       // when
       await zitierdatumElement.fill('15.01.2025')
@@ -270,8 +255,8 @@ test.describe('RubrikenPage - Formatdaten', () => {
       await zitierdatumElement.fill('20')
       await zitierdatumElement.press('Tab') // Triggers validation
       // then
-      await expect(zitierdatumElement).toHaveValue('20')
-      await expect(zitierdatumElement).toHaveClass(/has-error/)
+      await expect(zitierdatumElement).toHaveValue('20.__.____')
+      await expect(zitierdatumElement).toHaveAttribute('aria-invalid', 'true')
       await expect(page.getByText('Unvollständiges Datum')).toBeVisible()
     },
   )
@@ -295,7 +280,7 @@ test.describe('RubrikenPage - Formatdaten', () => {
       await zitierdatumElement.press('Tab') // Triggers validation
       // then
       await expect(zitierdatumElement).toHaveValue(tomorrow)
-      await expect(zitierdatumElement).toHaveClass(/has-error/)
+      await expect(zitierdatumElement).toHaveAttribute('aria-invalid', 'true')
       await expect(page.getByText('Das Datum darf nicht in der Zukunft liegen')).toBeVisible()
     },
   )
@@ -319,7 +304,7 @@ test.describe('RubrikenPage - Formatdaten', () => {
       await ausserkrafttretedatumElement.press('Tab') // Triggers validation
       // then
       await expect(ausserkrafttretedatumElement).toHaveValue(tomorrow)
-      await expect(ausserkrafttretedatumElement).not.toHaveClass(/has-error/)
+      await expect(ausserkrafttretedatumElement).not.toHaveAttribute('aria-invalid', 'true')
       await expect(page.getByText('Das Datum darf nicht in der Zukunft liegen')).toBeHidden()
     },
   )

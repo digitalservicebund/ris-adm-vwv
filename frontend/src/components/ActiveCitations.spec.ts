@@ -9,6 +9,8 @@ import { onSearchShortcutDirective } from '@/utils/onSearchShortcutDirective'
 import { createTestingPinia } from '@pinia/testing'
 import { http, HttpResponse } from 'msw'
 import { setupServer } from 'msw/node'
+import { config } from '@vue/test-utils'
+import InputText from 'primevue/inputtext'
 
 const server = setupServer(
   http.get('/api/lookup-tables/document-types', () =>
@@ -93,8 +95,17 @@ function generateActiveCitation(options?: {
 }
 
 describe('active citations', () => {
-  beforeAll(() => server.listen())
-  afterAll(() => server.close())
+  beforeAll(() => {
+    server.listen()
+    config.global.stubs = {
+      InputMask: InputText,
+    }
+  })
+
+  afterAll(() => {
+    server.close()
+    config.global.stubs = {}
+  })
 
   it('renders empty active citation in edit mode, when no activeCitations in list', async () => {
     renderComponent()

@@ -1,6 +1,6 @@
 import { userEvent } from '@testing-library/user-event'
 import { render, screen } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import ActiveReferences from '@/components/ActiveReferences.vue'
 import { type NormAbbreviation } from '@/domain/normAbbreviation'
 import SingleNorm from '@/domain/singleNorm'
@@ -10,6 +10,8 @@ import ActiveReference, {
 } from '@/domain/activeReference.ts'
 import { createTestingPinia } from '@pinia/testing'
 import type { DocumentUnit } from '@/domain/documentUnit.ts'
+import InputText from 'primevue/inputtext'
+import { config } from '@vue/test-utils'
 
 function renderComponent(activeReferences?: ActiveReference[]) {
   const user = userEvent.setup()
@@ -56,6 +58,16 @@ function generateActiveReference(options?: {
 }
 
 describe('ActiveReferences', () => {
+  beforeAll(() => {
+    config.global.stubs = {
+      InputMask: InputText,
+    }
+  })
+
+  afterAll(() => {
+    config.global.stubs = {}
+  })
+
   it('renders empty active reference in edit mode, when no active references in list', async () => {
     renderComponent()
     expect((await screen.findAllByLabelText('Listen Eintrag')).length).toBe(1)

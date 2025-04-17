@@ -1,8 +1,10 @@
 import { userEvent } from '@testing-library/user-event'
 import { render, screen } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import NormReferenceInput from '@/components/NormReferenceInput.vue'
 import NormReference from '@/domain/normReference'
+import { config } from '@vue/test-utils'
+import InputText from 'primevue/inputtext'
 
 function renderComponent(options?: { modelValue?: NormReference }) {
   const user = userEvent.setup()
@@ -14,6 +16,16 @@ function renderComponent(options?: { modelValue?: NormReference }) {
 }
 
 describe('NormReferenceEntry', () => {
+  beforeAll(() => {
+    config.global.stubs = {
+      InputMask: InputText,
+    }
+  })
+
+  afterAll(() => {
+    config.global.stubs = {}
+  })
+
   it('render empty norm input group on initial load', async () => {
     renderComponent()
     expect(screen.getByLabelText('RIS-Abkürzung')).toBeInTheDocument()

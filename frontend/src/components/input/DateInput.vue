@@ -1,10 +1,9 @@
 <script lang="ts" setup>
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
-import { Mask } from 'maska'
-import { vMaska } from 'maska/vue'
 import { computed, onMounted, ref, watch } from 'vue'
 import type { ValidationError } from '@/components/input/types'
+import InputMask from 'primevue/inputmask'
 
 interface Props {
   id: string
@@ -25,10 +24,9 @@ const emit = defineEmits<{
   'update:validationError': [value?: ValidationError]
 }>()
 
-const mask = '##.##.####'
-const inputCompleted = computed(
-  () => inputValue.value && new Mask({ mask }).completed(inputValue.value),
-)
+const inputCompleted = computed(() => {
+  return !!inputValue.value && /^\d{2}\.\d{2}\.\d{4}$/.test(inputValue.value)
+})
 
 const inputValue = ref(props.modelValue ? dayjs(props.modelValue).format('DD.MM.YYYY') : undefined)
 
@@ -42,12 +40,6 @@ const isInPast = computed(() => {
   if (props.isFutureDate) return true
   return dayjs(inputValue.value, 'DD.MM.YYYY', true).isBefore(dayjs())
 })
-
-const conditionalClasses = computed(() => ({
-  'has-error': props.hasError,
-  'ds-input-medium': props.size === 'medium',
-  'ds-input-small': props.size === 'small',
-}))
 
 function validateInput() {
   if (inputCompleted.value) {
@@ -108,17 +100,19 @@ watch(inputValue, (is) => {
 </script>
 
 <template>
-  <input
+  <InputMask
     :id="id"
     v-model="inputValue"
-    v-maska="mask"
     :aria-label="ariaLabel"
-    class="ds-input"
-    :class="conditionalClasses"
+    :auto-clear="false"
     :disabled="disabled"
+    fluid
+    :invalid="hasError"
+    mask="99.99.9999"
     placeholder="TT.MM.JJJJ"
     :readonly="readOnly"
     @blur="onBlur"
+    @complete="validateInput"
     @focus="emit('update:validationError', undefined)"
     @keydown.delete="backspaceDelete"
   />
