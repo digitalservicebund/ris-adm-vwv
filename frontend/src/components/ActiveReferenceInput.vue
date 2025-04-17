@@ -224,7 +224,7 @@ watch(
           <InputField
             id="normReferenceDocumentType"
             label="Norm"
-            label-class="ds-label-01-reg"
+            label-class="ris-label1-regular"
             :label-position="LabelPosition.RIGHT"
           >
             <RadioInput
@@ -238,7 +238,7 @@ watch(
           <InputField
             id="administrativeRegulationReferenceDocumentType"
             label="Verwaltungsvorschrift"
-            label-class="ds-label-01-reg"
+            label-class="ris-label1-regular"
             :label-position="LabelPosition.RIGHT"
           >
             <RadioInput

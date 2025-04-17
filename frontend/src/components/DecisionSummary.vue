@@ -63,7 +63,7 @@ const href = computed(() =>
           <a
             v-else-if="documentNumber && props.displayMode === DisplayMode.TAB"
             :href="href"
-            class="ds-link-01-bold whitespace-nowrap no-underline focus:outline-none focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-blue-800"
+            class="ris-link1-bold whitespace-nowrap no-underline focus:outline-none focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-blue-800"
             :data-testid="'document-number-link-' + documentNumber"
             tabindex="-1"
             target="_blank"
@@ -74,7 +74,7 @@ const href = computed(() =>
           <!-- or open preview in sidepanel -->
           <span v-else-if="documentNumber && props.displayMode === DisplayMode.SIDEPANEL">
             <button
-              class="ds-link-01-bold whitespace-nowrap leading-24 no-underline focus:outline-none focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-blue-800"
+              class="ris-link1-bold whitespace-nowrap leading-24 no-underline focus:outline-none focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-blue-800"
               :data-testid="'document-number-link-' + documentNumber"
             >
               {{ documentNumber }}

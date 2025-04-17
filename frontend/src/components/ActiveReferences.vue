@@ -55,7 +55,7 @@ const defaultValue = new ActiveReference() as ActiveReference
 <template>
   <div>
     <div aria-label="Verweise">
-      <h2 class="ds-label-01-bold mb-16">Verweise</h2>
+      <h2 class="ris-label1-bold mb-16">Verweise</h2>
       <div class="flex flex-row">
         <div class="flex-1">
           <EditableList

@@ -24,7 +24,7 @@ const props = defineProps<{
           "
           class="mr-8"
         />
-        <div class="ds-label-01-reg mr-8">
+        <div class="ris-label1-regular mr-8">
           {{ data.renderReferenceType }} |
           <button
             :aria-label="
@@ -33,7 +33,7 @@ const props = defineProps<{
               data.normAbbreviation?.officialLongTitle +
               ' anzeigen'
             "
-            class="ds-link-01-bold mr-8"
+            class="ris-link1-bold mr-8"
           >
             {{ data.renderSummary + ', ' + data.singleNorms[0].renderSummary }}
           </button>
@@ -69,7 +69,7 @@ const props = defineProps<{
             "
             class="mr-8"
           />
-          <div class="ds-label-01-reg mr-8">
+          <div class="ris-label1-regular mr-8">
             {{ data.renderReferenceType }} |
             <button
               :aria-label="
@@ -78,7 +78,7 @@ const props = defineProps<{
                 data.normAbbreviation?.officialLongTitle +
                 ' anzeigen'
               "
-              class="ds-link-01-bold mr-8"
+              class="ris-link1-bold mr-8"
             >
               {{ data.renderSummary }}
             </button>

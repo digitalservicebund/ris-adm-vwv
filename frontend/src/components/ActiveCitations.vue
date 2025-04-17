@@ -20,7 +20,7 @@ const defaultValue = new ActiveCitation() as ActiveCitation
 
 <template>
   <div aria-label="Aktivzitierung">
-    <h2 id="activeCitations" class="ds-label-01-bold mb-16">Aktivzitierung Rechtsprechung</h2>
+    <h2 id="activeCitations" class="ris-label1-bold mb-16">Aktivzitierung Rechtsprechung</h2>
     <EditableList
       v-model="activeCitations"
       :default-value="defaultValue"

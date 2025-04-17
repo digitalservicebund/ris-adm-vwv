@@ -19,7 +19,7 @@ import IconPermIdentity from '~icons/ic/baseline-perm-identity'
     <div class="grid grid-cols-[auto,1fr] gap-10">
       <IconPermIdentity data-testid="iconPermIdentity" />
       <div>
-        <div class="ds-label-01-reg">
+        <div class="ris-label1-regular">
           <FlexContainer>
             <FlexItem class="pe-8">Vorname Nachname</FlexItem>
             <FlexItem>

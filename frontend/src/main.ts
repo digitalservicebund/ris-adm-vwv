@@ -2,11 +2,10 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import PrimeVue from 'primevue/config'
 import { RisUiTheme, RisUiLocale } from '@digitalservicebund/ris-ui/primevue'
-import '@digitalservicebund/ris-ui/primevue/style.css'
 import '@digitalservicebund/ris-ui/fonts.css'
 import App from './App.vue'
 import * as Sentry from '@sentry/vue'
-import '@/styles/global.scss'
+import '@/styles/global.css'
 import router from '@/router.ts'
 
 const app = createApp(App)

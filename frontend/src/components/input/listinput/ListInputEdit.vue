@@ -70,7 +70,7 @@ watch(
 <template>
   <div class="flex flex-col gap-24">
     <div class="flex flex-col gap-4">
-      <label for="list-input" class="ds-label-02-reg"> {{ label }}</label>
+      <label for="list-input" class="ris-label2-regular"> {{ label }}</label>
       <textarea
         id="list-input"
         v-model="localModelValue"

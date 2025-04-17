@@ -107,7 +107,7 @@ export enum LabelPosition {
         class="grid items-center"
         :class="[
           { 'pl-4': labelPosition === LabelPosition.RIGHT },
-          labelClass ? labelClass : 'ds-label-02-reg',
+          labelClass ? labelClass : 'ris-label2-regular',
         ]"
         :for="id"
       >
@@ -129,7 +129,10 @@ export enum LabelPosition {
     <div v-if="localValidationError" class="flex flex-row items-center">
       <IconErrorOutline class="pr-4 text-14 text-red-800" />
 
-      <div class="lex-row ds-label-03-reg mt-2 text-red-800" :data-testid="id + '-validationError'">
+      <div
+        class="lex-row ris-label3-regular mt-2 text-red-800"
+        :data-testid="id + '-validationError'"
+      >
         {{ errorMessage }}
       </div>
     </div>

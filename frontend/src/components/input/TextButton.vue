@@ -89,10 +89,12 @@ const render = () => {
   </div>
 </template>
 
-<style lang="scss" scoped>
-// The ignoring of the rule is necessary because we use manual render functions
-// instead of a rich template.
-// eslint-disable vue-scoped-css/no-unused-selector
+<style scoped>
+/* 
+The ignoring of the rule is necessary because we use manual render functions
+instead of a rich template.
+eslint-disable vue-scoped-css/no-unused-selector 
+*/
 .ds-button-large > .ds-button-icon {
   font-size: 2rem;
 }

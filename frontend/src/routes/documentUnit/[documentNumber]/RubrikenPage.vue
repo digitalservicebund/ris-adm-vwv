@@ -210,7 +210,7 @@ const dokumenttypZusatz = computed({
           <InputField
             :id="noAktenzeichenElementId"
             label="kein Aktenzeichen"
-            label-class="ds-label-01-reg"
+            label-class="ris-label1-regular"
             :label-position="LabelPosition.RIGHT"
           >
             <CheckboxInput
