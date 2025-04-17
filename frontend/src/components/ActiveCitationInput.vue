@@ -6,7 +6,7 @@ import ComboboxInput from '@/components/ComboboxInput.vue'
 import DateInput from '@/components/input/DateInput.vue'
 import InputField from '@/components/input/InputField.vue'
 import TextButton from '@/components/input/TextButton.vue'
-import TextInput from '@/components/input/TextInput.vue'
+import InputText from 'primevue/inputtext'
 import Pagination, { type Page } from '@/components/Pagination.vue'
 import { useValidationStore } from '@/composables/useValidationStore'
 import ActiveCitation from '@/domain/activeCitation'
@@ -244,15 +244,15 @@ onMounted(() => {
           label="Aktenzeichen *"
           :validation-error="validationStore.getByField('fileNumber')"
         >
-          <TextInput
+          <InputText
             id="activeCitationFileNumber"
             v-model="activeCitation.fileNumber"
-            ariaLabel="Aktenzeichen Aktivzitierung"
-            :has-error="slotProps.hasError"
+            aria-label="Aktenzeichen Aktivzitierung"
+            :invalid="slotProps.hasError"
             :readonly="activeCitation.hasForeignSource"
-            size="medium"
+            fluid
             @focus="validationStore.remove('fileNumber')"
-          ></TextInput>
+          ></InputText>
         </InputField>
         <InputField id="activeCitationDecisionDocumentType" label="Dokumenttyp">
           <ComboboxInput

@@ -1,8 +1,10 @@
 import { userEvent } from '@testing-library/user-event'
 import { render, screen } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import NormReferenceInput from '@/components/NormReferenceInput.vue'
 import NormReference from '@/domain/normReference'
+import { config } from '@vue/test-utils'
+import InputText from 'primevue/inputtext'
 
 function renderComponent(options?: { modelValue?: NormReference }) {
   const user = userEvent.setup()
@@ -14,6 +16,16 @@ function renderComponent(options?: { modelValue?: NormReference }) {
 }
 
 describe('NormReferenceEntry', () => {
+  beforeAll(() => {
+    config.global.stubs = {
+      InputMask: InputText,
+    }
+  })
+
+  afterAll(() => {
+    config.global.stubs = {}
+  })
+
   it('render empty norm input group on initial load', async () => {
     renderComponent()
     expect(screen.getByLabelText('RIS-Abkürzung')).toBeInTheDocument()
@@ -225,19 +237,17 @@ describe('NormReferenceEntry', () => {
   })
 
   it('does not add norm with invalid year input', async () => {
-    renderComponent({
+    const { user } = renderComponent({
       modelValue: {
         normAbbreviation: { id: '123', abbreviation: 'ABC' },
-        singleNorms: [
-          {
-            dateOfRelevance: '0000',
-          },
-        ],
       } as NormReference,
     })
 
     const yearInput = await screen.findByLabelText('Jahr der Norm')
-    expect(yearInput).toHaveValue('0000')
+    expect(yearInput).toHaveValue('')
+
+    await user.type(yearInput, '0000')
+    await user.tab()
 
     await screen.findByText(/Kein valides Jahr/)
     screen.getByLabelText('Norm speichern').click()

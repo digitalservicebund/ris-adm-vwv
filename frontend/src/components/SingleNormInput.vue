@@ -3,7 +3,7 @@ import { computed, onMounted, ref } from 'vue'
 import { type ValidationError } from './input/types'
 import DateInput from '@/components/input/DateInput.vue'
 import InputField from '@/components/input/InputField.vue'
-import TextInput from '@/components/input/TextInput.vue'
+import InputText from 'primevue/inputtext'
 import YearInput from '@/components/input/YearInput.vue'
 import { useValidationStore } from '@/composables/useValidationStore'
 import SingleNorm, { type SingleNormValidationInfo } from '@/domain/singleNorm'
@@ -27,7 +27,7 @@ const emit = defineEmits<{
 }>()
 
 const validationStore = useValidationStore<(typeof SingleNorm.fields)[number]>()
-const singleNormInput = ref<InstanceType<typeof TextInput> | null>(null)
+const singleNormInput = ref<InstanceType<typeof InputText> | null>(null)
 
 const singleNorm = computed({
   get: () => {
@@ -105,7 +105,9 @@ onMounted(async () => {
     await validateNorm()
   }
 
-  singleNormInput.value?.focusInput()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const inputElement = (singleNormInput.value as any)?.$el.querySelector('input')
+  inputElement?.focus() // This works without TypeScript errors
 })
 </script>
 
@@ -119,16 +121,17 @@ onMounted(async () => {
           label="Einzelnorm"
           :validation-error="validationStore.getByField('singleNorm')"
         >
-          <TextInput
+          <InputText
             id="singleNorm"
             ref="singleNormInput"
             v-model.trim="singleNorm.singleNorm"
-            ariaLabel="Einzelnorm der Norm"
-            :has-error="slotProps.hasError"
-            size="medium"
+            aria-label="Einzelnorm der Norm"
+            :invalid="slotProps.hasError"
+            size="small"
+            fluid
             @blur="validateNorm"
             @focus="validationStore.remove('singleNorm')"
-          ></TextInput>
+          ></InputText>
         </InputField>
       </div>
       <div class="flex flex-col" :class="!showSingleNormInput ? 'w-[calc(50%-10px)]' : 'w-full'">
@@ -167,7 +170,6 @@ onMounted(async () => {
             v-model="singleNorm.dateOfRelevance"
             aria-label="Jahr der Norm"
             :has-error="slotProps.hasError"
-            size="medium"
             @focus="validationStore.remove('dateOfRelevance')"
             @update:validation-error="slotProps.updateValidationError"
           />

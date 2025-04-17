@@ -1,12 +1,14 @@
 import { userEvent } from '@testing-library/user-event'
 import { render, screen } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import NormReferences from '@/components/NormReferences.vue'
 import { type NormAbbreviation } from '@/domain/normAbbreviation'
 import NormReference from '@/domain/normReference'
 import SingleNorm from '@/domain/singleNorm'
 import { createTestingPinia } from '@pinia/testing'
 import type { DocumentUnit } from '@/domain/documentUnit'
+import { config } from '@vue/test-utils'
+import InputText from 'primevue/inputtext'
 
 function renderComponent(normReferences?: NormReference[]) {
   const user = userEvent.setup()
@@ -49,6 +51,16 @@ function generateNormReference(options?: {
 }
 
 describe('NormReferences', () => {
+  beforeAll(() => {
+    config.global.stubs = {
+      InputMask: InputText,
+    }
+  })
+
+  afterAll(() => {
+    config.global.stubs = {}
+  })
+
   it('renders empty norm reference in edit mode, when no norm references in list', async () => {
     renderComponent()
     expect((await screen.findAllByLabelText('Listen Eintrag')).length).toBe(1)

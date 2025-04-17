@@ -6,7 +6,7 @@ import InputField, { LabelPosition } from '@/components/input/InputField.vue'
 import DateInput from '@/components/input/DateInput.vue'
 import ComboboxItemService from '@/services/comboboxItemService.ts'
 import Textarea from 'primevue/textarea'
-import TextInput from '@/components/input/TextInput.vue'
+import InputText from 'primevue/inputtext'
 import ChipsInput from '@/components/input/ChipsInput.vue'
 import CheckboxInput from '@/components/input/CheckboxInput.vue'
 import KeyWords from '@/components/KeyWords.vue'
@@ -152,12 +152,11 @@ const dokumenttypZusatz = computed({
           ></ComboboxInput>
         </InputField>
         <InputField id="documentTypeLongText" label="Dokumenttyp Zusatz *">
-          <TextInput
+          <InputText
             id="documentTypeLongText"
             v-model="dokumenttypZusatz"
-            ariaLabel="Dokumenttyp Zusatz"
-            :has-error="false"
-            size="medium"
+            aria-label="Dokumenttyp Zusatz"
+            :invalid="false"
           />
         </InputField>
       </div>
