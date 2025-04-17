@@ -2,7 +2,7 @@
 import { computed, ref, watch } from 'vue'
 import InputField from '@/components/input/InputField.vue'
 import TextButton from '@/components/input/TextButton.vue'
-import TextInput from '@/components/input/TextInput.vue'
+import InputText from 'primevue/inputtext'
 import ComboboxInput from '@/components/ComboboxInput.vue'
 import { useValidationStore } from '@/composables/useValidationStore'
 import LegalPeriodical from '@/domain/legalPeriodical'
@@ -114,14 +114,15 @@ watch(
             label="Zitatstelle *"
             :validation-error="validationStore.getByField('citation')"
           >
-            <TextInput
+            <InputText
               id="citation"
               v-model="reference.citation"
-              ariaLabel="Zitatstelle"
-              :has-error="slotProps.hasError"
-              size="medium"
+              aria-label="Zitatstelle"
+              fluid
+              :invalid="slotProps.hasError"
+              size="small"
               @focus="validationStore.remove('citation')"
-            ></TextInput>
+            />
           </InputField>
           <span v-if="legalPeriodical" class="ris-label3-regular pt-4"
             >Zitierbeispiel: {{ legalPeriodical.value.citationStyle }}</span

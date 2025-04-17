@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import InputField from '@/components/input/InputField.vue'
 import TextButton from '@/components/input/TextButton.vue'
-import TextInput from '@/components/input/TextInput.vue'
+import InputText from 'primevue/inputtext'
 import IconSearch from '~icons/ic/baseline-search'
 
 defineProps<{
@@ -21,30 +21,33 @@ const norm = defineModel<string>('norm')
   <div class="flex w-full flex-col">
     <div class="flex w-full flex-row items-end gap-16">
       <InputField id="fieldOfLawIdentifierInput" label="Sachgebiet">
-        <TextInput
+        <InputText
           id="fieldOfLawIdentifierInput"
           v-model="identifier"
           aria-label="Sachgebietskürzel"
-          size="medium"
-          @enter-released="emit('search')"
+          size="small"
+          fluid
+          @keyup.enter="emit('search')"
         />
       </InputField>
       <InputField id="fieldOfLawDescriptionInput" label="Bezeichnung">
-        <TextInput
+        <InputText
           id="fieldOfLawDescriptionInput"
           v-model="description"
           aria-label="Sachgebietsbezeichnung"
-          size="medium"
-          @enter-released="emit('search')"
+          size="small"
+          fluid
+          @keyup.enter="emit('search')"
         />
       </InputField>
       <InputField id="fieldOfLawNormInput" label="Norm">
-        <TextInput
+        <InputText
           id="fieldOfLawNormInput"
           v-model="norm"
           aria-label="Sachgebietsnorm"
-          size="medium"
-          @enter-released="emit('search')"
+          size="small"
+          fluid
+          @keyup.enter="emit('search')"
         />
       </InputField>
 
