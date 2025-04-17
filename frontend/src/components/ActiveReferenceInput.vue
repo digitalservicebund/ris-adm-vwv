@@ -15,7 +15,7 @@ import ActiveReference, {
   ActiveReferenceDocumentType,
   ActiveReferenceType,
 } from '@/domain/activeReference.ts'
-import RadioInput from '@/components/input/RadioInput.vue'
+import RadioButton from 'primevue/radiobutton'
 import labels from '@/components/activeReferenceInputLabels.json'
 
 const props = defineProps<{
@@ -227,11 +227,10 @@ watch(
             label-class="ris-label1-regular"
             :label-position="LabelPosition.RIGHT"
           >
-            <RadioInput
+            <RadioButton
               id="normReferenceDocumentType"
               v-model="activeReference.referenceDocumentType"
               aria-label="Norm auswählen"
-              size="small"
               :value="`${ActiveReferenceDocumentType.NORM}`"
             />
           </InputField>
@@ -241,11 +240,10 @@ watch(
             label-class="ris-label1-regular"
             :label-position="LabelPosition.RIGHT"
           >
-            <RadioInput
+            <RadioButton
               id="administrativeRegulationReferenceDocumentType"
               v-model="activeReference.referenceDocumentType"
               aria-label="Verwaltungsvorschrift auswählen"
-              size="small"
               :value="`${ActiveReferenceDocumentType.ADMINISTRATIVE_REGULATION}`"
               @click="removeMultipleSingleNorms"
             />
