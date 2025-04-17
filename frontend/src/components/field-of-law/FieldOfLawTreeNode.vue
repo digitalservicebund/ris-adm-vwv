@@ -2,7 +2,7 @@
 import { computed, ref, watch } from 'vue'
 import { type NodeHelperInterface } from '@/components/field-of-law/FieldOfLawNode'
 import FlexContainer from '@/components/FlexContainer.vue'
-import Checkbox from '@/components/input/CheckboxInput.vue'
+import Checkbox from 'primevue/checkbox'
 import Tooltip from '@/components/ToolTip.vue'
 import { type FieldOfLaw } from '@/domain/fieldOfLaw'
 import IconArrowDown from '~icons/ic/baseline-keyboard-arrow-down'
@@ -135,13 +135,13 @@ watch(
       <span v-else class="pl-[1.3333em]" />
       <div v-if="!props.isRoot" data-testid>
         <Checkbox
-          :id="`field-of-law-node-${node.identifier}`"
           v-model="isSelected"
           :aria-label="
             node.identifier + ' ' + node.text + (isSelected ? ' entfernen' : ' hinzufügen')
           "
-          class="ds-checkbox-mini ml-12 bg-white"
+          binary
           :data-testid="`field-of-law-node-${node.identifier}`"
+          :input-id="`field-of-law-node-${node.identifier}`"
         />
       </div>
 

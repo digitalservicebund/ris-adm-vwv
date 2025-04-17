@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed, nextTick, ref, watch } from 'vue'
-import Checkbox from '@/components/input/CheckboxInput.vue'
+import Checkbox from 'primevue/checkbox'
 import InputField, { LabelPosition } from '@/components/input/InputField.vue'
 import TextButton from '@/components/input/TextButton.vue'
 
@@ -88,10 +88,10 @@ watch(
       :label-position="LabelPosition.RIGHT"
     >
       <Checkbox
-        :id="`sortAlphabetically_${label}`"
         v-model="sortAlphabetically"
         aria-label="Alphabetisch sortieren"
-        class="ds-checkbox-mini bg-white"
+        binary
+        :input-id="`sortAlphabetically_${label}`"
       />
     </InputField>
     <div class="flex w-full flex-row">

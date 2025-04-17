@@ -152,12 +152,6 @@ export interface ComboboxInputField extends BaseInputField {
   inputAttributes: ComboboxAttributes
 }
 
-//CHECKBOX
-export interface CheckboxInputField extends BaseInputField {
-  type: InputType.CHECKBOX
-  inputAttributes: BaseInputAttributes
-}
-
 //TEXTAREA
 export interface TextAreaInputAttributes extends BaseInputAttributes {
   placeholder?: string
@@ -176,7 +170,6 @@ export type InputField =
   | TextInputField
   | DropdownInputField
   | DateInputField
-  | CheckboxInputField
   | ChipsInputField
   | DateChipsInputField
   | NestedInputField
