@@ -361,7 +361,7 @@ describe('FieldsOfLaw', () => {
     await user.click(screen.getByRole('button', { name: 'Sachgebiete' }))
 
     // then
-    expect(screen.getByLabelText('Suche')).toBeInTheDocument()
+    expect(screen.getByRole('radio', { name: 'Sachgebietsuche auswählen' })).toBeInTheDocument()
   })
 
   it('Shows error message when no search term is entered', async () => {
@@ -370,7 +370,7 @@ describe('FieldsOfLaw', () => {
 
     // when
     await user.click(screen.getByRole('button', { name: 'Sachgebiete' }))
-    await user.click(screen.getByLabelText('Suche'))
+    await user.click(screen.getByRole('radio', { name: 'Sachgebietsuche auswählen' }))
     await user.click(screen.getByRole('button', { name: 'Sachgebietssuche ausführen' }))
 
     // then
@@ -383,7 +383,7 @@ describe('FieldsOfLaw', () => {
 
     // when
     await user.click(screen.getByRole('button', { name: 'Sachgebiete' }))
-    await user.click(screen.getByLabelText('Suche'))
+    await user.click(screen.getByRole('radio', { name: 'Sachgebietsuche auswählen' }))
     await user.type(screen.getByLabelText('Sachgebietskürzel'), 'PR-05')
     await user.click(screen.getByRole('button', { name: 'Sachgebietssuche ausführen' }))
 
@@ -399,7 +399,7 @@ describe('FieldsOfLaw', () => {
 
     // when
     await user.click(screen.getByRole('button', { name: 'Sachgebiete' }))
-    await user.click(screen.getByLabelText('Suche'))
+    await user.click(screen.getByRole('radio', { name: 'Sachgebietsuche auswählen' }))
     await user.type(screen.getByLabelText('Sachgebietskürzel'), 'PR-05')
     await user.click(screen.getByRole('button', { name: 'Sachgebietssuche ausführen' }))
     await user.click(screen.getAllByRole('checkbox')[0])
@@ -419,7 +419,7 @@ describe('FieldsOfLaw', () => {
 
     // when
     await user.click(screen.getByRole('button', { name: 'Sachgebiete' }))
-    await user.click(screen.getByLabelText('Suche'))
+    await user.click(screen.getByRole('radio', { name: 'Sachgebietsuche auswählen' }))
     await user.type(screen.getByLabelText('Sachgebietskürzel'), 'this triggers an error')
     await user.click(screen.getByRole('button', { name: 'Sachgebietssuche ausführen' }))
 
@@ -439,7 +439,7 @@ describe('FieldsOfLaw', () => {
 
     // when
     await user.click(screen.getByRole('button', { name: 'Sachgebiete' }))
-    await user.click(screen.getByLabelText('Suche'))
+    await user.click(screen.getByRole('radio', { name: 'Sachgebietsuche auswählen' }))
     await user.type(screen.getByLabelText('Sachgebietskürzel'), 'PR-05')
     await user.click(screen.getByRole('button', { name: 'Sachgebietssuche ausführen' }))
     await waitFor(() => {
@@ -457,7 +457,7 @@ describe('FieldsOfLaw', () => {
 
     // when
     await user.click(screen.getByRole('button', { name: 'Sachgebiete' }))
-    await user.click(screen.getByLabelText('Suche'))
+    await user.click(screen.getByRole('radio', { name: 'Sachgebietsuche auswählen' }))
     await user.type(screen.getByLabelText('Sachgebietskürzel'), 'PR-05')
     await user.click(screen.getByRole('button', { name: 'Sachgebietssuche ausführen' }))
     await waitFor(() => {
@@ -481,7 +481,7 @@ describe('FieldsOfLaw', () => {
 
     // when
     await user.click(screen.getByRole('button', { name: 'Sachgebiete' }))
-    await user.click(screen.getByLabelText('Suche'))
+    await user.click(screen.getByRole('radio', { name: 'Sachgebietsuche auswählen' }))
     await user.type(screen.getByLabelText('Sachgebietskürzel'), 'PR-05')
     await user.click(screen.getByRole('button', { name: 'Sachgebietssuche ausführen' }))
     await waitFor(() => {
@@ -506,7 +506,7 @@ describe('FieldsOfLaw', () => {
 
     // when
     await user.click(screen.getByRole('button', { name: 'Sachgebiete' }))
-    await user.click(screen.getByLabelText('Suche'))
+    await user.click(screen.getByRole('radio', { name: 'Sachgebietsuche auswählen' }))
     await user.type(screen.getByLabelText('Sachgebietskürzel'), 'PR-05')
     await user.click(screen.getByRole('button', { name: 'Sachgebietssuche ausführen' }))
     await waitFor(() => {
@@ -535,7 +535,7 @@ describe('FieldsOfLaw', () => {
 
     // when
     await user.click(screen.getByRole('button', { name: 'Sachgebiete' }))
-    await user.click(screen.getByLabelText('Suche'))
+    await user.click(screen.getByRole('radio', { name: 'Sachgebietsuche auswählen' }))
     await user.type(screen.getByLabelText('Sachgebietskürzel'), 'PR-05')
     await user.click(screen.getByRole('button', { name: 'Sachgebietssuche ausführen' }))
     await waitFor(() => {
