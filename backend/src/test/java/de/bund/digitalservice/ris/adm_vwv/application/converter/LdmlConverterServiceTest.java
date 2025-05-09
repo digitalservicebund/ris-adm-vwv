@@ -355,4 +355,26 @@ class LdmlConverterServiceTest {
       .extracting(DocumentationUnitContent::aktenzeichen, DocumentationUnitContent::noAktenzeichen)
       .containsExactly(List.of(), true);
   }
+
+  @Test
+  void convertToBusinessModel_fieldsOfLaw() {
+    // given
+    String xml = TestFile.readFileToString("ldml-example.akn.xml");
+    DocumentationUnit documentationUnit = new DocumentationUnit(
+      "KSNR20250000001",
+      UUID.randomUUID(),
+      null,
+      xml
+    );
+
+    // when
+    DocumentationUnitContent documentationUnitContent = ldmlConverterService.convertToBusinessModel(
+      documentationUnit
+    );
+
+    // then
+    assertThat(
+      documentationUnitContent.fieldsOfLaw().stream().map(c -> c.text()).toList()
+    ).isEqualTo(List.of("PR-05-01", "XX-04-02"));
+  }
 }
