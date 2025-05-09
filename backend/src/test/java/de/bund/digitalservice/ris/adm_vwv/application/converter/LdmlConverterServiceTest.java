@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.adm_vwv.application.converter;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 
+import de.bund.digitalservice.ris.adm_vwv.application.DocumentType;
 import de.bund.digitalservice.ris.adm_vwv.application.DocumentationUnit;
 import de.bund.digitalservice.ris.adm_vwv.application.converter.business.DocumentationUnitContent;
 import de.bund.digitalservice.ris.adm_vwv.application.converter.business.Reference;
@@ -354,5 +355,52 @@ class LdmlConverterServiceTest {
       .isNotNull()
       .extracting(DocumentationUnitContent::aktenzeichen, DocumentationUnitContent::noAktenzeichen)
       .containsExactly(List.of(), true);
+  }
+
+  @Test
+  void convertToBusinessModel_documentType() {
+    // given
+    String xml = TestFile.readFileToString("ldml-example.akn.xml");
+    DocumentationUnit documentationUnit = new DocumentationUnit(
+      "KSNR20250000001",
+      UUID.randomUUID(),
+      null,
+      xml
+    );
+
+    // when
+    DocumentationUnitContent documentationUnitContent = ldmlConverterService.convertToBusinessModel(
+      documentationUnit
+    );
+
+    // then
+    assertThat(documentationUnitContent)
+      .isNotNull()
+      .extracting(DocumentationUnitContent::dokumenttyp)
+      .extracting(DocumentType::abbreviation, DocumentType::name)
+      .containsExactly("VR", "Bekanntmachung");
+  }
+
+  @Test
+  void convertToBusinessModel_documentTypeZusatz() {
+    // given
+    String xml = TestFile.readFileToString("ldml-example.akn.xml");
+    DocumentationUnit documentationUnit = new DocumentationUnit(
+      "KSNR20250000001",
+      UUID.randomUUID(),
+      null,
+      xml
+    );
+
+    // when
+    DocumentationUnitContent documentationUnitContent = ldmlConverterService.convertToBusinessModel(
+      documentationUnit
+    );
+
+    // then
+    assertThat(documentationUnitContent)
+      .isNotNull()
+      .extracting(DocumentationUnitContent::dokumenttypZusatz)
+      .isEqualTo("Bekanntmachung");
   }
 }
