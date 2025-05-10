@@ -1,3 +1,5 @@
+*Note: There is a related ADR ([0007-dealing-with-published-documents](./0007-dealing-with-published-documents.md)) which details how the below is meant to work out for use cases related to published documents.*
+
 # 4. Data Persistence and Data Exchange
 
 Date: 2025-02-11
