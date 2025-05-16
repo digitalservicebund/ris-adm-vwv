@@ -1,12 +1,12 @@
 package de.bund.digitalservice.ris.adm_vwv.adapter.persistence;
 
 import de.bund.digitalservice.ris.adm_vwv.application.*;
+import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
-import javax.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RegExUtils;
@@ -185,9 +185,18 @@ public class LookupTablesPersistenceService implements LookupTablesPersistencePo
       ? regionRepository.findAll(pageable)
       : regionRepository.findByCodeContainingIgnoreCase(searchTerm, pageable);
 
-    return regions.map(regionEntity ->
-      new Region(regionEntity.getId(), regionEntity.getCode(), regionEntity.getLongText())
-    );
+    return regions.map(mapRegionEntity());
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public Optional<Region> findRegionByCode(@Nonnull String code) {
+    return regionRepository.findByCode(code).map(mapRegionEntity());
+  }
+
+  private Function<RegionEntity, Region> mapRegionEntity() {
+    return regionEntity ->
+      new Region(regionEntity.getId(), regionEntity.getCode(), regionEntity.getLongText());
   }
 
   @Override
@@ -202,22 +211,24 @@ public class LookupTablesPersistenceService implements LookupTablesPersistencePo
     Page<InstitutionEntity> institutions = StringUtils.isBlank(searchTerm)
       ? institutionRepository.findAll(pageable)
       : institutionRepository.findByNameContainingIgnoreCase(searchTerm, pageable);
+    return institutions.map(mapInstitutionEntity());
+  }
 
-    return institutions.map(institutionEntity ->
+  @Override
+  @Transactional(readOnly = true)
+  public Optional<Institution> findInstitutionByName(@Nonnull String name) {
+    return institutionRepository.findByName(name).map(mapInstitutionEntity());
+  }
+
+  private Function<InstitutionEntity, Institution> mapInstitutionEntity() {
+    return institutionEntity ->
       new Institution(
         institutionEntity.getId(),
         institutionEntity.getName(),
         institutionEntity.getOfficialName(),
         mapInstitutionType(institutionEntity.getType()),
-        institutionEntity
-          .getRegions()
-          .stream()
-          .map(regionEntity ->
-            new Region(regionEntity.getId(), regionEntity.getCode(), regionEntity.getLongText())
-          )
-          .toList()
-      )
-    );
+        institutionEntity.getRegions().stream().map(mapRegionEntity()).toList()
+      );
   }
 
   private InstitutionType mapInstitutionType(String institutionType) {

@@ -33,7 +33,7 @@ const isInvalid = computed(
     !validationStore.isValid(),
 )
 const existingInstitutionIds = computed<string[]>(
-  () => docUnitStore.documentUnit?.normgebers?.map((n) => n.institution.id) || [],
+  () => docUnitStore.documentUnit?.normgeberList?.map((n) => n.institution.id) || [],
 )
 
 const regionsInputText = computed(() => {

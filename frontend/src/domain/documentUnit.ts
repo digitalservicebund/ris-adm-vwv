@@ -35,5 +35,5 @@ export interface DocumentUnit {
   activeReferences?: ActiveReference[]
   normReferences?: NormReference[]
   note: string
-  normgebers?: Normgeber[]
+  normgeberList?: Normgeber[]
 }

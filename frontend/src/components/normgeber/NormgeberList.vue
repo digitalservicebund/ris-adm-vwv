@@ -9,23 +9,24 @@ import { useEditableList } from '@/composables/useEditableList'
 
 const store = useDocumentUnitStore()
 
-const normgebers = computed({
-  get: () => store.documentUnit!.normgebers ?? [],
+const normgeberList = computed({
+  get: () => store.documentUnit!.normgeberList ?? [],
   set: (newValue) => {
-    store.documentUnit!.normgebers = newValue
+    store.documentUnit!.normgeberList = newValue
   },
 })
 
-const { onRemoveItem, onAddItem, onUpdateItem, isCreationPanelOpened } = useEditableList(normgebers)
+const { onRemoveItem, onAddItem, onUpdateItem, isCreationPanelOpened } =
+  useEditableList(normgeberList)
 </script>
 
 <template>
-  <div class="normgebers">
+  <div class="normgeberList">
     <h2 class="ris-label1-bold mb-16">Normgeber</h2>
-    <ol v-if="normgebers.length > 0" aria-label="Normgeber Liste">
+    <ol v-if="normgeberList.length > 0" aria-label="Normgeber Liste">
       <li
         class="border-b-1 border-blue-300 py-16"
-        v-for="normgeber in normgebers"
+        v-for="normgeber in normgeberList"
         :key="normgeber.id"
       >
         <NormgeberListItem
@@ -37,11 +38,11 @@ const { onRemoveItem, onAddItem, onUpdateItem, isCreationPanelOpened } = useEdit
       </li>
     </ol>
     <NormgeberInput
-      v-if="isCreationPanelOpened || normgebers.length === 0"
+      v-if="isCreationPanelOpened || normgeberList.length === 0"
       class="mt-16"
       @update-normgeber="onAddItem"
       @cancel="isCreationPanelOpened = false"
-      :show-cancel-button="normgebers.length > 0"
+      :show-cancel-button="normgeberList.length > 0"
     />
     <Button
       v-else

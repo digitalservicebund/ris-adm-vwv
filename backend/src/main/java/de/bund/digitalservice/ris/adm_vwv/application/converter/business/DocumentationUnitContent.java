@@ -27,6 +27,7 @@ import java.util.UUID;
  * @param activeReferences List of active references
  * @param normReferences List of norm references
  * @param note The note
+ * @param normgeberList List of normgeber
  */
 public record DocumentationUnitContent(
   UUID id,
@@ -47,5 +48,6 @@ public record DocumentationUnitContent(
   List<ActiveCitation> activeCitations,
   List<ActiveReference> activeReferences,
   List<NormReference> normReferences,
-  String note
+  String note,
+  List<Normgeber> normgeberList
 ) {}

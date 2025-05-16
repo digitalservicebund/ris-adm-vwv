@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.adm_vwv.adapter.persistence;
 
+import java.util.Optional;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import org.springframework.data.domain.Page;
@@ -11,4 +12,6 @@ interface RegionRepository extends JpaRepository<RegionEntity, UUID> {
     @Nonnull String code,
     @Nonnull Pageable pageable
   );
+
+  Optional<RegionEntity> findByCode(@Nonnull String code);
 }

@@ -34,7 +34,8 @@
       </akn:analysis>
       <akn:proprietary source="attributsemantik-noch-undefiniert">
         <ris:metadata>
-          <ris:normgeber staat="DS"/>
+          <ris:normgeber staat="Erste Jurpn"/>
+          <ris:normgeber staat="AA" organ="Erstes Organ"/>
           <ris:fieldsOfLaw>
             <ris:fieldOfLaw notation="neu">PR-05-01</ris:fieldOfLaw>
             <ris:fieldOfLaw notation="neu">XX-04-02</ris:fieldOfLaw>

@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.adm_vwv.adapter.persistence;
 
+import java.util.Optional;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import org.springframework.data.domain.Page;
@@ -11,4 +12,5 @@ interface InstitutionRepository extends JpaRepository<InstitutionEntity, UUID> {
     @Nonnull String name,
     @Nonnull Pageable pageable
   );
+  Optional<InstitutionEntity> findByName(@Nonnull String name);
 }

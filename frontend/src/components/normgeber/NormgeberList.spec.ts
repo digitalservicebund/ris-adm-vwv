@@ -6,7 +6,7 @@ import NormgeberList from './NormgeberList.vue'
 import { createTestingPinia } from '@pinia/testing'
 import type { DocumentUnit } from '@/domain/documentUnit'
 
-const mockNormgebers: Normgeber[] = [
+const mocknormgeberList: Normgeber[] = [
   {
     id: 'normgeberId',
     institution: {
@@ -18,7 +18,7 @@ const mockNormgebers: Normgeber[] = [
   },
 ]
 
-function renderComponent(normgebers?: Normgeber[]) {
+function renderComponent(normgeberList?: Normgeber[]) {
   const user = userEvent.setup()
 
   return {
@@ -32,7 +32,7 @@ function renderComponent(normgebers?: Normgeber[]) {
                 docunitStore: {
                   documentUnit: <DocumentUnit>{
                     documentNumber: '1234567891234',
-                    normgebers: normgebers ?? [],
+                    normgeberList: normgeberList ?? [],
                   },
                 },
               },
@@ -53,15 +53,15 @@ describe('NormgeberList', () => {
     expect(screen.queryByRole('button', { name: 'Normgeber hinzufügen' })).not.toBeInTheDocument()
   })
 
-  it('renders a list of existing normgebers', async () => {
-    renderComponent(mockNormgebers)
+  it('renders a list of existing normgeberList', async () => {
+    renderComponent(mocknormgeberList)
     expect(screen.queryAllByRole('listitem')).toHaveLength(1)
     expect(screen.getByText('DEU, new institution')).toBeInTheDocument()
     expect(screen.getByLabelText('Normgeber Editieren')).toBeInTheDocument()
   })
 
   it('opens the creation panel on clicking add', async () => {
-    const { user } = renderComponent(mockNormgebers)
+    const { user } = renderComponent(mocknormgeberList)
 
     // when
     await user.click(screen.getByRole('button', { name: 'Normgeber hinzufügen' }))

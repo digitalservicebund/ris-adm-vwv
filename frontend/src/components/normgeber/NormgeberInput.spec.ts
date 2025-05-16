@@ -149,7 +149,7 @@ function renderComponent(props: { normgeber?: Normgeber; showCancelButton: boole
                   documentUnit: {
                     id: '123',
                     documentNumber: '1234567891234',
-                    normgebers: [],
+                    normgeberList: [],
                   },
                 },
               },
@@ -355,7 +355,7 @@ describe('NormgeberInput', () => {
                   documentUnit: {
                     id: '123',
                     documentNumber: '1234567891234',
-                    normgebers: [mockLegalEntityNormgeber],
+                    normgeberList: [mockLegalEntityNormgeber],
                   },
                 },
               },

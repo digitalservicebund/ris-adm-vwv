@@ -3,9 +3,7 @@ package de.bund.digitalservice.ris.adm_vwv.application.converter;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 
-import de.bund.digitalservice.ris.adm_vwv.application.DocumentType;
-import de.bund.digitalservice.ris.adm_vwv.application.DocumentationUnit;
-import de.bund.digitalservice.ris.adm_vwv.application.FieldOfLaw;
+import de.bund.digitalservice.ris.adm_vwv.application.*;
 import de.bund.digitalservice.ris.adm_vwv.application.converter.business.*;
 import de.bund.digitalservice.ris.adm_vwv.test.TestFile;
 import java.util.List;
@@ -558,6 +556,41 @@ class LdmlConverterServiceIntegrationTest {
       .containsExactly(
         tuple("administrative_regulation", "PhanGB", "rechtsgrundlage", List.of("§ 1a Abs 1")),
         tuple("administrative_regulation", "PhanGB", "rechtsgrundlage", List.of("§ 2 Abs 6"))
+      );
+  }
+
+  @Test
+  void convertToBusinessModel_normgeber() {
+    // given
+    String xml = TestFile.readFileToString("ldml-example.akn.xml");
+    DocumentationUnit documentationUnit = new DocumentationUnit(
+      "KSNR20250000001",
+      UUID.randomUUID(),
+      null,
+      xml
+    );
+
+    // when
+    DocumentationUnitContent documentationUnitContent = ldmlConverterService.convertToBusinessModel(
+      documentationUnit
+    );
+
+    // then
+    assertThat(documentationUnitContent)
+      .isNotNull()
+      .extracting(
+        DocumentationUnitContent::normgeberList,
+        InstanceOfAssertFactories.list(Normgeber.class)
+      )
+      .hasSize(2)
+      .extracting(
+        normgeber -> normgeber.institution().name(),
+        normgeber -> normgeber.institution().type(),
+        normgeber -> normgeber.regions().stream().map(Region::code).toList()
+      )
+      .containsExactly(
+        tuple("Erste Jurpn", InstitutionType.LEGAL_ENTITY, List.of()),
+        tuple("Erstes Organ", InstitutionType.INSTITUTION, List.of("AA"))
       );
   }
 }

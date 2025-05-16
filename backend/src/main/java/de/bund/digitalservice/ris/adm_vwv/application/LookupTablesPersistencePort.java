@@ -23,6 +23,8 @@ public interface LookupTablesPersistencePort {
   List<LegalPeriodical> findLegalPeriodicalsByAbbreviation(@Nonnull String abbreviation);
 
   Page<Region> findRegions(@Nonnull RegionQuery regionQuery);
+  Optional<Region> findRegionByCode(@Nonnull String code);
 
   Page<Institution> findInstitutions(@Nonnull InstitutionQuery query);
+  Optional<Institution> findInstitutionByName(@Nonnull String name);
 }

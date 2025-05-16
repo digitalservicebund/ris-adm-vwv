@@ -65,7 +65,8 @@ class DocumentationUnitContentTest {
           List.of(new SingleNorm(UUID.randomUUID(), "§ 1", null, null))
         )
       ),
-      "note"
+      "note",
+      List.of()
     );
 
     // then
