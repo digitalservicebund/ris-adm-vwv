@@ -21,6 +21,7 @@ A guideline on how to contribute to this project can be found in [CONTRIBUTING.m
 ## Developing
 
 Details on how to work with the code can be found in [DEVELOPING.md](./DEVELOPING.md).
+For an overview of domain specific German terms see [GLOSSARY.md](./GLOSSARY.md)
 
 ## Contributor Covenant
 
