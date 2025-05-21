@@ -17,3 +17,14 @@ springdoc:
     path: /api/swagger-ui
   api-docs:
     path: /api/swagger-ui/v3/api-docs
+
+---
+
+# For local setup, include a database initialization with after docker initialization and Flyway.
+spring:
+  config:
+    activate:
+      on-profile: default
+  sql:
+    init:
+      mode: always

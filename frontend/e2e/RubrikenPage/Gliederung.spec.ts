@@ -113,3 +113,20 @@ test.describe('RubrikenPage - Gliederung', () => {
     },
   )
 })
+
+test.describe('RubrikenPage - Gliederung - Bestandsdaten', () => {
+  test(
+    'Load test documentation unit and expect Gliederung content',
+    { tag: ['@RISDEV-7639'] },
+    async ({ page }) => {
+      // given
+
+      // when
+      await page.goto('/documentUnit/KSNR999999999/rubriken')
+
+      // then
+      await expect(page.getByText('TOC entry 1')).toHaveCount(1)
+      await expect(page.getByText('TOC entry 2')).toHaveCount(1)
+    },
+  )
+})

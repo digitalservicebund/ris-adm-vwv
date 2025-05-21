@@ -174,3 +174,20 @@ test.describe('RubrikenPage - Verweise (on Verwaltungsvorschrift)', () => {
     await expect(page.getByText('Neuregelung | KVLG, § 2')).toHaveCount(1)
   })
 })
+
+test.describe('RubrikenPage - Verweise - Bestandsdaten', () => {
+  test(
+    'Load test documentation unit and expect two Verweise',
+    { tag: ['@RISDEV-7639'] },
+    async ({ page }) => {
+      // given
+
+      // when
+      await page.goto('/documentUnit/KSNR999999999/rubriken')
+
+      // then
+      await expect(page.getByText('Rechtsgrundlage | PhanGB, § 1a Abs 1')).toHaveCount(1)
+      await expect(page.getByText('Rechtsgrundlage | PhanGB, § 2 Abs 6')).toHaveCount(1)
+    },
+  )
+})

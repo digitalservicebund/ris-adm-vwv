@@ -193,3 +193,19 @@ test.describe('RubrikenPage - Aktivzitierung', () => {
     },
   )
 })
+
+test.describe('RubrikenPage - Aktivzitierung - Bestandsdaten', () => {
+  test(
+    'Load test documentation unit and expect one Aktivzitierung',
+    { tag: ['@RISDEV-7639'] },
+    async ({ page }) => {
+      // given
+
+      // when
+      await page.goto('/documentUnit/KSNR999999999/rubriken')
+
+      // then
+      await expect(page.getByText('PhanGH, 20.10.2021, C-01/02 | WBRE000001234')).toHaveCount(1)
+    },
+  )
+})

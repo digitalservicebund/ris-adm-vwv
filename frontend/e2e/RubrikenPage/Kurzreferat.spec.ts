@@ -115,3 +115,20 @@ test.describe('RubrikenPage - Kurzreferat', () => {
     },
   )
 })
+
+test.describe('RubrikenPage - Kurzreferat - Bestandsdaten', () => {
+  test(
+    'Load test documentation unit and expect Kurzreferat content',
+    { tag: ['@RISDEV-7639'] },
+    async ({ page }) => {
+      // given
+
+      // when
+      await page.goto('/documentUnit/KSNR999999999/rubriken')
+
+      // then
+      await expect(page.getByText('Kurzreferat Zeile 1')).toHaveCount(1)
+      await expect(page.getByText('Kurzreferat Zeile 2')).toHaveCount(1)
+    },
+  )
+})

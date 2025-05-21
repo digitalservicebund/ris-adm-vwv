@@ -51,3 +51,20 @@ test.describe('RubrikenPage - Dokumenttyp', () => {
     },
   )
 })
+
+test.describe('RubrikenPage - Dokumenttyp - Bestandsdaten', () => {
+  test(
+    'Load test documentation unit and expect one Dokumenttyp and Dokumenttyp Zusatz',
+    { tag: ['@RISDEV-7639'] },
+    async ({ page }) => {
+      // given
+
+      // when
+      await page.goto('/documentUnit/KSNR999999999/rubriken')
+
+      // then
+      await expect(page.getByText('Dokumenttyp *')).toHaveValue('Verwaltungsregelung')
+      await expect(page.getByText('Dokumenttyp Zusatz *')).toHaveValue('Bekanntmachung')
+    },
+  )
+})

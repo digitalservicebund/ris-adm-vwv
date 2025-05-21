@@ -516,3 +516,20 @@ test.describe('RubrikenPage - Sachgebiete', () => {
     await expect(page.getByText('PRPhantasierecht')).toHaveCount(1)
   })
 })
+
+test.describe('RubrikenPage - Sachgebiete - Bestandsdaten', () => {
+  test(
+    'Load test documentation unit and expect two Sachgebiete',
+    { tag: ['@RISDEV-7639'] },
+    async ({ page }) => {
+      // given
+
+      // when
+      await page.goto('/documentUnit/KSNR999999999/rubriken')
+
+      // then
+      await expect(page.getByText('PR-05-01')).toHaveCount(1)
+      await expect(page.getByText('XX-04-02')).toHaveCount(1)
+    },
+  )
+})

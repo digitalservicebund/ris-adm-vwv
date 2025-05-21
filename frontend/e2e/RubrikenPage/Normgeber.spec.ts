@@ -238,3 +238,21 @@ test.describe('RubrikenPage - Normgeber', () => {
     },
   )
 })
+
+test.describe('RubrikenPage - Normgeber - Bestandsdaten', () => {
+  test(
+    'Load test documentation unit and two Normgeber',
+    { tag: ['@RISDEV-7639'] },
+    async ({ page }) => {
+      // given
+
+      // when
+      await page.goto('/documentUnit/KSNR999999999/rubriken')
+
+      // then
+      await expect(page.getByText('Erste Jurpn')).toHaveCount(1)
+      await expect(page.getByText('Erstes Organ')).toHaveCount(1)
+      await expect(page.getByText('AA')).toHaveCount(1)
+    },
+  )
+})

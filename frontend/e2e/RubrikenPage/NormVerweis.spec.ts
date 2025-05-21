@@ -109,3 +109,20 @@ test.describe('RubrikenPage - Verweise: Norm', () => {
     },
   )
 })
+
+test.describe('RubrikenPage - Verweise: Norm - Bestandsdaten', () => {
+  test(
+    'Load test documentation unit and expect two norm Verweise',
+    { tag: ['@RISDEV-7639'] },
+    async ({ page }) => {
+      // given
+
+      // when
+      await page.goto('/documentUnit/KSNR999999999/rubriken')
+
+      // then
+      await expect(page.getByText('PhanGB, § 1a Abs 1, 02.02.2022, 2011')).toHaveCount(1)
+      await expect(page.getByText('PhanGB 5, § 2 Abs 6, 02.02.2022, 2011')).toHaveCount(1)
+    },
+  )
+})

@@ -195,3 +195,21 @@ test.describe('FundstellenPageSaveAndLoad', () => {
     },
   )
 })
+
+test.describe('FundstellenPageBestandsdaten', () => {
+  test(
+    'Load test documentation unit and expect fundstellen',
+    { tag: ['@RISDEV-7639'] },
+    async ({ page }) => {
+      // given
+      await page.goto('/documentUnit/KSNR999999999/fundstellen')
+
+      // when
+      await page.getByTestId('list-entry-0').click()
+      await page.getByRole('button', { name: 'Abbrechen' }).click()
+
+      // then
+      await expect(page.getByText('Das Periodikum 2021, Seite 15')).toHaveCount(1)
+    },
+  )
+})

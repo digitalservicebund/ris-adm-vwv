@@ -107,3 +107,21 @@ test.describe('RubrikenPage - Schlagwörter with persistence', () => {
     },
   )
 })
+
+test.describe('RubrikenPage - Schlagwörter - Bestandsdaten', () => {
+  test(
+    'Load test documentation unit and expect three keywords',
+    { tag: ['@RISDEV-7639'] },
+    async ({ page }) => {
+      // given
+
+      // when
+      await page.goto('/documentUnit/KSNR999999999/rubriken')
+
+      // then
+      await expect(page.getByText('Schlag')).toHaveCount(1)
+      await expect(page.getByText('Wort')).toHaveCount(1)
+      await expect(page.getByText('Mehrere Wörter in einem Schlagwort')).toHaveCount(1)
+    },
+  )
+})

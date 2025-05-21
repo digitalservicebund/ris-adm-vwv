@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test'
 
-test.describe('Rubriken page: Langüberschrift', () => {
+test.describe('Rubriken page - Langüberschrift', () => {
   test(
     'Data of Langüberschrift persists during reload when saved',
     { tag: ['@RISDEV-6213'] },
@@ -19,6 +19,24 @@ test.describe('Rubriken page: Langüberschrift', () => {
       await page.reload()
       // then
       await expect(page.getByText('Amtl. Langüberschrift')).toHaveValue(myLangueberschrift)
+    },
+  )
+})
+
+test.describe('RubrikenPage - Langüberschrift - Bestandsdaten', () => {
+  test(
+    'Load test documentation unit and expect Langüberschrift content',
+    { tag: ['@RISDEV-7639'] },
+    async ({ page }) => {
+      // given
+
+      // when
+      await page.goto('/documentUnit/KSNR999999999/rubriken')
+
+      // then
+      await expect(page.getByRole('textbox', { name: 'Amtl. Langüberschrift *' })).toHaveValue(
+        '1. Bekanntmachung zum XML-Testen in NeuRIS VwV',
+      )
     },
   )
 })
