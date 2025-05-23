@@ -10,7 +10,6 @@ import type { NormAbbreviation } from '@/domain/normAbbreviation.ts'
 import ActiveReference, { ActiveReferenceType } from '@/domain/activeReference.ts'
 import type { FieldOfLaw } from '@/domain/fieldOfLaw'
 import errorMessages from '@/i18n/errors.json'
-import { type RegionApiResponse, type InstitutionApiResponse } from '@/domain/normgeber'
 import type { Court } from '@/domain/court'
 import type { DocumentType } from '@/domain/documentType'
 
@@ -18,8 +17,6 @@ enum Endpoint {
   documentTypes = 'lookup-tables/document-types',
   fieldsOfLaw = 'lookup-tables/fields-of-law',
   legalPeriodicals = 'lookup-tables/legal-periodicals',
-  institutions = 'lookup-tables/institutions',
-  regions = 'lookup-tables/regions',
 }
 
 function formatDropdownItems(
@@ -51,31 +48,6 @@ function formatDropdownItems(
           citationStyle: item.citationStyle,
         },
         additionalInformation: item.subtitle,
-      }))
-    }
-    case Endpoint.institutions: {
-      return (responseData as InstitutionApiResponse[]).map((item) => ({
-        label: item.name,
-        value: {
-          id: item.id,
-          label: item.name,
-          officialName: item.officialName,
-          type: item.type,
-          regions: item.regions.map((r) => {
-            return { label: r.code, longText: r.longText }
-          }),
-        },
-        additionalInformation: item.officialName,
-      }))
-    }
-    case Endpoint.regions: {
-      return (responseData as RegionApiResponse[]).map((item) => ({
-        label: item.code,
-        value: {
-          id: item.id,
-          label: item.code,
-          longText: item.longText,
-        },
       }))
     }
   }
@@ -115,12 +87,6 @@ function fetchFromEndpoint(
         case Endpoint.legalPeriodicals:
           ctx.data = formatDropdownItems(ctx.data.legalPeriodicals, endpoint)
           break
-        case Endpoint.institutions:
-          ctx.data = formatDropdownItems(ctx.data.institutions, endpoint)
-          break
-        case Endpoint.regions:
-          ctx.data = formatDropdownItems(ctx.data.regions, endpoint)
-          break
       }
       return ctx
     },
@@ -137,8 +103,6 @@ function fetchFromEndpoint(
 export type ComboboxItemService = {
   getLegalPeriodicals: (filter: Ref<string | undefined>) => UseFetchReturn<ComboboxItem[]>
   getCourts: (filter: Ref<string | undefined>) => ComboboxResult<ComboboxItem[]>
-  getInstitutions: (filter: Ref<string | undefined>) => UseFetchReturn<ComboboxItem[]>
-  getRegions: (filter: Ref<string | undefined>) => UseFetchReturn<ComboboxItem[]>
   getDocumentTypes: (filter: Ref<string | undefined>) => UseFetchReturn<ComboboxItem[]>
   getRisAbbreviations: (filter: Ref<string | undefined>) => ComboboxResult<ComboboxItem[]>
   getActiveReferenceTypes: (filter: Ref<string | undefined>) => ComboboxResult<ComboboxItem[]>
@@ -183,10 +147,6 @@ const service: ComboboxItemService = {
     }
     return result
   },
-  getInstitutions: (filter: Ref<string | undefined>) =>
-    fetchFromEndpoint(Endpoint.institutions, filter, { usePagination: false }),
-  getRegions: (filter: Ref<string | undefined>) =>
-    fetchFromEndpoint(Endpoint.regions, filter, { usePagination: false }),
   getDocumentTypes: (filter: Ref<string | undefined>) =>
     fetchFromEndpoint(Endpoint.documentTypes, filter, { usePagination: false }),
   getRisAbbreviations: (filter: Ref<string | undefined>) => {

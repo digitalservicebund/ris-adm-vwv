@@ -38,7 +38,7 @@ const onDeleteNormgeber = (normgeberId: string) => {
 }
 
 const label = computed(() =>
-  [...props.normgeber.regions.map((r) => r.label), props.normgeber.institution.label]
+  [...props.normgeber.regions.map((r) => r.code), props.normgeber.institution.name]
     .filter(Boolean)
     .join(', ')
     .toString(),

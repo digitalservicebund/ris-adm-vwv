@@ -7,8 +7,8 @@ import { createTestingPinia } from '@pinia/testing'
 
 const mockNormgeber: Normgeber = {
   id: 'normgeberId',
-  institution: { id: 'institutionId', label: 'new institution', type: InstitutionType.Institution },
-  regions: [{ id: 'regionId', label: 'DEU' }],
+  institution: { id: 'institutionId', name: 'new institution', type: InstitutionType.Institution },
+  regions: [{ id: 'regionId', code: 'DEU' }],
 }
 
 function renderComponent() {

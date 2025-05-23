@@ -1,13 +1,13 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue'
 import InputField from '../input/InputField.vue'
-import ComboboxInput from '../ComboboxInput.vue'
-import ComboboxItemService from '@/services/comboboxItemService'
-import { type Region, type Normgeber, type Institution, InstitutionType } from '@/domain/normgeber'
+import { type Institution, InstitutionType, type Normgeber, type Region } from '@/domain/normgeber'
 import InputText from 'primevue/inputtext'
 import Button from 'primevue/button'
 import { useValidationStore } from '@/composables/useValidationStore'
 import { useDocumentUnitStore } from '@/stores/documentUnitStore'
+import InstitutionDropDown from '@/components/normgeber/InstitutionDropDown.vue'
+import RegionDropDown from '@/components/normgeber/RegionDropDown.vue'
 
 const props = defineProps<{
   normgeber?: Normgeber
@@ -41,7 +41,7 @@ const regionsInputText = computed(() => {
   const hasRegions =
     institution.value && institution.value.regions && institution.value.regions.length > 0
   if (isLegalEntity && hasRegions) {
-    return institution.value?.regions?.map((r) => r.label).join(', ')
+    return institution.value?.regions?.map((r) => r.code).join(', ')
   } else if (isLegalEntity && !hasRegions) {
     return 'Keine Region zugeordnet'
   } else {
@@ -107,14 +107,7 @@ watch(institution, (newVal, oldVal) => {
         :validation-error="validationStore.getByField('institution')"
         v-slot="slotProps"
       >
-        <ComboboxInput
-          id="institution"
-          v-model="institution"
-          aria-label="Normgeber"
-          clear-on-choosing-item
-          :has-error="slotProps.hasError"
-          :item-service="ComboboxItemService.getInstitutions"
-        ></ComboboxInput>
+        <InstitutionDropDown v-model="institution" :is-invalid="slotProps.hasError" />
       </InputField>
       <InputField id="region" :label="regionLabel" class="w-full">
         <InputText
@@ -126,14 +119,7 @@ watch(institution, (newVal, oldVal) => {
           fluid
           readonly
         />
-        <ComboboxInput
-          v-else
-          id="region"
-          v-model="selectedRegion"
-          :item-service="ComboboxItemService.getRegions"
-          aria-label="Region"
-          clear-on-choosing-item
-        ></ComboboxInput>
+        <RegionDropDown v-else v-model="selectedRegion" />
       </InputField>
     </div>
     <div class="flex w-full gap-16 mt-16">

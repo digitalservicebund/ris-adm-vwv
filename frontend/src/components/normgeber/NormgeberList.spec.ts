@@ -11,10 +11,10 @@ const mocknormgeberList: Normgeber[] = [
     id: 'normgeberId',
     institution: {
       id: 'institutionId',
-      label: 'new institution',
+      name: 'new institution',
       type: InstitutionType.Institution,
     },
-    regions: [{ id: 'regionId', label: 'DEU' }],
+    regions: [{ id: 'regionId', code: 'DEU' }],
   },
 ]
 
