@@ -40,10 +40,10 @@ values (gen_random_uuid(), 'KSNR999999999',
                   <ris:normgeber staat="Erste Jurpn"/>
                   <ris:normgeber staat="AA" organ="Erstes Organ"/>
                   <ris:fieldsOfLaw>
-                    <ris:fieldOfLaw notation="neu">PR-05-01</ris:fieldOfLaw>
-                    <ris:fieldOfLaw notation="neu">XX-04-02</ris:fieldOfLaw>
-                    <ris:fieldOfLaw notation="alt">01-01-01-01</ris:fieldOfLaw>
-                    <ris:fieldOfLaw notation="alt">02-02-02-02</ris:fieldOfLaw>
+                    <ris:fieldOfLaw notation="NEW">PR-05-01</ris:fieldOfLaw>
+                    <ris:fieldOfLaw notation="NEW">XX-04-02</ris:fieldOfLaw>
+                    <ris:fieldOfLaw notation="OLD">01-01-01-01</ris:fieldOfLaw>
+                    <ris:fieldOfLaw notation="OLD">02-02-02-02</ris:fieldOfLaw>
                   </ris:fieldsOfLaw>
                   <ris:entryIntoEffectDate>2025-01-01</ris:entryIntoEffectDate>
                   <ris:expiryDate>2025-02-02</ris:expiryDate>

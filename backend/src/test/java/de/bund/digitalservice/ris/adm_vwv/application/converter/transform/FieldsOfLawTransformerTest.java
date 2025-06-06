@@ -45,7 +45,7 @@ class FieldsOfLawTransformerTest {
           false,
           "PR-05-01",
           "Phantasierecht",
-          "neu",
+          "NEW",
           List.of(),
           List.of(),
           List.of(),
@@ -59,7 +59,7 @@ class FieldsOfLawTransformerTest {
     //       <akn:proprietary>
     //         <ris:metadata>
     //           <ris:fieldsOfLaw>
-    //             <ris:fieldOfLaw notation="neu">PR-05-01</ris:fieldOfLaw>
+    //             <ris:fieldOfLaw notation="NEW">PR-05-01</ris:fieldOfLaw>
     //           </ris:fieldsOfLaw>
     //         </ris:metadata>
     //       </akn:proprietary>
@@ -100,7 +100,7 @@ class FieldsOfLawTransformerTest {
           false,
           "RR-00-11",
           "RR-00-11",
-          "neu",
+          "NEW",
           List.of(),
           List.of(),
           List.of(),
@@ -114,7 +114,7 @@ class FieldsOfLawTransformerTest {
     //       <akn:proprietary>
     //         <ris:metadata>
     //           <ris:fieldsOfLaw>
-    //             <ris:fieldOfLaw notation="neu">RR-00-11</ris:fieldOfLaw>
+    //             <ris:fieldOfLaw notation="NEW">RR-00-11</ris:fieldOfLaw>
     //           </ris:fieldsOfLaw>
     //         </ris:metadata>
     //       </akn:proprietary>
@@ -186,7 +186,7 @@ class FieldsOfLawTransformerTest {
 
   private RisFieldOfLaw createRisFieldOfLaw(String identifier) {
     RisFieldOfLaw risFieldOfLaw = new RisFieldOfLaw();
-    risFieldOfLaw.setNotation("neu");
+    risFieldOfLaw.setNotation("NEW");
     risFieldOfLaw.setValue(identifier);
     return risFieldOfLaw;
   }
