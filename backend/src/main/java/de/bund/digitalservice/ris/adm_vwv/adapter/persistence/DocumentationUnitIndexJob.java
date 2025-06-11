@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.adm_vwv.adapter.persistence;
 
+import jakarta.annotation.PostConstruct;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,7 @@ public class DocumentationUnitIndexJob {
    * Execute indexing of all documentation units without documentation unit index.
    */
   @Scheduled(cron = "${cronjob.DocumentationUnitIndexJob:-}", zone = "Europe/Berlin")
+  @PostConstruct
   public void indexAll() {
     StopWatch stopWatch = new StopWatch("Index documentation units");
     stopWatch.start();
