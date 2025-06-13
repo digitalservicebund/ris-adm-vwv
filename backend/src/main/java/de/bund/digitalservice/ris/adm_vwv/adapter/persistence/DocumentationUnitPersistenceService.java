@@ -166,7 +166,7 @@ public class DocumentationUnitPersistenceService implements DocumentationUnitPer
         documentationUnitEntities.getSize(),
         documentationUnitEntities.getNumber()
       );
-      documentationUnitEntities.stream().parallel().forEach(this::indexSafely);
+      documentationUnitEntities.stream().forEach(this::indexSafely);
       totalNumberOfElements += documentationUnitEntities.getNumberOfElements();
     } while (documentationUnitEntities.hasNext());
     return totalNumberOfElements;
