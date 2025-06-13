@@ -61,19 +61,19 @@ jobs:
       # browsers that don't need system packages (cf. matrix)
       # note that msedge still installs some
       - name: Install Playwright Browser
-        if: ${{ ! matrix.playwright-project.requiresInstallWithDeps }}
+        if: steps.cache-browser-binaries.outputs.cache-hit != 'true' && !matrix.playwright-project.requiresInstallWithDeps
         working-directory: ./frontend
         run: npx playwright install ${{ matrix.playwright-project.name }}
       # browser (webkit) that need system packages (cf. matrix)
       - name: Install Playwright Browser --with-deps
-        if: matrix.playwright-project.requiresInstallWithDeps
+        if: steps.cache-browser-binaries.outputs.cache-hit != 'true' && matrix.playwright-project.requiresInstallWithDeps
         working-directory: ./frontend
         run: npx playwright install --with-deps ${{ matrix.playwright-project.name }}
       - name: Wait for backend to serve the health Actuator (max 5min)
         timeout-minutes: 5
         run: |
-          until curl --output /dev/null --silent --head --fail http://localhost:8080/actuator/health/readiness; do  
-            echo "Waiting for backend to be fully up..."  
+          until curl --output /dev/null --silent --head --fail http://localhost:8080/actuator/health/readiness; do
+            echo "Waiting for backend to be fully up..."
             sleep 0.1
           done
       - name: Run e2e tests (project ${{ matrix.playwright-project.name }})
