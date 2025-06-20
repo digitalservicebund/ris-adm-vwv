@@ -26,6 +26,9 @@ jobs:
           java-version: "23.0"
           distribution: "temurin"
           cache: gradle
+          cache-dependency-path: | # optional
+            backend/*.gradle*
+            backend/**/gradle-wrapper.properties
 
       - name: Build backend image
         working-directory: ./backend

@@ -21,6 +21,9 @@ jobs:
           java-version: "23.0"
           distribution: "temurin"
           cache: gradle
+          cache-dependency-path: | # optional
+            backend/*.gradle*
+            backend/**/gradle-wrapper.properties
       - name: Run spotlessCheck
         working-directory: ./backend
         run: ./gradlew spotlessCheck
@@ -44,6 +47,9 @@ jobs:
           java-version: "23.0"
           distribution: "temurin"
           cache: gradle
+          cache-dependency-path: | # optional
+            backend/*.gradle*
+            backend/**/gradle-wrapper.properties
       - name: Run checkstyleMain
         working-directory: ./backend
         run: ./gradlew checkstyleMain
@@ -57,64 +63,64 @@ jobs:
         with:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
-  test-backend:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          submodules: true
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          java-version: "23.0"
-          distribution: "temurin"
-          cache: gradle
-      - name: Run tests
-        run: ./gradlew test
-        working-directory: ./backend
-      - name: Upload test report artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: backend-test-report
-          path: backend/build/reports/tests/test
-          if-no-files-found: warn
-      - name: On failure send status to Slack
-        # only on failure and if on "main" branch
-        if: ${{ failure() && github.ref == 'refs/heads/main' }}
-        uses: digitalservicebund/notify-on-failure-gha@814d0c4b2ad6a3443e89c991f8657b10126510bf # v1.5.0
-        with:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+  # test-backend:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+  #       with:
+  #         submodules: true
+  #     - name: Set up JDK
+  #       uses: actions/setup-java@v4
+  #       with:
+  #         java-version: "23.0"
+  #         distribution: "temurin"
+  #         cache: gradle
+  #     - name: Run tests
+  #       run: ./gradlew test
+  #       working-directory: ./backend
+  #     - name: Upload test report artifact
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: backend-test-report
+  #         path: backend/build/reports/tests/test
+  #         if-no-files-found: warn
+  #     - name: On failure send status to Slack
+  #       # only on failure and if on "main" branch
+  #       if: ${{ failure() && github.ref == 'refs/heads/main' }}
+  #       uses: digitalservicebund/notify-on-failure-gha@814d0c4b2ad6a3443e89c991f8657b10126510bf # v1.5.0
+  #       with:
+  #         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
-  build-backend:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v4
-        with:
-          submodules: true
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          java-version: "23.0"
-          distribution: "temurin"
-          cache: gradle
-      - name: Build backend
-        run: ./gradlew build --profile -x test -x spotlessCheck -x checkstyleMain -x checkstyleTest
-        working-directory: ./backend
-      - name: Upload build performance report
-        uses: actions/upload-artifact@v4
-        with:
-          name: backend-build-performance-report
-          path: backend/build/reports/profile/profile*.html
-      - name: On failure send status to Slack
-        # only on failure and if on "main" branch
-        if: ${{ failure() && github.ref == 'refs/heads/main' }}
-        uses: digitalservicebund/notify-on-failure-gha@814d0c4b2ad6a3443e89c991f8657b10126510bf # v1.5.0
-        with:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+  # build-backend:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Check out code
+  #       uses: actions/checkout@v4
+  #       with:
+  #         submodules: true
+  #     - name: Set up JDK
+  #       uses: actions/setup-java@v4
+  #       with:
+  #         java-version: "23.0"
+  #         distribution: "temurin"
+  #         cache: gradle
+  #     - name: Build backend
+  #       run: ./gradlew build --profile -x test -x spotlessCheck -x checkstyleMain -x checkstyleTest
+  #       working-directory: ./backend
+  #     - name: Upload build performance report
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: backend-build-performance-report
+  #         path: backend/build/reports/profile/profile*.html
+  #     - name: On failure send status to Slack
+  #       # only on failure and if on "main" branch
+  #       if: ${{ failure() && github.ref == 'refs/heads/main' }}
+  #       uses: digitalservicebund/notify-on-failure-gha@814d0c4b2ad6a3443e89c991f8657b10126510bf # v1.5.0
+  #       with:
+  #         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
-  check-code-quality-with-sonarqube-backend:
+  build-test-qualityCheck:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -127,17 +133,20 @@ jobs:
           java-version: "23.0"
           distribution: "temurin"
           cache: gradle
+          cache-dependency-path: | # optional
+            backend/*.gradle*
+            backend/**/gradle-wrapper.properties
       - name: Cache SonarQube packages
         uses: actions/cache@v4
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
-      - name: Scan with SonarQube
+      - name: Build, test, sonar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_BACKEND }}
         working-directory: ./backend
-        run: ./gradlew sonar --info
+        run: ./gradlew build test --profile sonar --info -x checkstyleMain -x checkstyleTest
       - name: Check SonarQube Quality Gate
         uses: sonarsource/sonarqube-quality-gate-action@df914238f99aa5d81f4490aeea80f205c7ed9600
         with:
@@ -145,6 +154,23 @@ jobs:
         timeout-minutes: 3 # Force to fail step after specific time
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_BACKEND }}
+      #
+      # Upload reports as pipeline artifacts
+      #
+      - name: Upload build performance report
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-build-performance-report
+          path: backend/build/reports/profile/profile*.html
+      - name: Upload test report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-test-report
+          path: backend/build/reports/tests/test
+          if-no-files-found: warn
+      #
+      # Let the team know on failure on `main`
+      #
       - name: On failure send status to Slack
         # only on failure and if on "main" branch
         if: ${{ failure() && github.ref == 'refs/heads/main' }}
@@ -162,6 +188,9 @@ jobs:
           java-version: "23.0"
           distribution: "temurin"
           cache: gradle
+          cache-dependency-path: | # optional
+            backend/*.gradle*
+            backend/**/gradle-wrapper.properties
       - name: Check licenses
         working-directory: ./backend
         run: ./gradlew checkLicense
@@ -187,10 +216,13 @@ jobs:
           java-version: "23.0"
           distribution: "temurin"
           cache: gradle
-      - name: Check licenses
+          cache-dependency-path: | # optional
+            backend/*.gradle*
+            backend/**/gradle-wrapper.properties
+      - name: Generate javadocs
         working-directory: ./backend
         run: ./gradlew javadoc
-      - name: Upload licence report
+      - name: Upload javadocs
         uses: actions/upload-artifact@v4
         with:
           name: backend-code-documentation

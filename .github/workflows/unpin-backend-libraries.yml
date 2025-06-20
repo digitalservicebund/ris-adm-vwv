@@ -20,6 +20,9 @@ jobs:
           java-version: "23.0"
           distribution: "temurin"
           cache: gradle
+          cache-dependency-path: | # optional
+            backend/*.gradle*
+            backend/**/gradle-wrapper.properties
 
       # Step 1: Unpin pinned libraries:
       # 1. the libraries are unpinned in build.gradle.kts

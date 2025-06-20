@@ -25,6 +25,9 @@ jobs:
           java-version: "23.0"
           distribution: "temurin"
           cache: gradle
+          cache-dependency-path: | # optional
+            backend/*.gradle*
+            backend/**/gradle-wrapper.properties
       - name: Setup and validate Gradle
         uses: gradle/actions/setup-gradle@ac638b010cf58a27ee6c972d7336334ccaf61c96
       - name: Start backend
