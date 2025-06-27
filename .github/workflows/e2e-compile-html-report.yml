@@ -10,50 +10,29 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version-file: ./frontend/.node-version
-          cache: npm
-          cache-dependency-path: ./frontend/package-lock.json
-      - name: Cache node_modules
-        uses: actions/cache@v4
-        id: node-modules-cache
-        with:
-          path: |
-            ./frontend/node_modules
-          key: modules-${{ hashFiles('./frontend/package-lock.json') }}
+
       - name: Install dependencies
-        if: steps.node-modules-cache.outputs.cache-hit != 'true'
-        run: |
-          npm ci
+        run: npm ci
         working-directory: ./frontend
-      # download reports from project/browser matrix
-      - name: Download e2e chromium test report blob
+
+      - name: Download all sharded blob reports
         uses: actions/download-artifact@v4
         with:
-          name: frontend-e2e-test-report.blob.chromium
-          path: tmp/e2e-test-report
-      - name: Download e2e firefox test report blob
-        uses: actions/download-artifact@v4
-        with:
-          name: frontend-e2e-test-report.blob.firefox
-          path: tmp/e2e-test-report
-      - name: Download e2e webkit test report blob
-        uses: actions/download-artifact@v4
-        with:
-          name: frontend-e2e-test-report.blob.webkit
-          path: tmp/e2e-test-report
-      - name: Download e2e msedge test report blob
-        uses: actions/download-artifact@v4
-        with:
-          name: frontend-e2e-test-report.blob.msedge
-          path: tmp/e2e-test-report
-      # end of downloads
-      - name: Generate HTML report out of all the blobs
+          pattern: blob-report-* # Matches all the new sharded artifacts
+          path: all-blob-reports
+          # merge-multiple: true
+
+      - name: List downloaded files for debugging
+        run: ls -R all-blob-reports
+
+      - name: Merge the blob reports
         working-directory: ./frontend
         run: |
-          npx playwright merge-reports --reporter html ../tmp/e2e-test-report
-      - name: Upload e2e HTML test report
-        if: always()
+          npx playwright merge-reports --reporter html ../all-blob-reports
+
+      - name: Upload final merged HTML report
         uses: actions/upload-artifact@v4
         with:
           name: frontend-e2e-test-report-html
+          path: frontend/playwright-report/
           retention-days: 3
-          path: frontend/playwright-report

@@ -27,13 +27,13 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
-  /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : undefined,
+  /* Half of available CPU cores on ci. */
+  workers: process.env.CI ? '50%' : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
     ['html', { outputFolder: 'frontend-e2e-test-report-html' }],
     ['json', { outputFile: 'frontend-e2e-test-report.json' }],
-    ['blob', { outputFile: 'frontend-e2e-test-report.blob' }],
+    ['blob', { outputFile: process.env.BLOB_REPORT_PATH || 'frontend-e2e-test-report.blob' }],
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {

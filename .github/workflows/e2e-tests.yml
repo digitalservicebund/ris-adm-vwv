@@ -12,6 +12,8 @@ jobs:
             { name: "webkit", install: "webkit", requiresInstallWithDeps: true },
             { name: "msedge", install: "msedge chromium" },
           ]
+        shardIndex: [ 1, 2, 3, 4 ]
+        shardTotal: [ 4 ]
     runs-on: ubuntu-latest
     # container:
     #   image: mcr.microsoft.com/playwright:v1.50.0-noble
@@ -81,18 +83,18 @@ jobs:
           done
       - name: Run e2e tests (project ${{ matrix.playwright-project.name }})
         working-directory: ./frontend
+        env:
+          BLOB_REPORT_PATH: blob-report-${{ matrix.playwright-project.name }}-${{ matrix.shardIndex }}.blob
         run: |
-          npm run test:e2e -- --project ${{ matrix.playwright-project.name }}
-      - name: Rename ${{ matrix.playwright-project.name }} test report blob
-        working-directory: ./frontend
-        run: mv frontend-e2e-test-report.blob frontend-e2e-test-report.blob.${{ matrix.playwright-project.name }}.zip
+          npm run test:e2e -- --project ${{ matrix.playwright-project.name }} --shard=${{ matrix.shardIndex }}/4
+
       - name: Upload e2e ${{ matrix.playwright-project.name }} test report blob
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: frontend-e2e-test-report.blob.${{ matrix.playwright-project.name }}
-          retention-days: 3
-          path: frontend/frontend-e2e-test-report.blob.${{ matrix.playwright-project.name }}.zip
+          name: blob-report-${{ matrix.playwright-project.name }}-${{ matrix.shardIndex }}
+          retention-days: 1
+          path: frontend/blob-report-${{ matrix.playwright-project.name }}-${{ matrix.shardIndex }}.blob
       - name: Send status to Slack
         # Third-party action, pin to commit SHA!
         # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
