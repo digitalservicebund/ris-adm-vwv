@@ -2,7 +2,8 @@
 
 As an authorization flow we use Oauth 2 with PKCE (Proof Key for Code Exchange), PKCE is recommended for all OAuth 2.0 flows involving public clients to provide an additional layer of security. It is supported by many identity providers and is considered a best practice for securing OAuth 2.0 implementations in public client applications.
 
-As an authorization service we use Keycloak, an open-source identity and access management solution widely used for adding authentication and authorization to applications.
+As an authorization service we use Keycloak locally, an open-source identity and access management solution widely used for adding authentication and authorization to applications. On the server we use bare.ID.
+
 
 ```mermaid
 sequenceDiagram
@@ -19,6 +20,7 @@ sequenceDiagram
     User's Browser (Vue App)->>Keycloak / bare.id: 3. Exchange Authorization Code for Tokens (behind the scenes)
     Keycloak / bare.id-->>User's Browser (Vue App): 4. Return secure Access Token & ID Token
 
+    Note over User's Browser (Vue App): User is redirected to homepage
     Note over User's Browser (Vue App): User navigates to a protected route
 
     User's Browser (Vue App)->> Backend (Spring Boot): 5. Request protected data with Access Token in "Authorization" header
