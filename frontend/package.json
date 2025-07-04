@@ -61,6 +61,7 @@
     "@vueuse/core": "^13.4.0",
     "axios": "^1.10.0",
     "dayjs": "^1.11.13",
+    "keycloak-js": "^26.2.0",
     "postcss": "^8.5.6",
     "primevue": "^4.3.5",
     "unplugin-icons": "^22.1.0",
