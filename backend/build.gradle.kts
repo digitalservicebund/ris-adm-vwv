@@ -55,6 +55,8 @@ dependencies {
     // CVE-2023-51775
     exclude("org.bitbucket.b_c", "jose4j")
   }
+  implementation("org.springframework.boot:spring-boot-starter-security")
+  implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
 
   implementation("com.google.protobuf:protobuf-java:4.31.1")
   implementation("org.bitbucket.b_c:jose4j:0.9.6")
