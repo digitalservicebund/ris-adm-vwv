@@ -1,5 +1,4 @@
 import { computed, ref } from 'vue'
-import { type ResponseError } from '@/services/httpClient'
 import { useDocumentUnitStore } from '@/stores/documentUnitStore'
 import errorMessages from '@/i18n/errors.json'
 
@@ -12,7 +11,7 @@ function getCurrentTime(dateSaved: Date) {
 export function useSaveToRemote() {
   const store = useDocumentUnitStore()
   const saveIsInProgress = ref(false)
-  const lastSaveError = ref<ResponseError | undefined>(undefined)
+  const lastSaveError = ref<{ title: string } | undefined>(undefined)
   const lastSavedOn = ref<Date | undefined>(undefined)
 
   const formattedLastSavedOn = computed(

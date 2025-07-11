@@ -1,6 +1,7 @@
 import { type FieldOfLaw } from '@/domain/fieldOfLaw'
-import FieldOfLawService from '@/services/fieldOfLawService'
+import { useGetFieldOfLawChildren, useGetFieldOfLaw } from '@/services/fieldOfLawService'
 import StringsUtil from '@/utils/stringsUtil'
+import { until } from '@vueuse/core'
 
 export interface NodeHelperInterface {
   nodes: Map<string, FieldOfLaw>
@@ -19,10 +20,13 @@ export class NodeHelper implements NodeHelperInterface {
     if (StringsUtil.isEmpty(clickedIdentifier)) {
       return Array.from(itemsToReturn.values())
     }
-    const response = await FieldOfLawService.getParentAndChildrenForIdentifier(clickedIdentifier)
-    if (response.data) {
-      this.extractChildren(itemsToReturn, response.data)
-      this.extractParents(itemsToReturn, response.data)
+
+    const { data: fieldsOfLaw, isFinished } = useGetFieldOfLaw(clickedIdentifier)
+    await until(isFinished).toBe(true)
+
+    if (fieldsOfLaw.value) {
+      this.extractChildren(itemsToReturn, fieldsOfLaw.value)
+      this.extractParents(itemsToReturn, fieldsOfLaw.value)
     }
     return Array.from(itemsToReturn.values())
   }
@@ -68,14 +72,17 @@ export class NodeHelper implements NodeHelperInterface {
       if (fromLocal) {
         return fromLocal
       }
-      const response = await FieldOfLawService.getChildrenOf(node.identifier)
-      if (response.data) {
+
+      const { data: fieldsOfLaw, isFinished } = useGetFieldOfLawChildren(node.identifier)
+      await until(isFinished).toBe(true)
+
+      if (fieldsOfLaw.value !== null) {
         // Put resulting elements to nodes map
-        response.data.forEach((fieldOfLaw) => this.nodes.set(fieldOfLaw.identifier, fieldOfLaw))
+        fieldsOfLaw.value.forEach((fieldOfLaw) => this.nodes.set(fieldOfLaw.identifier, fieldOfLaw))
         // Add resulting elements as children to requested node and put it to map
-        node.children = response.data
+        node.children = fieldsOfLaw.value
         this.nodes.set(node.identifier, node)
-        return response.data
+        return fieldsOfLaw.value
       }
     }
     return []

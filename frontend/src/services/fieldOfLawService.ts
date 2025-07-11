@@ -1,72 +1,38 @@
-import httpClient, { type ServiceResponse } from './httpClient'
-import type { Page } from '@/components/Pagination.vue'
 import type { FieldOfLaw, FieldOfLawResponse } from '@/domain/fieldOfLaw'
-import errorMessages from '@/i18n/errors.json'
+import type { UseFetchReturn } from '@vueuse/core'
+import { useApiFetch } from './apiService'
+import { computed, type Ref } from 'vue'
+import { buildUrlWithParams } from '@/utils/urlHelpers'
 
-interface FieldOfLawService {
-  getChildrenOf(identifier: string): Promise<ServiceResponse<FieldOfLaw[]>>
-  getParentAndChildrenForIdentifier(identifier: string): Promise<ServiceResponse<FieldOfLaw>>
-  searchForFieldsOfLaw(
-    page: number,
-    size: number,
-    query?: string,
-    identifier?: string,
-    norm?: string,
-  ): Promise<ServiceResponse<FieldOfLawResponse>>
+const FIELD_OF_LAW_URL = '/lookup-tables/fields-of-law'
+
+export function useGetFieldOfLawChildren(identifier: string): UseFetchReturn<FieldOfLaw[]> {
+  return useApiFetch(`${FIELD_OF_LAW_URL}/${identifier}/children`, {
+    afterFetch: ({ data }) => ({
+      data: data.fieldsOfLaw,
+    }),
+  }).json()
 }
 
-const service: FieldOfLawService = {
-  async getChildrenOf(identifier: string) {
-    const response = await httpClient.get<{ fieldsOfLaw: FieldOfLaw[] }>(
-      `lookup-tables/fields-of-law/${identifier}/children`,
-    )
-    if (response.status >= 300) {
-      response.error = {
-        title: errorMessages.FIELDS_OF_LAW_COULD_NOT_BE_LOADED.title.replace(
-          '${identifier}',
-          identifier,
-        ),
-      }
-    }
-
-    if (response.error) return response
-
-    return {
-      status: response.status,
-      data: response.data?.fieldsOfLaw,
-    }
-  },
-  async getParentAndChildrenForIdentifier(identifier: string) {
-    const response = await httpClient.get<FieldOfLaw>(`lookup-tables/fields-of-law/${identifier}`)
-    if (response.status >= 300) {
-      response.error = {
-        title: errorMessages.FIELD_OF_LAW_COULD_NOT_BE_LOADED.title,
-      }
-    }
-    return response
-  },
-  async searchForFieldsOfLaw(
-    page: number,
-    size: number,
-    query?: string,
-    identifier?: string,
-    norm?: string,
-  ) {
-    const response = await httpClient.get<{ fieldsOfLaw: FieldOfLaw[]; page: Page }>(
-      `lookup-tables/fields-of-law?pageNumber=${page}&pageSize=${size}&identifier=${identifier}&text=${query}&norm=${norm}`,
-    )
-    if (response.status >= 300) {
-      response.error = {
-        title: errorMessages.FIELD_OF_LAW_SEARCH_FAILED.title,
-      }
-    }
-    if (response.error) return response
-
-    return {
-      status: response.status,
-      data: response.data,
-    }
-  },
+export function useGetFieldOfLaw(identifier: string): UseFetchReturn<FieldOfLaw> {
+  return useApiFetch(`${FIELD_OF_LAW_URL}/${identifier}`, {}).json()
 }
 
-export default service
+export function useGetPaginatedFieldsOfLaw(
+  pageNumber: number,
+  pageSize: number,
+  text?: Ref<string>,
+  identifier?: Ref<string>,
+  norm?: Ref<string>,
+): UseFetchReturn<FieldOfLawResponse> {
+  const urlWithParams = computed(() =>
+    buildUrlWithParams(`${FIELD_OF_LAW_URL}`, {
+      pageNumber: pageNumber.toString(),
+      pageSize: pageSize.toString(),
+      identifier: identifier?.value,
+      text: text?.value,
+      norm: norm?.value,
+    }),
+  )
+  return useApiFetch(urlWithParams).json()
+}

@@ -10,9 +10,10 @@ import FieldOfLawSearchResultList from '@/components/field-of-law/FieldOfLawSear
 import FieldOfLawTree from '@/components/field-of-law/FieldOfLawTree.vue'
 import { type Page } from '@/components/Pagination.vue'
 import { type FieldOfLaw } from '@/domain/fieldOfLaw'
-import service from '@/services/fieldOfLawService'
+import { useGetPaginatedFieldsOfLaw } from '@/services/fieldOfLawService'
 import { useDocumentUnitStore } from '@/stores/documentUnitStore'
 import StringsUtil from '@/utils/stringsUtil'
+import { until } from '@vueuse/core'
 
 type FieldOfLawTreeType = InstanceType<typeof FieldOfLawTree>
 const treeRef = useTemplateRef<FieldOfLawTreeType>('treeRef')
@@ -55,16 +56,18 @@ async function submitSearch(page: number) {
     return
   }
 
-  const response = await service.searchForFieldsOfLaw(
+  const { data, isFinished } = useGetPaginatedFieldsOfLaw(
     page,
     itemsPerPage,
-    description.value,
-    identifier.value,
-    norm.value,
+    description,
+    identifier,
+    norm,
   )
-  if (response.data) {
-    currentPage.value = response.data.page
-    results.value = response.data.fieldsOfLaw
+  await until(isFinished).toBe(true)
+
+  if (data.value) {
+    currentPage.value = data.value.page
+    results.value = data.value.fieldsOfLaw
 
     if (results.value?.[0]) {
       nodeOfInterest.value = results.value[0]
@@ -138,7 +141,9 @@ function resetSearch() {
   // reset tree
   nodeOfInterest.value = undefined
   showNorms.value = false
-  treeRef.value?.collapseTree()
+  if (treeRef.value && typeof treeRef.value.collapseTree === 'function') {
+    treeRef.value.collapseTree()
+  }
   isResetButtonVisible.value = false
 }
 

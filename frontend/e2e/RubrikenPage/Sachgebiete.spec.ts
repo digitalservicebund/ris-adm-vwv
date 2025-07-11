@@ -372,7 +372,7 @@ test.describe('RubrikenPage - Sachgebiete', () => {
         await page.getByLabel('Sachgebietsuche auswählen').click()
         await page.getByLabel('Sachgebietsbezeichnung').fill('phantasie')
         await page.keyboard.press('Enter')
-        await page.getByRole('checkbox', { name: 'Mit Normen' }).click()
+        await page.getByRole('checkbox', { name: 'Normen anzeigen' }).click()
 
         // then
         await expect(page.getByText('§ 99 PStG').first()).toBeVisible()
@@ -389,12 +389,12 @@ test.describe('RubrikenPage - Sachgebiete', () => {
         // when
         await page.getByRole('button', { name: 'Sachgebiete hinzufügen' }).click()
         await page.getByLabel('Sachgebietsuche auswählen').click()
-        await page.getByRole('checkbox', { name: 'Mit Normen' }).click()
+        await page.getByRole('checkbox', { name: 'Normen anzeigen' }).click()
         await page.getByLabel('Sachgebietsbezeichnung').fill('phantasie')
         await page.keyboard.press('Enter')
 
         // then
-        await expect(page.getByRole('checkbox', { name: 'Mit Normen' })).toBeChecked()
+        await expect(page.getByRole('checkbox', { name: 'Normen anzeigen' })).toBeChecked()
       },
     )
 

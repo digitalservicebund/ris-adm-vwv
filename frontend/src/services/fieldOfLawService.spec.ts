@@ -1,120 +1,76 @@
-import { afterEach, beforeEach, describe, expect, it } from 'vitest'
-import MockAdapter from 'axios-mock-adapter'
-import { axiosInstance } from '@/services/httpClient'
-import FieldOfLawService from '@/services/fieldOfLawService.ts'
-
-const fieldOfLawResponse = {
-  fieldsOfLaw: [],
-  page: {
-    content: {
-      fieldsOfLaw: [
-        {
-          hasChildren: false,
-          identifier: 'PR-01',
-          text: 'Arbeitsvertrag: Abschluss, Klauseln, Arten, Betriebsübergang',
-          linkedFields: [],
-          norms: [
-            {
-              abbreviation: 'BGB',
-              singleNormDescription: '§ 611a',
-            },
-            {
-              abbreviation: 'GewO',
-              singleNormDescription: '§ 105',
-            },
-          ],
-          children: [],
-          parent: {
-            hasChildren: true,
-            identifier: 'PR',
-            text: 'Phantasierecht',
-            linkedFields: [],
-            norms: [],
-            children: [],
-            parent: undefined,
-          },
-        },
-      ],
-    },
-    size: 1,
-    number: 1,
-    numberOfElements: 1,
-    first: true,
-    last: true,
-    empty: false,
-  },
-}
+import { describe, expect, it, vi } from 'vitest'
+import {
+  useGetFieldOfLawChildren,
+  useGetFieldOfLaw,
+  useGetPaginatedFieldsOfLaw,
+} from '@/services/fieldOfLawService.ts'
+import { until } from '@vueuse/core'
 
 describe('fieldOfLawService', () => {
-  let server: MockAdapter
+  it('gets field of law children', async () => {
+    const fieldOfLawResponse = {
+      fieldsOfLaw: [
+        {
+          id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+          hasChildren: true,
+        },
+      ],
+    }
 
-  beforeEach(() => {
-    server = new MockAdapter(axiosInstance)
-  })
-
-  afterEach(() => {
-    server.restore()
-  })
-
-  it('responds with data property and no error when http code is 200', async () => {
-    server.onAny().reply(200, fieldOfLawResponse)
-
-    const response = await FieldOfLawService.getChildrenOf('root')
-
-    expect(server.history.get).toBeDefined()
-    expect(server.history.get[0].url).toBe('/api/lookup-tables/fields-of-law/root/children')
-    expect(response.data).toBeDefined()
-    expect(response.error).toBeUndefined()
-  })
-
-  it('responds with no data property and error when http code is >= 300', async () => {
-    server.onAny().reply(400)
-
-    const response = await FieldOfLawService.getChildrenOf('THIS_DOES_NOT_EXIST')
-
-    expect(response.data).toBeUndefined()
-    expect(response.error).toBeDefined()
-  })
-
-  it('responds with data property and no error when http code is 200 on get parent and children', async () => {
-    server.onAny().reply(200, fieldOfLawResponse)
-
-    const response = await FieldOfLawService.getParentAndChildrenForIdentifier('PR-01')
-
-    expect(server.history.get).toBeDefined()
-    expect(server.history.get[0].url).toBe('/api/lookup-tables/fields-of-law/PR-01')
-    expect(response.data).toBeDefined()
-    expect(response.error).toBeUndefined()
-  })
-
-  it('responds with no data property and error when http code is >= 300 get parent and children', async () => {
-    server.onAny().reply(500)
-
-    const response = await FieldOfLawService.getParentAndChildrenForIdentifier('PR-YY-XX-ZZ')
-
-    expect(response.data).toBeUndefined()
-    expect(response.error).toBeDefined()
-  })
-
-  it('responds with data property and no error when http code is 200 on search', async () => {
-    server.onAny().reply(200, fieldOfLawResponse)
-
-    const response = await FieldOfLawService.searchForFieldsOfLaw(0, 10, '', 'PR', '')
-
-    expect(server.history.get).toBeDefined()
-    expect(server.history.get[0].url).toBe(
-      '/api/lookup-tables/fields-of-law?pageNumber=0&pageSize=10&identifier=PR&text=&norm=',
+    vi.spyOn(window, 'fetch').mockResolvedValue(
+      new Response(JSON.stringify(fieldOfLawResponse), { status: 200 }),
     )
-    expect(response.data).toBeDefined()
-    expect(response.error).toBeUndefined()
+
+    const { data, error, isFetching, isFinished } = useGetFieldOfLawChildren('PR-05')
+    await until(isFinished).toBe(true)
+
+    expect(isFetching.value).toBe(false)
+    expect(error.value).toBeFalsy()
+    expect(data.value?.length).toBe(1)
   })
 
-  it('responds with no data property and error when http code is >= 300 on search', async () => {
-    server.onAny().reply(500)
+  it('gets field of law parent and children', async () => {
+    const fieldOfLawResponse = {
+      id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+      identifier: 'PR-05',
+    }
 
-    const response = await FieldOfLawService.searchForFieldsOfLaw(0, 10, '', 'PR', '')
+    vi.spyOn(window, 'fetch').mockResolvedValue(
+      new Response(JSON.stringify(fieldOfLawResponse), { status: 200 }),
+    )
 
-    expect(response.data).toBeUndefined()
-    expect(response.error).toBeDefined()
+    const { data, error, isFetching, isFinished } = useGetFieldOfLaw('PR-05')
+    await until(isFinished).toBe(true)
+
+    expect(isFetching.value).toBe(false)
+    expect(error.value).toBeFalsy()
+    expect(data.value?.identifier).toBe('PR-05')
+  })
+
+  it('gets paginated fields of law', async () => {
+    const paginatedResponse = {
+      fieldsOfLaw: [
+        {
+          id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+          identifier: 'PR-05',
+        },
+      ],
+      page: {
+        number: 0,
+        size: 2,
+      },
+    }
+
+    vi.spyOn(window, 'fetch').mockResolvedValue(
+      new Response(JSON.stringify(paginatedResponse), { status: 200 }),
+    )
+
+    const { data, error, isFetching, isFinished } = useGetPaginatedFieldsOfLaw(0, 2)
+    await until(isFinished).toBe(true)
+
+    expect(isFetching.value).toBe(false)
+    expect(error.value).toBeFalsy()
+    expect(data.value?.fieldsOfLaw.length).toBe(1)
+    expect(data.value?.page.number).toBe(0)
   })
 })
