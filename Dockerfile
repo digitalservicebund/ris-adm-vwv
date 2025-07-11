@@ -1,5 +1,9 @@
 FROM node:23.11.0
 
+ARG VITE_AUTH_URL
+ARG VITE_AUTH_CLIENT_ID
+ARG VITE_AUTH_REALM
+
 # make the 'app' folder the current working directory
 WORKDIR /frontend
 
@@ -13,7 +17,10 @@ RUN npm install
 COPY /frontend/. .
 
 # build app for production with minification
-RUN npm run build
+RUN VITE_AUTH_URL=$VITE_AUTH_URL \
+    VITE_AUTH_CLIENT_ID=$VITE_AUTH_CLIENT_ID \
+    VITE_AUTH_REALM=$VITE_AUTH_REALM \
+    npm run build
 
 EXPOSE 5173
 CMD [ "npm", "run", "dev", "--", "--host" ]

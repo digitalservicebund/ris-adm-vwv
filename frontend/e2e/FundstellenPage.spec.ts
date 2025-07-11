@@ -221,7 +221,7 @@ test.describe('FundstellenPageSaveAndLoad', () => {
       })
       await page.getByRole('button', { name: 'Speichern', exact: true }).click()
       await page.goto('/')
-      await page.reload()
+      await expect(page.getByText('Neue Dokumentationseinheit')).toBeVisible()
       await page.goto('/documentUnit/KSNR054920707/fundstellen')
 
       // Assert
@@ -257,7 +257,7 @@ test.describe('FundstellenPage - Bestandsdaten', () => {
       await page.goto('/documentUnit/KSNR999999999')
 
       // then
-      expect(page.url().includes('/documentUnit/KSNR999999999/fundstellen')).toBeTruthy()
+      await expect(page).toHaveURL(/\/documentUnit\/KSNR999999999\/fundstellen/)
     },
   )
 })

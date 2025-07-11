@@ -18,3 +18,6 @@ sentry:
   # Set traces_sample_rate to 1.0 to capture 100% of transactions for tracing.
   tracesSampleRate: 0.01
   ignoreTransactions: ["/actuator/**"]
+
+oauth2:
+  issuer-uri: https://neuris.login.bare.id/auth/realms/development

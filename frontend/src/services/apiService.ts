@@ -1,5 +1,6 @@
 import type { UseFetchReturn } from '@vueuse/core'
 import { createFetch } from '@vueuse/core'
+import { useAuthentication } from '@/services/auth.ts'
 
 /**
  * The same as UseFetchReturn, but without the methods to get more specific useFetch instances.
@@ -53,6 +54,14 @@ export const useApiFetch = createFetch({
           ...options.headers,
         }
       }
+
+      // Authorize requests
+      const { addAuthorizationHeader, tryRefresh } = useAuthentication()
+
+      const hasValidSession = await tryRefresh()
+      if (!hasValidSession) cancel()
+
+      options.headers = addAuthorizationHeader(options.headers)
 
       return { options }
     },

@@ -14,7 +14,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build frontend image
-        run: docker build --tag ${{ inputs.image-ref }} --secret id=SENTRY_AUTH_TOKEN,env=SENTRY_AUTH_TOKEN -f prod.Dockerfile .
+        run: |
+          docker build --tag ${{ inputs.image-ref }} \
+            --secret id=SENTRY_AUTH_TOKEN,env=SENTRY_AUTH_TOKEN \
+            --build-arg VITE_AUTH_URL=${{ vars.VITE_AUTH_URL }} \
+            --build-arg VITE_AUTH_CLIENT_ID=${{ vars.VITE_AUTH_CLIENT_ID }} \
+            --build-arg VITE_AUTH_REALM=${{ vars.VITE_AUTH_REALM }} \
+            -f prod.Dockerfile .
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
       - name: Run Trivy vulnerability image scanner

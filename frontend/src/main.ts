@@ -8,6 +8,7 @@ import * as Sentry from '@sentry/vue'
 import '@/styles/global.css'
 import router from '@/router.ts'
 import { ToastService } from 'primevue'
+import { useAuthentication } from '@/services/auth.ts'
 
 const app = createApp(App)
 
@@ -23,6 +24,14 @@ if (import.meta.env.PROD) {
   })
 }
 
+// Configure authentication
+const auth = useAuthentication()
+// TODO: use env to decide the vars
+await auth.configure({
+  url: import.meta.env.VITE_AUTH_URL || 'http://localhost:8443',
+  clientId: import.meta.env.VITE_AUTH_CLIENT_ID || 'ris-vwv-local',
+  realm: import.meta.env.VITE_AUTH_REALM || 'ris',
+})
 app
   .use(createPinia())
   .use(PrimeVue, {

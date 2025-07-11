@@ -1,6 +1,7 @@
-import axios, { AxiosError } from 'axios'
+import axios, { AxiosError, type InternalAxiosRequestConfig } from 'axios'
 import type { ValidationError } from '@/components/input/types'
 import errorMessages from '@/i18n/errors.json'
+import { useAuthentication } from '@/services/auth.ts'
 
 type RequestOptions = {
   headers?: {
@@ -31,6 +32,34 @@ interface HttpClient {
   ): Promise<ServiceResponse<TResponse>>
 }
 
+export const axiosInstance = axios.create()
+export const API_PREFIX = `/api/`
+
+axiosInstance.interceptors.request.use((config) => {
+  const { isConfigured, addAuthorizationHeader } = useAuthentication()
+  if (isConfigured()) {
+    config.headers = addAuthorizationHeader(config.headers) as any
+  }
+  return config
+})
+
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  async (error: AxiosError) => {
+    const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean }
+
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true
+      const { tryRefresh } = useAuthentication()
+      const refreshed = await tryRefresh()
+      if (refreshed) {
+        return axiosInstance(originalRequest)
+      }
+    }
+    return Promise.reject(error)
+  },
+)
+
 async function baseHttp<T>(url: string, method: string, options?: RequestOptions, data?: T) {
   try {
     const response = await axiosInstance.request({
@@ -48,7 +77,7 @@ async function baseHttp<T>(url: string, method: string, options?: RequestOptions
   } catch (error) {
     let errorCode = (error as AxiosError).code
     if (errorCode === 'ECONNABORTED') {
-      errorCode = '504' // use "Gateway Timeout" code if frontend timeout option has triggered
+      errorCode = '504'
     }
     return {
       status: Number(errorCode) || 500,
@@ -95,6 +124,4 @@ export type ServiceResponse<T> = {
     }
 )
 
-export const axiosInstance = axios.create()
 export default httpClient
-export const API_PREFIX = `/api/`
