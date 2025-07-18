@@ -1,6 +1,9 @@
 import * as Keycloak from 'keycloak-js'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
+// Unmock the globally mocked auth module
+vi.unmock('@/services/auth')
+
 vi.mock('keycloak-js', () => {
   const MockKeycloak = vi.fn()
   MockKeycloak.prototype.init = vi.fn().mockResolvedValue(true)

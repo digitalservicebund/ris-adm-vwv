@@ -6,6 +6,7 @@ on:
     paths-ignore:
       - "**/*.md"
   pull_request:
+    types: [opened, synchronize, reopened, labeled]
   # Allow to run this workflow manually
   workflow_dispatch:
 
@@ -50,7 +51,7 @@ jobs:
       container-registry: ghcr.io
 
   backend-push-image-to-registry:
-    if: ${{ github.ref == 'refs/heads/main' }}
+    if: ${{ github.ref == 'refs/heads/main' || contains(github.event.pull_request.labels.*.name, 'dev-env') }}
     # For PR releases, labels could be used like this:
     # if: ${{ github.ref == 'refs/heads/main' || contains(github.event.pull_request.labels.*.name, 'dev-env') || contains(github.event.labeled.labels.*.name, 'dev-env') }}
     needs:
@@ -95,7 +96,7 @@ jobs:
       image-ref: ghcr.io/${{ github.repository }}-frontend:${{ github.event.pull_request.head.sha || github.sha }}
 
   frontend-push-image-to-registry:
-    if: ${{ github.ref == 'refs/heads/main' }}
+    if: ${{ github.ref == 'refs/heads/main' || contains(github.event.pull_request.labels.*.name, 'dev-env') }}
     # For PR releases, labels could be used like this:
     # if: ${{ github.ref == 'refs/heads/main' || contains(github.event.pull_request.labels.*.name, 'dev-env') || contains(github.event.labeled.labels.*.name, 'dev-env') }}
     needs:

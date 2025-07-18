@@ -9,7 +9,6 @@ jobs:
           [
             { name: "chromium", install: "chromium" },
             { name: "firefox", install: "firefox" },
-            { name: "webkit", install: "webkit", requiresInstallWithDeps: true },
             { name: "msedge", install: "msedge chromium" },
           ]
         shardIndex: [1, 2, 3, 4]
@@ -67,11 +66,6 @@ jobs:
         if: ${{ ! matrix.playwright-project.requiresInstallWithDeps }}
         working-directory: ./frontend
         run: npx playwright install ${{ matrix.playwright-project.install }}
-      # browser (webkit) that need system packages (cf. matrix)
-      - name: Install Playwright Browser --with-deps
-        if: matrix.playwright-project.requiresInstallWithDeps
-        working-directory: ./frontend
-        run: npx playwright install --with-deps ${{ matrix.playwright-project.install }}
       - name: Wait for backend to serve the health Actuator (max 5min)
         timeout-minutes: 5
         run: |
@@ -79,6 +73,9 @@ jobs:
             echo "Waiting for backend to be fully up..."
             sleep 0.1
           done
+      - name: Run Playwright setup and seed data
+        working-directory: ./frontend
+        run: npx playwright test --project=setup --project="seed data"
       - name: Run e2e tests (project ${{ matrix.playwright-project.name }})
         working-directory: ./frontend
         run: |

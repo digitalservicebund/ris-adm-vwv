@@ -2,7 +2,10 @@
 import FlexContainer from '@/components/FlexContainer.vue'
 import FlexItem from '@/components/FlexItem.vue'
 import IconBadge from '@/components/IconBadge.vue'
+import { useAuthentication } from '@/services/auth'
 import IconPermIdentity from '~icons/ic/baseline-perm-identity'
+
+const { getUsername } = useAuthentication()
 </script>
 
 <template>
@@ -17,7 +20,9 @@ import IconPermIdentity from '~icons/ic/baseline-perm-identity'
       <IconPermIdentity data-testid="iconPermIdentity" />
       <div>
         <FlexContainer>
-          <FlexItem class="pe-8">Vorname Nachname</FlexItem>
+          <FlexItem class="pe-8">
+            {{ getUsername() ?? 'Vorname Nachname' }}
+          </FlexItem>
           <FlexItem>
             <IconBadge
               :background-color="'bg-red-300'"

@@ -11,3 +11,18 @@ services:
       - '5432:5432'
     volumes:
       - ./docker-initialization:/docker-entrypoint-initdb.d/
+
+  keycloak:
+    container_name: 'ris-adm-vwv-keycloak'
+    image: 'quay.io/keycloak/keycloak:26.2.5'
+    environment:
+      - 'KEYCLOAK_ADMIN=admin'
+      - 'KEYCLOAK_ADMIN_PASSWORD=admin'
+    ports:
+      - '8443:8080'
+
+    volumes:
+      - ./keycloak-config:/opt/keycloak/data/import
+    command: ["start-dev", "--import-realm"]
+
+

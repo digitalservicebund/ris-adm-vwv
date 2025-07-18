@@ -28,7 +28,7 @@ test.describe('StartPage', () => {
       await expect(page.getByText('des Bundes')).toBeVisible()
       // user icon
       await expect(page.getByTestId('iconPermIdentity')).toHaveCount(1)
-      await expect(page.getByText('Vorname Nachname')).toBeVisible()
+      await expect(page.getByText('test test')).toBeVisible()
       await expect(page.getByText('BSG')).toHaveCount(1)
       await expect(page.getByText('Übersicht Verwaltungsvorschriften')).toHaveCount(1)
       await expect(page.getByText('Neue Dokumentationseinheit')).toHaveCount(1)

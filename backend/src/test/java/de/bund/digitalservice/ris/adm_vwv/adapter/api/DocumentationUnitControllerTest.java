@@ -27,10 +27,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(controllers = DocumentationUnitController.class)
+@WithMockUser(roles = "adm_vwv_user")
 @Import(SecurityConfiguration.class)
 class DocumentationUnitControllerTest {
 

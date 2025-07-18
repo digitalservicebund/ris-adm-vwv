@@ -75,8 +75,7 @@ describe('useApiFetch', () => {
     expect(fetchSpy).not.toHaveBeenCalled()
   })
 
-  // Activate once keycloak is in place
-  it.skip('adds the Authorization header if available', async () => {
+  it('adds the Authorization header if available', async () => {
     const fetchSpy = vi.spyOn(window, 'fetch').mockResolvedValue(new Response('{}'))
 
     vi.spyOn(Auth, 'useAuthentication').mockReturnValue({
@@ -96,7 +95,7 @@ describe('useApiFetch', () => {
 
     await vi.waitFor(() =>
       expect(fetchSpy).toHaveBeenCalledWith(
-        '/api/v1/foo/bar',
+        '/api/foo/bar',
         expect.objectContaining({
           headers: expect.objectContaining({ Authorization: 'Bearer 1234' }),
         }),
@@ -123,8 +122,7 @@ describe('useApiFetch', () => {
     )
   })
 
-  // Activate once keycloak is in place
-  it.skip('attempts a token refresh before sending the request', async () => {
+  it('attempts a token refresh before sending the request', async () => {
     vi.spyOn(window, 'fetch').mockResolvedValue(new Response('{}'))
 
     const tryRefresh = vi.fn().mockResolvedValue(true)
@@ -170,8 +168,7 @@ describe('useApiFetch', () => {
     await vi.waitFor(() => expect(fetchSpy).toHaveBeenCalled())
   })
 
-  // Activate once keycloak is in place
-  it.skip('aborts the request if the token refresh fails', async () => {
+  it('aborts the request if the token refresh fails', async () => {
     const fetchSpy = vi.spyOn(window, 'fetch').mockResolvedValue(new Response('{}'))
 
     const tryRefresh = vi.fn().mockResolvedValue(false)

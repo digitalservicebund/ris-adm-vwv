@@ -1,11 +1,12 @@
 import { describe, it, expect } from 'vitest'
+import { render, screen } from '@testing-library/vue'
+import NavbarTop from '@/components/NavbarTop.vue'
 
-import { mount } from '@vue/test-utils'
-import NavbarTop from './NavbarTop.vue'
+describe('NavbarTop', () => {
+  it('renders properly', async () => {
+    render(NavbarTop)
 
-describe('HelloWorld', () => {
-  it('renders properly', () => {
-    const wrapper = mount(NavbarTop, { props: {} })
-    expect(wrapper.text()).toContain('Rechtsinformationen')
+    expect(screen.getByText('Rechtsinformationen')).toBeInTheDocument()
+    expect(screen.getByText('test test')).toBeInTheDocument()
   })
 })
