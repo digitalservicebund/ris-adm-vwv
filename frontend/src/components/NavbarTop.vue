@@ -4,8 +4,9 @@ import FlexItem from '@/components/FlexItem.vue'
 import IconBadge from '@/components/IconBadge.vue'
 import { useAuthentication } from '@/services/auth'
 import IconPermIdentity from '~icons/ic/baseline-perm-identity'
+import IconLogout from '~icons/ic/baseline-logout'
 
-const { getUsername } = useAuthentication()
+const { getUsername, logout, openUserProfile } = useAuthentication()
 </script>
 
 <template>
@@ -17,21 +18,22 @@ const { getUsername } = useAuthentication()
       </div>
     </div>
     <div class="flex items-center gap-10">
-      <IconPermIdentity data-testid="iconPermIdentity" />
-      <div>
-        <FlexContainer>
-          <FlexItem class="pe-8">
-            {{ getUsername() ?? 'Vorname Nachname' }}
-          </FlexItem>
-          <FlexItem>
-            <IconBadge
-              :background-color="'bg-red-300'"
-              color="text-black"
-              :label="'BSG | Staging'"
-            />
-          </FlexItem>
-        </FlexContainer>
-      </div>
+      <FlexContainer alignItems="items-center">
+        <button @click="openUserProfile" aria-label="Open user profile">
+          <IconPermIdentity data-testid="iconPermIdentity" />
+        </button>
+        <FlexItem>
+          {{ getUsername() ?? 'Vorname Nachname' }}
+        </FlexItem>
+        <FlexItem>
+          <IconBadge :background-color="'bg-red-300'" color="text-black" :label="'BSG | Staging'" />
+        </FlexItem>
+        <FlexItem>
+          <button @click="logout" class="hover:cursor-pointer" aria-label="Log out">
+            <IconLogout class="h-5 w-5" />
+          </button>
+        </FlexItem>
+      </FlexContainer>
     </div>
   </nav>
 </template>

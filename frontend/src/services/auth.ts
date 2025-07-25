@@ -78,6 +78,12 @@ function createAuthentication() {
     return keycloak?.createLogoutUrl()
   }
 
+  function logout(): Promise<void> | undefined {
+    const redirectUri = window.location.origin
+
+    return keycloak?.logout({ redirectUri: redirectUri })
+  }
+
   let pendingRefresh: Promise<boolean> | null = null
 
   /**
@@ -108,13 +114,19 @@ function createAuthentication() {
     }
   }
 
+  function openUserProfile(): Promise<void> | undefined {
+    return keycloak?.accountManagement()
+  }
+
   return () => ({
     addAuthorizationHeader,
     configure,
     getLogoutLink,
+    logout,
     getUsername,
     isConfigured,
     tryRefresh,
+    openUserProfile,
   })
 }
 
