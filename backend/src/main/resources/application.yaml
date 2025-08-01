@@ -26,10 +26,6 @@ springdoc:
 # At 08:00 every day between Monday and Friday
 cronjob.DocumentationUnitIndexJob: "0 0 8 * * Mon-Fri"
 
-logging:
-  level:
-    de.bund.digitalservice.ris.adm_vwv.config: DEBUG
-
 frontend:
   auth:
     url: ${oauth2.frontend-url:http://localhost:8443}
