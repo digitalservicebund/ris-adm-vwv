@@ -1,3 +1,4 @@
+import { requiredDocumentUnitFields, type DocumentUnit } from '@/domain/documentUnit'
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 dayjs.extend(customParseFormat)
@@ -19,4 +20,12 @@ export function getFutureDateErrMessage(dates: string[]): string {
   return futureDates.length > 0
     ? `Das Datum darf nicht in der Zukunft liegen: ${futureDates.join(', ')}`
     : ''
+}
+
+// Returns a list of missing required fields
+export function missingDocUnitFields(doc: DocumentUnit): string[] {
+  return requiredDocumentUnitFields.filter((field) => {
+    const value = doc[field]
+    return !value || (Array.isArray(value) && value.length === 0)
+  })
 }

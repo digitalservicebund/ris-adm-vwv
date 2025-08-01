@@ -1,6 +1,12 @@
 import { describe, it, expect } from 'vitest'
-import { areDatesValid, getFutureDateErrMessage, getInvalidDateErrMessage } from './validators'
+import {
+  areDatesValid,
+  getFutureDateErrMessage,
+  getInvalidDateErrMessage,
+  missingDocUnitFields,
+} from './validators'
 import dayjs from 'dayjs'
+import type { DocumentUnit } from '@/domain/documentUnit'
 
 describe('Validators functions', () => {
   describe('areDatesValid', () => {
@@ -67,6 +73,24 @@ describe('Validators functions', () => {
 
       const expectedMessage = `Das Datum darf nicht in der Zukunft liegen: ${futureDate1}, ${futureDate2}`
       expect(getFutureDateErrMessage(dates)).toBe(expectedMessage)
+    })
+  })
+
+  describe('validateDocumentUnit', () => {
+    it('should return a list of missing fields', () => {
+      const doc: DocumentUnit = {
+        id: 'docId1',
+        documentNumber: 'KSNR999999999',
+        note: '',
+        langueberschrift: 'this is a langueberschrift',
+        inkrafttretedatum: '',
+        zitierdaten: [],
+      }
+
+      const actual = missingDocUnitFields(doc)
+      const expected = ['inkrafttretedatum', 'dokumenttyp', 'zitierdaten', 'normgeberList']
+
+      expect(expected.sort()).toEqual(actual.sort())
     })
   })
 })

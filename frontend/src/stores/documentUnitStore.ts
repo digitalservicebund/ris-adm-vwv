@@ -31,7 +31,12 @@ export const useDocumentUnitStore = defineStore('docunitStore', () => {
     isLoading.value = true
     error.value = null
 
-    const { data, error: putError, statusCode, execute } = usePutDocUnit(documentUnit.value)
+    const {
+      data,
+      error: putError,
+      statusCode,
+      execute,
+    } = usePutDocUnit(documentUnit.value as DocumentUnit)
     await execute()
 
     if (statusCode.value && statusCode.value >= 200 && statusCode.value < 300 && data.value) {

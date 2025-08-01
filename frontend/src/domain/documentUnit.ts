@@ -34,7 +34,6 @@ export interface DocumentUnit {
   fieldsOfLaw?: FieldOfLaw[]
   langueberschrift?: string
   keywords?: string[]
-  zitierdatum?: string
   zitierdaten?: string[]
   inkrafttretedatum?: string
   ausserkrafttretedatum?: string
@@ -49,3 +48,11 @@ export interface DocumentUnit {
   note: string
   normgeberList?: Normgeber[]
 }
+
+export const requiredDocumentUnitFields = [
+  'langueberschrift',
+  'inkrafttretedatum',
+  'dokumenttyp',
+  'normgeberList',
+  'zitierdaten',
+] as const

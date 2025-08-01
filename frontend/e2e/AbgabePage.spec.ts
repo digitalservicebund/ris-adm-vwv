@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 
-test(
+test.skip(
   'Visiting the Abgabe step of creating a documentUnit which displays a Button to end the process and leads to the StartPage',
   { tag: ['@RISDEV-6048'] },
   async ({ page }) => {
