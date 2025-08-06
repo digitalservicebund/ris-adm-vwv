@@ -194,8 +194,8 @@ describe('usePeriodikumSearch', () => {
     expect(results).toEqual([
       {
         id: bundesanzeigerFixture.id,
-        label: bundesanzeigerFixture.abbreviation,
-        secondaryLabel: bundesanzeigerFixture.title,
+        label: `${bundesanzeigerFixture.abbreviation} | ${bundesanzeigerFixture.title}`,
+        secondaryLabel: '',
       },
     ])
   })
