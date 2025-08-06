@@ -2,6 +2,7 @@ import { ref, type Ref } from 'vue'
 import { useDebounceFn } from '@vueuse/core'
 import type { AutoCompleteDropdownClickEvent } from 'primevue/autocomplete'
 import type { Institution, Region } from '@/domain/normgeber'
+import type { Periodikum } from '@/domain/fundstelle'
 
 // Should be exported from ris-ui
 export interface AutoCompleteSuggestion {
@@ -104,6 +105,18 @@ export function useRegionSearch(regions: Ref<Region[]>) {
         id: region.id,
         label: region.code,
         secondaryLabel: region.longText,
+      }))
+  }
+}
+
+export function usePeriodikumSearch(periodika: Ref<Periodikum[]>) {
+  return function searchFn(query?: string) {
+    return periodika.value
+      .filter((p) => !query || p.title?.toLowerCase().includes(query.toLowerCase()))
+      .map((p) => ({
+        id: p.id,
+        label: p.title,
+        secondaryLabel: p.subtitle,
       }))
   }
 }
