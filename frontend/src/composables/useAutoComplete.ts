@@ -115,8 +115,8 @@ export function usePeriodikumSearch(periodika: Ref<Periodikum[]>) {
       .filter((p) => !query || p.title?.toLowerCase().includes(query.toLowerCase()))
       .map((p) => ({
         id: p.id,
-        label: p.title,
-        secondaryLabel: p.subtitle,
+        label: p.abbreviation,
+        secondaryLabel: p.title,
       }))
   }
 }

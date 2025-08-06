@@ -2,12 +2,15 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import {
   useAutoComplete,
   useInstitutionSearch,
+  usePeriodikumSearch,
   useRegionSearch,
   type AutoCompleteSuggestion,
 } from '@/composables/useAutoComplete'
 import type { AutoCompleteDropdownClickEvent } from 'primevue/autocomplete'
 import { InstitutionType, type Institution, type Region } from '@/domain/normgeber'
 import { ref } from 'vue'
+import { amtsblattFixture, bundesanzeigerFixture } from '@/testing/fixtures/periodikum'
+import type { Periodikum } from '@/domain/fundstelle'
 
 describe('useAutoComplete', () => {
   // Mock debounce to avoid delay
@@ -171,6 +174,34 @@ describe('useRegionSearch', () => {
 
   it('returns an empty array if no matches', () => {
     const search = useRegionSearch(mockRegions)
+    const results = search('xyz')
+    expect(results).toEqual([])
+  })
+})
+
+describe('usePeriodikumSearch', () => {
+  const mockPeriodika = ref<Periodikum[]>([bundesanzeigerFixture, amtsblattFixture])
+
+  it('returns all periodika when query is empty', () => {
+    const search = usePeriodikumSearch(mockPeriodika)
+    const results = search('')
+    expect(results).toHaveLength(2)
+  })
+
+  it('returns filtered periodika by title', () => {
+    const search = usePeriodikumSearch(mockPeriodika)
+    const results = search('bu')
+    expect(results).toEqual([
+      {
+        id: bundesanzeigerFixture.id,
+        label: bundesanzeigerFixture.abbreviation,
+        secondaryLabel: bundesanzeigerFixture.title,
+      },
+    ])
+  })
+
+  it('returns an empty array if no matches', () => {
+    const search = usePeriodikumSearch(mockPeriodika)
     const results = search('xyz')
     expect(results).toEqual([])
   })

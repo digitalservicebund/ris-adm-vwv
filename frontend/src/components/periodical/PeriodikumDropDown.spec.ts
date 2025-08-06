@@ -12,7 +12,7 @@ vi.mock('@digitalservicebund/ris-ui/components', () => ({
 }))
 
 describe('PeriodikumDropDown', () => {
-  it('renders the component', async () => {
+  it('renders correctly', async () => {
     const fetchSpy = vi
       .spyOn(window, 'fetch')
       .mockResolvedValue(
@@ -21,6 +21,23 @@ describe('PeriodikumDropDown', () => {
           { status: 200 },
         ),
       )
+
+    const wrapper = mount(PeriodikumDropDown, {
+      props: {
+        inputId: 'foo',
+        isInvalid: false,
+        modelValue: undefined,
+      },
+    })
+
+    await vi.waitFor(() => expect(fetchSpy).toHaveBeenCalledTimes(1))
+
+    const input = wrapper.find('[data-testid="autocomplete"]')
+    expect(input.exists()).toBe(true)
+  })
+
+  it('renders correctly on fetching error', async () => {
+    const fetchSpy = vi.spyOn(window, 'fetch').mockRejectedValue('fetch error')
 
     const wrapper = mount(PeriodikumDropDown, {
       props: {
@@ -64,5 +81,11 @@ describe('PeriodikumDropDown', () => {
     const emitted = wrapper.emitted('update:modelValue')!
     expect(emitted).toHaveLength(1)
     expect(emitted[0][0]).toEqual(bundesanzeigerFixture)
+
+    // when
+    await input.setValue('unknownId')
+
+    // then value is not emitted
+    expect(emitted).toHaveLength(1)
   })
 })
