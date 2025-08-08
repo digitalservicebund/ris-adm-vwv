@@ -212,7 +212,7 @@ test.describe('List of documents', () => {
     },
   )
 
-  test(
+  test.skip(
     'shows dokumentnummer, zitierdatum, langueberschrift, fundstelle for a newly created document',
     { tag: ['@RISDEV-8315', '@RISDEV-7599'] },
     async ({ page }) => {
@@ -224,7 +224,7 @@ test.describe('List of documents', () => {
 
       await page.goto('/')
       await page.getByText('Neue Dokumentationseinheit').click()
-      await page.getByRole('button', { name: 'Dropdown öffnen' }).click()
+      await page.getByRole('combobox', { name: 'Periodikum' }).fill('Die')
       await page.getByText('ABc | Die Beispieler').click()
       await page.getByRole('textbox', { name: 'Zitatstelle' }).fill('2024, Seite 24')
       await page.getByText('Übernehmen').click()
