@@ -101,21 +101,21 @@ export default defineConfig({
     // The following tests test the login functionality itself, so they need to be separate projects which run without
     // the playwright login as a dependency.
     {
-      name: 'Login Test - Chromium',
+      name: 'loginChromium',
       testMatch: 'login.spec.ts',
       use: {
         ...devices['Desktop Chrome'],
       },
     },
     {
-      name: 'Login Test - Firefox',
+      name: 'loginFirefox',
       testMatch: 'login.spec.ts',
       use: {
         ...devices['Desktop Firefox'],
       },
     },
     {
-      name: 'Login Test - Edge',
+      name: 'loginEdge',
       testMatch: 'login.spec.ts',
       use: {
         ...devices['Desktop Edge'],

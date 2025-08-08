@@ -4,7 +4,9 @@ on:
 jobs:
   e2e-tests:
     strategy:
+      fail-fast: false
       matrix:
+        # Standard, sharded runs
         playwright-project:
           [
             { name: "chromium", install: "chromium" },
@@ -13,6 +15,13 @@ jobs:
           ]
         shardIndex: [1, 2, 3, 4]
         shardTotal: [4]
+
+        # Non-sharded login tests
+        include:
+          - playwright-project: { name: "loginChromium", install: "chromium" }
+          - playwright-project: { name: "loginFirefox", install: "firefox" }
+          - playwright-project: { name: "loginEdge", install: "msedge chromium" }
+
     runs-on: ubuntu-latest
 
     steps:
@@ -74,7 +83,7 @@ jobs:
         run: |
           until curl --output /dev/null --silent --head --fail http://localhost:8080/actuator/health/readiness; do
             echo "Waiting for backend to be fully up..."
-            sleep 0.1
+            sleep 0.5
           done
       - name: Run Playwright setup and seed data
         working-directory: ./frontend
@@ -82,17 +91,21 @@ jobs:
       - name: Run e2e tests (project ${{ matrix.playwright-project.name }})
         working-directory: ./frontend
         run: |
-          npm run test:e2e -- --project ${{ matrix.playwright-project.name }} --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
+          SHARD_ARG=""
+          if [[ -n "${{ matrix.shardIndex }}" ]]; then
+            SHARD_ARG="--shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}"
+          fi
+          npm run test:e2e -- --project ${{ matrix.playwright-project.name }} $SHARD_ARG
       - name: Rename ${{ matrix.playwright-project.name }} test report blob
         working-directory: ./frontend
-        run: mv frontend-e2e-test-report.blob frontend-e2e-test-report.blob.${{ matrix.playwright-project.name }}.${{ matrix.shardIndex }}.zip
+        run: mv frontend-e2e-test-report.blob frontend-e2e-test-report.blob.${{ matrix.playwright-project.name }}.${{ matrix.shardIndex || 'full' }}.zip
       - name: Upload e2e ${{ matrix.playwright-project.name }} test report blob
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: frontend-e2e-test-report.blob.${{ matrix.playwright-project.name }}.${{ matrix.shardIndex }}
+          name: frontend-e2e-test-report.blob.${{ matrix.playwright-project.name }}.${{ matrix.shardIndex || 'full' }}
           retention-days: 3
-          path: frontend/frontend-e2e-test-report.blob.${{ matrix.playwright-project.name }}.${{ matrix.shardIndex }}.zip
+          path: frontend/frontend-e2e-test-report.blob.${{ matrix.playwright-project.name }}.${{ matrix.shardIndex || 'full' }}.zip
       - name: Send status to Slack
         # Third-party action, pin to commit SHA!
         # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
