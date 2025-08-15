@@ -34,28 +34,31 @@ public class NormReferencesTransformer {
 
     List<OtherReferences> otherReferencesWithImplicitAndNormReferences = otherReferences
       .stream()
-      .filter(or -> or.getImplicitReference() != null)
-      .filter(or -> or.getImplicitReference().getNormReference() != null)
+      .filter(or -> or.getImplicitReferences() != null)
+      .filter(or ->
+        or.getImplicitReferences().stream().anyMatch(ir -> ir.getNormReference() != null)
+      )
       .toList();
 
     if (otherReferencesWithImplicitAndNormReferences.isEmpty()) return List.of();
 
     return otherReferencesWithImplicitAndNormReferences
       .stream()
-      .map(or ->
+      .flatMap(or -> or.getImplicitReferences().stream())
+      .map(implicitReference ->
         new NormReference(
           new NormAbbreviation(
             UUID.randomUUID(),
-            or.getImplicitReference().getShortForm(),
-            or.getImplicitReference().getShowAs()
+            implicitReference.getShortForm(),
+            implicitReference.getShowAs()
           ),
-          or.getImplicitReference().getShortForm(),
+          implicitReference.getShortForm(),
           List.of(
             new SingleNorm(
               UUID.randomUUID(),
-              or.getImplicitReference().getNormReference().getSingleNorm(),
-              or.getImplicitReference().getNormReference().getDateOfVersion(),
-              or.getImplicitReference().getNormReference().getDateOfRelevance()
+              implicitReference.getNormReference().getSingleNorm(),
+              implicitReference.getNormReference().getDateOfVersion(),
+              implicitReference.getNormReference().getDateOfRelevance()
             )
           )
         )

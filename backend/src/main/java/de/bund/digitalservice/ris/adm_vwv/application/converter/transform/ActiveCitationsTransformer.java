@@ -31,7 +31,7 @@ public class ActiveCitationsTransformer {
     List<OtherReferences> otherReferences = analysis.getOtherReferences();
     return otherReferences
       .stream()
-      .map(OtherReferences::getImplicitReference)
+      .flatMap(or -> or.getImplicitReferences().stream())
       .filter(ir -> ir.getReferenceType() == ImplicitReferenceType.ACTIVE_CITATION)
       .map(ImplicitReference::getCaselawReference)
       .map(cr ->

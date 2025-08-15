@@ -87,7 +87,7 @@ class ActiveCitationsTransformerTest {
     risCaselawReference.setCourt("PhanGH");
     risCaselawReference.setCourtLocation("Berlin");
     implicitReference.setCaselawReference(risCaselawReference);
-    otherReferences.setImplicitReference(implicitReference);
+    otherReferences.setImplicitReferences(List.of(implicitReference));
     return otherReferences;
   }
 }

@@ -38,7 +38,7 @@ public class FundstellenTransformer {
     List<OtherReferences> otherReferences = analysis.getOtherReferences();
     return otherReferences
       .stream()
-      .map(OtherReferences::getImplicitReference)
+      .flatMap(or -> or.getImplicitReferences().stream())
       .filter(ir -> ir.getReferenceType() == ImplicitReferenceType.FUNDSTELLE)
       .map(ir -> {
         String abbreviation = ir.getShortForm();

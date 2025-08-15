@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.adm_vwv.application.converter;
 
 import de.bund.digitalservice.ris.adm_vwv.application.DocumentType;
 import de.bund.digitalservice.ris.adm_vwv.application.FieldOfLaw;
+import de.bund.digitalservice.ris.adm_vwv.application.Fundstelle;
 import de.bund.digitalservice.ris.adm_vwv.application.InstitutionType;
 import de.bund.digitalservice.ris.adm_vwv.application.converter.business.DocumentationUnitContent;
 import de.bund.digitalservice.ris.adm_vwv.application.converter.business.Normgeber;
@@ -13,6 +14,7 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Element;
@@ -69,6 +71,7 @@ public class LdmlPublishConverterService {
       documentationUnitContent.dokumenttypZusatz()
     );
     setAktenzeichen(meta, documentationUnitContent.aktenzeichen());
+    setFundstellen(meta, documentationUnitContent.fundstellen());
     return xmlWriter.writeXml(akomaNtoso);
   }
 
@@ -243,6 +246,25 @@ public class LdmlPublishConverterService {
     if (!aktenzeichen.isEmpty()) {
       RisMetadata risMetadata = meta.getOrCreateProprietary().getMetadata();
       risMetadata.setReferenceNumbers(aktenzeichen);
+    }
+  }
+
+  private void setFundstellen(Meta meta, List<Fundstelle> fundstellen) {
+    if (CollectionUtils.isNotEmpty(fundstellen)) {
+      OtherReferences otherReferences = meta.getOrCreateAnalysis().getOtherReferences().getFirst();
+      otherReferences.setImplicitReferences(
+        fundstellen
+          .stream()
+          .map(fundstelle -> {
+            ImplicitReference implicitReference = new ImplicitReference();
+            implicitReference.setShortForm(fundstelle.periodikum().abbreviation());
+            implicitReference.setShowAs(
+              fundstelle.periodikum().abbreviation() + ", " + fundstelle.zitatstelle()
+            );
+            return implicitReference;
+          })
+          .toList()
+      );
     }
   }
 }

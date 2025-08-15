@@ -130,7 +130,7 @@ class FundstellenTransformerTest {
     ImplicitReference implicitReference = new ImplicitReference();
     implicitReference.setShowAs(citation);
     implicitReference.setShortForm(legalPeriodicalRawValue);
-    otherReferences.setImplicitReference(implicitReference);
+    otherReferences.setImplicitReferences(List.of(implicitReference));
     return otherReferences;
   }
 }
