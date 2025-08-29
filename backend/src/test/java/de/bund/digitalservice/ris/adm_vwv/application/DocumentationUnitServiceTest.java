@@ -163,6 +163,8 @@ class DocumentationUnitServiceTest {
       List.of(),
       null,
       List.of(),
+      List.of(),
+      List.of(),
       List.of()
     );
   }

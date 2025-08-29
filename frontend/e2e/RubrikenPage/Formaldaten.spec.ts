@@ -305,4 +305,68 @@ test.describe('RubrikenPage - Formatdaten', () => {
       await expect(page.getByText('Unvollständiges Datum')).toBeVisible()
     },
   )
+
+  test(
+    'Titelaspekt: items can be added, edited, deleted and changes persist when saved',
+    { tag: ['@RISDEV-8618'] },
+    async ({ page }) => {
+      // given
+      await page.goto('/')
+      await page.getByText('Neue Dokumentationseinheit').click()
+      await page.waitForURL(/documentUnit/)
+      await page.getByRole('link', { name: 'Rubriken' }).click()
+
+      // when
+      await page.getByRole('button', { name: 'Titelaspekt hinzufügen' }).click()
+
+      // then
+      const titelAspektGroup = page.getByRole('group', { name: 'Titelaspekt' })
+      await expect(titelAspektGroup).toBeVisible()
+
+      // when
+      // eslint-disable-next-line playwright/no-raw-locators
+      const titelAspektInput = titelAspektGroup.locator('input')
+      await expect(titelAspektInput).toHaveCount(1)
+      await titelAspektInput.fill('Gemeinsamer Bundesausschuss')
+      await titelAspektInput.press('Enter')
+      // then
+      await expect(page.getByText('Gemeinsamer Bundesausschuss')).toHaveCount(1)
+
+      // when
+      await page.getByRole('button', { name: 'Speichern', exact: true }).click()
+      await page.reload()
+      // then
+      await expect(page.getByText('Gemeinsamer Bundesausschuss')).toHaveCount(1)
+
+      // when
+      const listItem = titelAspektGroup.getByRole('listitem', {
+        name: 'Gemeinsamer Bundesausschuss',
+      })
+      await expect(listItem).toHaveCount(1)
+      await listItem.dblclick()
+      await listItem.getByRole('textbox').fill('Leistungserbringer')
+      await page.keyboard.press('Enter')
+      await page.getByRole('button', { name: 'Speichern', exact: true }).click()
+      await page.reload()
+      // then
+      await expect(titelAspektGroup.getByRole('listitem')).toHaveCount(1)
+      await expect(
+        titelAspektGroup.getByRole('listitem', { name: 'Leistungserbringer' }),
+      ).toHaveCount(1)
+
+      // when
+      const deleteButton = titelAspektGroup
+        .getByRole('listitem', { name: 'Leistungserbringer' })
+        .getByRole('button', { name: 'Eintrag löschen' })
+      await deleteButton.click()
+      // then
+      await expect(titelAspektGroup.getByRole('listitem')).toHaveCount(0)
+
+      // when
+      await page.getByRole('button', { name: 'Speichern', exact: true }).click()
+      await page.reload()
+      // then
+      await expect(titelAspektGroup.getByRole('listitem')).toHaveCount(0)
+    },
+  )
 })

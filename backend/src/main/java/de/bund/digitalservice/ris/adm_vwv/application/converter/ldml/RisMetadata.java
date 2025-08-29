@@ -62,4 +62,12 @@ public class RisMetadata {
   @XmlElementWrapper(name = "berufsbilder", namespace = XmlNamespace.RIS_NS)
   @XmlElement(name = "berufsbild", namespace = XmlNamespace.RIS_NS)
   private List<String> berufsbilder;
+
+  @XmlElementWrapper(name = "titelAspekt", namespace = XmlNamespace.RIS_NS)
+  @XmlElement(name = "begriff", namespace = XmlNamespace.RIS_NS)
+  private List<String> titelAspekt;
+
+  @XmlElementWrapper(name = "definitions", namespace = XmlNamespace.RIS_NS)
+  @XmlElement(name = "definition", namespace = XmlNamespace.RIS_NS)
+  private List<RisDefinition> definitions;
 }

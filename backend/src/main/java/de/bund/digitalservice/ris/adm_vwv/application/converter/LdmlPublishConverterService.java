@@ -96,6 +96,8 @@ public class LdmlPublishConverterService {
     setActiveReferences(meta, documentationUnitContent.activeReferences());
     setIdentification(meta, documentationUnitContent);
     setBerufsbilder(meta, documentationUnitContent.berufsbilder());
+    setTitelAspekt(meta, documentationUnitContent.titelAspekt());
+    setDefinitions(meta, documentationUnitContent.definitions());
     return xmlWriter.writeXml(akomaNtoso);
   }
 
@@ -444,6 +446,29 @@ public class LdmlPublishConverterService {
     if (CollectionUtils.isNotEmpty(berufsbilder)) {
       RisMetadata risMetadata = meta.getOrCreateProprietary().getMetadata();
       risMetadata.setBerufsbilder(berufsbilder);
+    }
+  }
+
+  private void setTitelAspekt(Meta meta, List<String> titelAspekt) {
+    if (CollectionUtils.isNotEmpty(titelAspekt)) {
+      RisMetadata risMetadata = meta.getOrCreateProprietary().getMetadata();
+      risMetadata.setTitelAspekt(titelAspekt);
+    }
+  }
+
+  private void setDefinitions(Meta meta, List<Definition> definitions) {
+    if (CollectionUtils.isNotEmpty(definitions)) {
+      List<RisDefinition> risDefinitions = definitions
+        .stream()
+        .map(definition -> {
+          RisDefinition risDefinition = new RisDefinition();
+          risDefinition.setBegriff(definition.begriff());
+          return risDefinition;
+        })
+        .toList();
+
+      RisMetadata risMetadata = meta.getOrCreateProprietary().getMetadata();
+      risMetadata.setDefinitions(risDefinitions);
     }
   }
 

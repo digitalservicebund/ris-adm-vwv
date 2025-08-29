@@ -15,14 +15,13 @@ test.describe('RubrikenPage - Normgeber', () => {
 
       // when
       const normgeberElement = page.getByRole('combobox', { name: 'Normgeber' })
+      const addButton = page.getByRole('button', { name: 'Normgeber übernehmen', exact: true })
       await normgeberElement.fill('Erstes')
       await expect(page.getByText('Erstes Organ')).toHaveCount(1)
       await page.getByText('Erstes Organ').click()
       // then
       await expect(normgeberElement).toHaveValue('Erstes Organ')
-      await expect(
-        page.getByRole('button', { name: 'Normgeber übernehmen', exact: true }),
-      ).toHaveAttribute('disabled')
+      await expect(addButton).toHaveAttribute('disabled')
 
       // when
       const regionElement = page.getByRole('combobox', { name: 'Region' })
@@ -31,12 +30,11 @@ test.describe('RubrikenPage - Normgeber', () => {
       await page.getByText('AA').click()
       // then
       await expect(regionElement).toHaveValue('AA')
-      await expect(
-        page.getByRole('button', { name: 'Normgeber übernehmen', exact: true }),
-      ).not.toHaveAttribute('disabled')
+      await expect(addButton).toBeVisible()
+      await expect(addButton).not.toHaveAttribute('disabled')
 
       // when
-      await page.getByRole('button', { name: 'Normgeber übernehmen', exact: true }).click()
+      await addButton.click()
       await page.getByText('Speichern').click()
       await page.reload()
       // then

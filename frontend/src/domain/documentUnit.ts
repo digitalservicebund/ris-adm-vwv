@@ -6,6 +6,7 @@ import type { Normgeber } from './normgeber'
 import type { DocumentType } from './documentType'
 import type { Page } from './pagination'
 import type { Fundstelle } from './fundstelle'
+import type { Definition } from './definition'
 
 export interface DocumentUnitSearchParams {
   documentNumber: string
@@ -48,6 +49,8 @@ export interface DocumentUnit {
   note: string
   normgeberList?: Normgeber[]
   berufsbilder?: string[]
+  titelAspekt?: string[]
+  definitions?: Definition[]
 }
 
 export const requiredDocumentUnitFields = [

@@ -98,6 +98,8 @@ class LdmlPublishConverterServiceIntegrationTest {
       List.of(),
       null,
       List.of(TestNormgeber.createByLegalEntity("DEU")),
+      List.of(),
+      List.of(),
       List.of()
     );
 
@@ -142,6 +144,8 @@ class LdmlPublishConverterServiceIntegrationTest {
       List.of(),
       null,
       List.of(TestNormgeber.createByLegalEntity("DEU")),
+      List.of(),
+      List.of(),
       List.of()
     );
 
@@ -187,6 +191,8 @@ class LdmlPublishConverterServiceIntegrationTest {
       List.of(),
       null,
       List.of(TestNormgeber.createByLegalEntity("DEU")),
+      List.of(),
+      List.of(),
       List.of()
     );
 
@@ -231,6 +237,8 @@ class LdmlPublishConverterServiceIntegrationTest {
       List.of(),
       null,
       List.of(TestNormgeber.createByLegalEntity("DEU")),
+      List.of(),
+      List.of(),
       List.of()
     );
 
@@ -275,6 +283,8 @@ class LdmlPublishConverterServiceIntegrationTest {
       List.of(),
       null,
       List.of(TestNormgeber.createByLegalEntity("DEU")),
+      List.of(),
+      List.of(),
       List.of()
     );
 
@@ -318,6 +328,8 @@ class LdmlPublishConverterServiceIntegrationTest {
         TestNormgeber.createByLegalEntity("Bundesagentur"),
         TestNormgeber.createByInstitution("Bundesregierung", "DEU")
       ),
+      List.of(),
+      List.of(),
       List.of()
     );
 
@@ -357,6 +369,8 @@ class LdmlPublishConverterServiceIntegrationTest {
       List.of(),
       null,
       List.of(TestNormgeber.createByLegalEntity("DEU")),
+      List.of(),
+      List.of(),
       List.of()
     );
 
@@ -404,6 +418,8 @@ class LdmlPublishConverterServiceIntegrationTest {
       List.of(),
       null,
       List.of(TestNormgeber.createByLegalEntity("DEU")),
+      List.of(),
+      List.of(),
       List.of()
     );
 
@@ -453,6 +469,8 @@ class LdmlPublishConverterServiceIntegrationTest {
       List.of(),
       null,
       List.of(TestNormgeber.createByLegalEntity("DEU")),
+      List.of(),
+      List.of(),
       List.of()
     );
 
@@ -526,6 +544,8 @@ class LdmlPublishConverterServiceIntegrationTest {
       ),
       null,
       List.of(TestNormgeber.createByLegalEntity("DEU")),
+      List.of(),
+      List.of(),
       List.of()
     );
 
@@ -581,6 +601,8 @@ class LdmlPublishConverterServiceIntegrationTest {
       List.of(),
       null,
       List.of(TestNormgeber.createByLegalEntity("DEU")),
+      List.of(),
+      List.of(),
       List.of()
     );
 
@@ -652,6 +674,8 @@ class LdmlPublishConverterServiceIntegrationTest {
       List.of(),
       null,
       List.of(TestNormgeber.createByLegalEntity("DEU")),
+      List.of(),
+      List.of(),
       List.of()
     );
 
@@ -698,6 +722,8 @@ class LdmlPublishConverterServiceIntegrationTest {
       List.of(),
       null,
       List.of(TestNormgeber.createByLegalEntity("DEU")),
+      List.of(),
+      List.of(),
       List.of()
     );
     String previousXml = TestFile.readFileToString("ldml-example-historic-data.akn.xml");
@@ -759,6 +785,8 @@ class LdmlPublishConverterServiceIntegrationTest {
       List.of(),
       null,
       List.of(TestNormgeber.createByLegalEntity("Bundesausschuss ÜT 1")),
+      List.of(),
+      List.of(),
       List.of()
     );
 
@@ -829,6 +857,8 @@ class LdmlPublishConverterServiceIntegrationTest {
       List.of(),
       null,
       List.of(TestNormgeber.createByLegalEntity("DEU")),
+      List.of(),
+      List.of(),
       List.of()
     );
 
@@ -890,6 +920,8 @@ class LdmlPublishConverterServiceIntegrationTest {
       List.of(),
       null,
       List.of(TestNormgeber.createByLegalEntity("DEU")),
+      List.of(),
+      List.of(),
       List.of()
     );
 
@@ -917,8 +949,8 @@ class LdmlPublishConverterServiceIntegrationTest {
   }
 
   @Test
-  @DisplayName("Converts berufsbilder to ris:berufsbilder in ris:metadata")
-  void convertToLdml_berufsbilder() {
+  @DisplayName("Converts berufsbilder, titelAspekt and definitions in ris:metadata")
+  void convertToLdml_berufsbilder_titelAspekt_definitions() {
     // given
     DocumentationUnitContent documentationUnitContent = new DocumentationUnitContent(
       null,
@@ -941,19 +973,27 @@ class LdmlPublishConverterServiceIntegrationTest {
       List.of(),
       null,
       List.of(TestNormgeber.createByLegalEntity("DEU")),
-      List.of("Handwerker")
+      List.of("Handwerker"),
+      List.of("Gemeinsamer Bundesausschuss"),
+      List.of(new Definition("Sachgesamtheit"))
     );
 
     // when
     String xml = ldmlPublishConverterService.convertToLdml(documentationUnitContent, null);
 
     // then
-    // then
     assertThat(xml).contains(
       """
       <ris:berufsbilder>
           <ris:berufsbild>Handwerker</ris:berufsbild>
-      </ris:berufsbilder>""".indent(20)
+      </ris:berufsbilder>
+      <ris:titelAspekt>
+          <ris:begriff>Gemeinsamer Bundesausschuss</ris:begriff>
+      </ris:titelAspekt>
+      <ris:definitions>
+          <ris:definition begriff="Sachgesamtheit"/>
+      </ris:definitions>
+      """.indent(20)
     );
   }
 }

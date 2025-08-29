@@ -9,10 +9,10 @@ import IconAdd from '~icons/material-symbols/add'
 
 const store = useDocumentUnitStore()
 
-const berufsbilder = computed({
-  get: () => store.documentUnit!.berufsbilder ?? [],
+const definitions = computed({
+  get: () => store.documentUnit!.definitions?.map((d) => d.begriff) ?? [],
   set: (newValues: string[]) => {
-    store.documentUnit!.berufsbilder = newValues
+    store.documentUnit!.definitions = newValues.map((begriff) => ({ begriff }))
   },
 })
 
@@ -20,14 +20,14 @@ const showChips = ref(false)
 </script>
 
 <template>
-  <InputField v-if="berufsbilder.length > 0 || showChips" id="berufsbild" label="Berufsbild">
-    <RisChipsInput id="berufsbild" v-model="berufsbilder" aria-label="Berufsbild"></RisChipsInput>
+  <InputField v-if="definitions.length > 0 || showChips" id="definition" label="Definition">
+    <RisChipsInput id="definition" v-model="definitions" aria-label="Definition"></RisChipsInput>
   </InputField>
   <Button
     v-else
-    aria-label="Berufsbild hinzufügen"
+    aria-label="Definition hinzufügen"
     class="self-start"
-    label="Berufsbild"
+    label="Definition"
     size="small"
     severity="secondary"
     @click="showChips = true"

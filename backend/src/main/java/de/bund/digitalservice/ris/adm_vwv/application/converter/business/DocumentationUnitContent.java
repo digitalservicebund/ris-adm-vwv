@@ -34,6 +34,8 @@ import java.util.UUID;
  * @param note                  The note
  * @param normgeberList         List of normgeber
  * @param berufsbilder          List of berufsbild
+ * @param titelAspekt           List of titelAspekt
+ * @param definitions           List of definition
  */
 public record DocumentationUnitContent(
   UUID id,
@@ -56,5 +58,7 @@ public record DocumentationUnitContent(
   List<NormReference> normReferences,
   String note,
   @NotEmpty List<Normgeber> normgeberList,
-  List<String> berufsbilder
+  List<String> berufsbilder,
+  List<String> titelAspekt,
+  List<Definition> definitions
 ) {}
