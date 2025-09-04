@@ -12,7 +12,7 @@ jobs:
       # NodeJS is used by prettier, which formats kotlin in spotless
       # Using the latest LTS should work
       - name: Setup NodeJS
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version-file: ./backend/.node-version
       - name: Set up JDK
