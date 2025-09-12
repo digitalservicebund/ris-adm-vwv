@@ -21,9 +21,9 @@ function renderSearchResults(
         decision: new RelatedDocumentation({
           ...{
             court: {
+              id: 'courtId',
               type: 'fooType',
               location: 'fooLocation',
-              label: 'fooLabel',
             },
             documentNumber: 'fooDocumentNumber',
           },
@@ -73,7 +73,7 @@ describe('Search result list', () => {
   it('renders correctly', async () => {
     renderSearchResults()
 
-    expect(await screen.findByText(/fooLabel/)).toBeVisible()
+    expect(await screen.findByText(/fooType fooLocation/)).toBeVisible()
     expect(await screen.findByText('fooDocumentNumber')).toBeVisible()
 
     expect(await screen.findByTestId('add-decision-button')).toBeVisible()
@@ -93,9 +93,9 @@ describe('Search result list', () => {
         decision: new RelatedDocumentation({
           ...{
             court: {
+              id: 'courtId',
               type: 'fooType',
               location: 'fooLocation',
-              label: 'fooLabel',
             },
             documentNumber: 'fooDocumentNumber',
           },
@@ -111,7 +111,7 @@ describe('Search result list', () => {
   it("clicking on 'Übernehmen' emits link decision event", async () => {
     const { user, emitted } = renderSearchResults()
 
-    expect(await screen.findByText(/fooLabel/)).toBeVisible()
+    expect(await screen.findByText(/fooType fooLocation/)).toBeVisible()
     expect(await screen.findByText('fooDocumentNumber')).toBeVisible()
 
     expect(await screen.findByTestId('add-decision-button')).toBeVisible()
@@ -129,9 +129,9 @@ describe('Search result list', () => {
         decision: new RelatedDocumentation({
           ...{
             court: {
+              id: 'courtId',
               type: 'fooType',
               location: 'fooLocation',
-              label: 'fooLabel',
             },
             documentNumber: 'fooDocumentNumber',
           },

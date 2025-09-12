@@ -32,7 +32,7 @@ export default class RelatedDocumentation {
 
   get renderSummary(): string {
     return [
-      ...(this.court ? [`${this.court?.label}`] : []),
+      ...(this.court ? [`${this.court?.type} ${this.court?.location}`] : []),
       ...(this.decisionDate ? [dayjs(this.decisionDate).format('DD.MM.YYYY')] : []),
       ...(this.fileNumber ? [this.fileNumber] : []),
       ...(this.documentType?.name ? [this.documentType.name] : []),

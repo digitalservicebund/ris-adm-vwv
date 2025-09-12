@@ -6,10 +6,12 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 
 import de.bund.digitalservice.ris.adm_vwv.application.*;
+import de.bund.digitalservice.ris.adm_vwv.application.converter.business.Court;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -469,5 +471,23 @@ class LookupTablesPersistenceServiceTest {
 
     // then
     assertThat(regions.content()).contains(new Region(uuid, "AA", null));
+  }
+
+  @Test
+  void findCourts_all() {
+    // given
+
+    // when
+    var courts = lookupTablesPersistenceService.findCourts(
+      new CourtQuery(null, new QueryOptions(0, 10, "type", Sort.Direction.ASC, true))
+    );
+
+    // then
+    assertThat(courts.content())
+      .extracting(Court::type, Court::location)
+      .containsExactly(
+        Tuple.tuple("AG", "Aachen"),
+        Tuple.tuple("Berufsgericht für Architekten", "Bremen")
+      );
   }
 }

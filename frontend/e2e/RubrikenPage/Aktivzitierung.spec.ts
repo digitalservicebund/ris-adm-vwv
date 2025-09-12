@@ -29,11 +29,9 @@ test.describe('RubrikenPage - Aktivzitierung - Mocked routes', () => {
 
     await page.getByTestId('list-entry-0').click()
     await expect(page.getByText('Pflichtfeld nicht befüllt')).toHaveCount(3)
-    await page.getByText('Gericht *').click()
-    await page
-      .getByRole('button', { name: 'dropdown-option' })
-      .filter({ hasText: 'AG Aachen' })
-      .click()
+    // await page.getByText('Gericht *').click()
+    await page.getByRole('combobox', { name: 'Gericht Aktivzitierung' }).click()
+    await page.getByText('AG Aachen').click()
     await page.getByRole('button', { name: 'Aktivzitierung speichern' }).click()
     await expect(page.getByText('Ablehnung, AG Aachen')).toBeVisible()
     await expect(page.getByText('Fehlende Daten')).toBeVisible()
@@ -102,11 +100,8 @@ test.describe('RubrikenPage - Aktivzitierung - Mocked routes', () => {
         .getByRole('button', { name: 'dropdown-option' })
         .filter({ hasText: 'Ablehnung' })
         .click()
-      await page.getByRole('textbox', { name: 'Gericht Aktivzitierung' }).click()
-      await page
-        .getByRole('button', { name: 'dropdown-option' })
-        .filter({ hasText: 'AG Aachen' })
-        .click()
+      await page.getByRole('combobox', { name: 'Gericht Aktivzitierung' }).click()
+      await page.getByText('AG Aachen').click()
       await page.getByRole('textbox', { name: 'Entscheidungsdatum' }).fill('15.01.2025')
       await page.getByRole('textbox', { name: 'Aktenzeichen Aktivzitierung' }).fill('Az1')
       await page.getByRole('button', { name: 'Aktivzitierung speichern' }).click()
@@ -118,11 +113,8 @@ test.describe('RubrikenPage - Aktivzitierung - Mocked routes', () => {
         .getByRole('button', { name: 'dropdown-option' })
         .filter({ hasText: 'Übernahme' })
         .click()
-      await page.getByRole('textbox', { name: 'Gericht Aktivzitierung' }).click()
-      await page
-        .getByRole('button', { name: 'dropdown-option' })
-        .filter({ hasText: 'Berufsgericht für Architekten Bremen' })
-        .click()
+      await page.getByRole('combobox', { name: 'Gericht Aktivzitierung' }).click()
+      await page.getByText('Berufsgericht für Architekten Bremen').click()
       await page.getByRole('textbox', { name: 'Entscheidungsdatum' }).fill('31.12.2024')
       await page.getByRole('textbox', { name: 'Aktenzeichen Aktivzitierung' }).fill('Az2')
       await page.getByRole('button', { name: 'Aktivzitierung speichern' }).click()
@@ -154,11 +146,13 @@ test.describe('RubrikenPage - Aktivzitierung - Mocked routes', () => {
         .click()
       await page.getByRole('button', { name: 'Nach Entscheidung suchen' }).click()
       await expect(
-        page.getByText('label1, 01.02.2022, test fileNumber1, Verwaltungsvorschrift'),
+        page.getByText('type1 location1, 01.02.2022, test fileNumber1, Verwaltungsvorschrift'),
       ).toBeVisible()
       await page.getByRole('button', { name: 'Treffer übernehmen' }).click()
       await expect(
-        page.getByText('Übernahme, label1, 01.02.2022, test fileNumber1, Verwaltungsvorschrift'),
+        page.getByText(
+          'Übernahme, type1 location1, 01.02.2022, test fileNumber1, Verwaltungsvorschrift',
+        ),
       ).toBeVisible()
 
       // re-open the same record
@@ -182,7 +176,9 @@ test.describe('RubrikenPage - Aktivzitierung - Mocked routes', () => {
 
       // then
       await expect(
-        page.getByText('Übernahme, label1, 01.02.2022, test fileNumber1, Verwaltungsregelung'),
+        page.getByText(
+          'Übernahme, type1 location1, 01.02.2022, test fileNumber1, Verwaltungsregelung',
+        ),
       ).toBeVisible()
 
       await page.getByTestId('list-entry-0').click()
@@ -221,11 +217,8 @@ test.describe('RubrikenPage - Aktivzitierung - Mocked routes', () => {
         .getByRole('button', { name: 'dropdown-option' })
         .filter({ hasText: 'Ablehnung' })
         .click()
-      await page.getByText('Gericht *').click()
-      await page
-        .getByRole('button', { name: 'dropdown-option' })
-        .filter({ hasText: 'AG Aachen' })
-        .click()
+      await page.getByRole('combobox', { name: 'Gericht Aktivzitierung' }).click()
+      await page.getByText('AG Aachen').click()
       await page.getByRole('button', { name: 'Aktivzitierung speichern' }).click()
       await expect(page.getByText('Ablehnung, AG Aachen')).toBeVisible()
 
@@ -257,11 +250,8 @@ test.describe('RubrikenPage - Aktivzitierung', () => {
         .getByRole('button', { name: 'dropdown-option' })
         .filter({ hasText: 'Ablehnung' })
         .click()
-      await page.getByRole('textbox', { name: 'Gericht Aktivzitierung' }).click()
-      await page
-        .getByRole('button', { name: 'dropdown-option' })
-        .filter({ hasText: 'AG Aachen' })
-        .click()
+      await page.getByRole('combobox', { name: 'Gericht Aktivzitierung' }).click()
+      await page.getByText('AG Aachen').click()
       await page.getByRole('textbox', { name: 'Entscheidungsdatum' }).fill('15.01.2025')
       await page.getByRole('textbox', { name: 'Aktenzeichen Aktivzitierung' }).fill('Az1')
       await page.getByRole('button', { name: 'Aktivzitierung speichern' }).click()
@@ -286,9 +276,10 @@ test.describe('RubrikenPage - Aktivzitierung - Bestandsdaten', () => {
 
       // when
       await page.goto('/documentUnit/KSNR999999999/rubriken')
+      await page.waitForURL(/documentUnit/)
 
       // then
-      await expect(page.getByText('PhanGH, 20.10.2021, C-01/02 | WBRE000001234')).toHaveCount(1)
+      await expect(page.getByText('AG Aachen, 20.10.2021, C-01/02 | WBRE000001234')).toHaveCount(1)
     },
   )
 })

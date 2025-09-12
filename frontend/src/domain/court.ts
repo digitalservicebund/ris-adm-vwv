@@ -1,9 +1,9 @@
 import type DocumentationOffice from './documentationOffice'
 
-export type Court = {
-  type?: string
+export interface Court {
+  readonly id: string
+  type: string
   location?: string
-  label: string
   revoked?: string
   responsibleDocOffice?: DocumentationOffice
 }

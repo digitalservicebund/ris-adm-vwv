@@ -524,7 +524,7 @@ class LdmlPublishConverterServiceIntegrationTest {
           UUID.randomUUID(),
           false,
           "KSNR00000011",
-          new Court(UUID.randomUUID(), "sozial", "Kassel", "BSG"),
+          new Court(UUID.randomUUID(), "BSG", "Kassel"),
           "2024-02-04",
           "X/I 43",
           null,
@@ -569,7 +569,7 @@ class LdmlPublishConverterServiceIntegrationTest {
               <akn:implicitReference shortForm="BGB" showAs="BGB §2 Abs. 1">
                   <ris:normReference singleNorm="§2 Abs. 1" dateOfRelevance="2025" dateOfVersion="2025-01-01"/>
               </akn:implicitReference>
-              <akn:implicitReference shortForm="Übernahme BSG X/I 43" showAs="Übernahme BSG X/I 43 2024-02-04">
+              <akn:implicitReference shortForm="Übernahme BSG Kassel X/I 43" showAs="Übernahme BSG Kassel X/I 43 2024-02-04">
                   <ris:caselawReference abbreviation="Übernahme" court="BSG" courtLocation="Kassel" date="2024-02-04" documentNumber="KSNR00000011" referenceNumber="X/I 43"/>
               </akn:implicitReference>
           </akn:otherReferences>

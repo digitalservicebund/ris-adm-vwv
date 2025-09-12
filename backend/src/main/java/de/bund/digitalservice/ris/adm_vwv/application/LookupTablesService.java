@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.adm_vwv.application;
 
+import de.bund.digitalservice.ris.adm_vwv.application.converter.business.Court;
 import jakarta.annotation.Nonnull;
 import java.util.List;
 import java.util.Optional;
@@ -53,5 +54,10 @@ public class LookupTablesService implements LookupTablesPort {
   @Override
   public Page<Institution> findInstitutions(@Nonnull InstitutionQuery query) {
     return lookupTablesPersistencePort.findInstitutions(query);
+  }
+
+  @Override
+  public Page<Court> findCourts(@Nonnull CourtQuery query) {
+    return lookupTablesPersistencePort.findCourts(query);
   }
 }

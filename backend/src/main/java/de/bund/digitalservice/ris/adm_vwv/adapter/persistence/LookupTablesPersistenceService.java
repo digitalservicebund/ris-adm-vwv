@@ -4,11 +4,9 @@ import static de.bund.digitalservice.ris.adm_vwv.adapter.persistence.Institution
 
 import de.bund.digitalservice.ris.adm_vwv.application.*;
 import de.bund.digitalservice.ris.adm_vwv.application.Page;
+import de.bund.digitalservice.ris.adm_vwv.application.converter.business.Court;
 import jakarta.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -230,6 +228,29 @@ public class LookupTablesPersistenceService implements LookupTablesPersistencePo
     return institutionRepository
       .findByNameAndType(name, mapInstitutionType(institutionType))
       .map(mapInstitutionEntity());
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public Page<Court> findCourts(@Nonnull CourtQuery query) {
+    log.info("Ignoring given query as mocked result is returned always: {}.", query);
+    return new Page<>(
+      List.of(
+        new Court(UUID.fromString("0e1b035-a7f4-4d88-b5c0-a7d0466b8752"), "AG", "Aachen"),
+        new Court(
+          UUID.fromString("8163531c-2c51-410a-9591-b45b004771da"),
+          "Berufsgericht für Architekten",
+          "Bremen"
+        )
+      ),
+      2,
+      0,
+      2,
+      2,
+      true,
+      true,
+      false
+    );
   }
 
   private Function<InstitutionEntity, Institution> mapInstitutionEntity() {

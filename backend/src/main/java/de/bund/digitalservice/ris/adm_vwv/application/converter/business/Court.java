@@ -8,6 +8,5 @@ import java.util.UUID;
  * @param id The uuid
  * @param type The type
  * @param location The location
- * @param label The label
  */
-public record Court(UUID id, String type, String location, String label) {}
+public record Court(UUID id, String type, String location) {}

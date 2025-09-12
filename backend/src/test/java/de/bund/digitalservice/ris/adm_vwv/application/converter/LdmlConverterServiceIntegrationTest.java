@@ -525,7 +525,8 @@ class LdmlConverterServiceIntegrationTest {
       .extracting(
         ac -> ac.citationType().jurisShortcut(),
         ac -> ac.citationType().label(),
-        ac -> ac.court().label(),
+        ac -> ac.court().type(),
+        ac -> ac.court().location(),
         ActiveCitation::decisionDate,
         ActiveCitation::fileNumber,
         ActiveCitation::documentNumber
@@ -533,7 +534,8 @@ class LdmlConverterServiceIntegrationTest {
       .containsExactly(
         "Vgl",
         "Vgl (fulltext not yet implemented)",
-        "PhanGH",
+        "AG",
+        "Aachen",
         "2021-10-20",
         "C-01/02",
         "WBRE000001234"

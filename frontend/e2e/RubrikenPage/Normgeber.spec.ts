@@ -251,7 +251,7 @@ test.describe('RubrikenPage - Normgeber - Bestandsdaten', () => {
       // then
       await expect(page.getByText('Erste Jurpn')).toHaveCount(1)
       await expect(page.getByText('Erstes Organ')).toHaveCount(1)
-      await expect(page.getByText('AA')).toHaveCount(1)
+      await expect(page.getByText(/AA/)).toHaveCount(1)
     },
   )
 })

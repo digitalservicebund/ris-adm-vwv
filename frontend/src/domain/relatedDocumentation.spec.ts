@@ -7,7 +7,9 @@ describe('RelatedDocumentation', () => {
     const relatedDocumentation = new RelatedDocumentation({
       ...{
         court: {
-          label: 'courtLabel',
+          id: 'courtId',
+          type: 'type1',
+          location: 'location1',
         },
         fileNumber: 'fileNumber',
         decisionDate: '01.01.1998',
@@ -22,14 +24,16 @@ describe('RelatedDocumentation', () => {
       },
     })
     const decision = relatedDocumentation.renderSummary
-    expect(decision).toEqual('courtLabel, 01.01.1998, fileNumber, Beschluss')
+    expect(decision).toEqual('type1 location1, 01.01.1998, fileNumber, Beschluss')
   })
 
   it('renders decision with UNPUBLISHED status and with error', () => {
     const relatedDocumentation = new RelatedDocumentation({
       ...{
         court: {
-          label: 'courtLabel',
+          id: 'courtId',
+          type: 'type1',
+          location: 'location1',
         },
         fileNumber: 'fileNumber',
         decisionDate: '01.01.1998',
@@ -44,14 +48,16 @@ describe('RelatedDocumentation', () => {
       },
     })
     const decision = relatedDocumentation.renderSummary
-    expect(decision).toEqual('courtLabel, 01.01.1998, fileNumber, Beschluss')
+    expect(decision).toEqual('type1 location1, 01.01.1998, fileNumber, Beschluss')
   })
 
   it('renders decision without status', () => {
     const relatedDocumentation = new RelatedDocumentation({
       ...{
         court: {
-          label: 'courtLabel',
+          id: 'courtId',
+          type: 'type1',
+          location: 'location1',
         },
         fileNumber: 'fileNumber',
         decisionDate: '01.01.1998',
@@ -62,6 +68,6 @@ describe('RelatedDocumentation', () => {
       },
     })
     const decision = relatedDocumentation.renderSummary
-    expect(decision).toEqual('courtLabel, 01.01.1998, fileNumber, Beschluss')
+    expect(decision).toEqual('type1 location1, 01.01.1998, fileNumber, Beschluss')
   })
 })

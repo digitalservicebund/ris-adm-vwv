@@ -39,7 +39,8 @@ public class ActiveCitationsTransformer {
           UUID.randomUUID(),
           false,
           cr.getDocumentNumber(),
-          new Court(null, null, cr.getCourtLocation(), cr.getCourt()),
+          // Lookup id after implementing RISDEV-6318 (migrate "Courts" lookup table
+          new Court(UUID.randomUUID(), cr.getCourt(), cr.getCourtLocation()),
           cr.getDate(),
           cr.getReferenceNumber(),
           null,

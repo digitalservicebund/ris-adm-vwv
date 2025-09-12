@@ -8,7 +8,6 @@ import type { NormAbbreviation } from '@/domain/normAbbreviation.ts'
 import ActiveReference, { ActiveReferenceType } from '@/domain/activeReference.ts'
 import type { FieldOfLaw } from '@/domain/fieldOfLaw'
 import errorMessages from '@/i18n/errors.json'
-import type { Court } from '@/domain/court'
 import type { DocumentType } from '@/domain/documentType'
 import { useApiFetch } from './apiService'
 
@@ -84,7 +83,6 @@ function fetchFromEndpoint(
 }
 
 export type ComboboxItemService = {
-  getCourts: (filter: Ref<string | undefined>) => ComboboxResult<ComboboxItem[]>
   getDocumentTypes: (filter: Ref<string | undefined>) => UseFetchReturn<ComboboxItem[]>
   getRisAbbreviations: (filter: Ref<string | undefined>) => ComboboxResult<ComboboxItem[]>
   getActiveReferenceTypes: (filter: Ref<string | undefined>) => ComboboxResult<ComboboxItem[]>
@@ -95,38 +93,6 @@ export type ComboboxItemService = {
 }
 
 const service: ComboboxItemService = {
-  getCourts: (filter: Ref<string | undefined>) => {
-    const agAachen = {
-      label: 'AG Aachen',
-    } as Court
-    const agAachenItem: ComboboxItem = {
-      label: agAachen.label,
-      value: agAachen,
-    }
-    const bgBremen = {
-      label: 'Berufsgericht für Architekten Bremen',
-    } as Court
-    const bgBremenItem: ComboboxItem = {
-      label: bgBremen.label,
-      value: bgBremen,
-    }
-    let items = ref([agAachenItem, bgBremenItem])
-    if (filter?.value?.startsWith('a')) {
-      items = ref([agAachenItem])
-    } else if (filter?.value?.startsWith('b')) {
-      items = ref([bgBremenItem])
-    }
-    const execute = async () => {
-      return service.getCourts(filter)
-    }
-    const result: ComboboxResult<ComboboxItem[]> = {
-      data: items,
-      execute: execute,
-      canAbort: computed(() => false),
-      abort: () => {},
-    }
-    return result
-  },
   getDocumentTypes: (filter: Ref<string | undefined>) =>
     fetchFromEndpoint(Endpoint.documentTypes, filter, { usePagination: false }),
   getRisAbbreviations: (filter: Ref<string | undefined>) => {

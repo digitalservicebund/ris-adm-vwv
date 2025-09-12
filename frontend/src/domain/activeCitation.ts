@@ -28,7 +28,7 @@ export default class ActiveCitation extends RelatedDocumentation implements Edit
   get renderSummary(): string {
     return [
       ...(this.citationType?.label ? [this.citationType.label] : []),
-      ...(this.court ? [`${this.court?.label}`] : []),
+      ...(this.court ? [`${this.court?.type} ${this.court?.location}`] : []),
       ...(this.decisionDate ? [dayjs(this.decisionDate).format('DD.MM.YYYY')] : []),
       ...(this.fileNumber ? [this.fileNumber] : []),
       ...(this.documentType ? [this.documentType.name] : []),

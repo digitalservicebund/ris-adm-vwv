@@ -3,6 +3,7 @@ import { useDebounceFn } from '@vueuse/core'
 import type { AutoCompleteDropdownClickEvent } from 'primevue/autocomplete'
 import type { Institution, Region } from '@/domain/normgeber'
 import type { Periodikum } from '@/domain/fundstelle'
+import type { Court } from '@/domain/court.ts'
 
 // Should be exported from ris-ui
 export interface AutoCompleteSuggestion {
@@ -123,6 +124,24 @@ export function usePeriodikumSearch(periodika: Ref<Periodikum[]>) {
         id: p.id,
         label: `${p.abbreviation} | ${p.title}`,
         secondaryLabel: p.subtitle || '',
+      }))
+  }
+}
+
+export function useCourtSearch(courts: Ref<Court[]>) {
+  return function searchFn(query?: string) {
+    return courts.value
+      .filter(
+        (c) =>
+          !query ||
+          c.type.toLowerCase().includes(query.trim().toLowerCase()) ||
+          c.location?.toLowerCase().includes(query.trim().toLowerCase()) ||
+          `${c.type} ${c.location}`.toLowerCase().includes(query.trim().toLowerCase()),
+      )
+      .map((c) => ({
+        id: c.id,
+        label: `${c.type} ${c.location}`,
+        secondaryLabel: c.revoked || '',
       }))
   }
 }

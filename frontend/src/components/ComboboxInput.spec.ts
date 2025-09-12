@@ -452,22 +452,6 @@ describe('Combobox Element', () => {
     await vi.advanceTimersByTimeAsync(debounceTimeout)
   })
 
-  it('uses endpoint to fetch all court items', async () => {
-    renderComponent({
-      itemService: comboboxItemService.getCourts,
-    })
-
-    const openDropdownContainer = screen.getByLabelText('Dropdown öffnen')
-    await user.click(openDropdownContainer)
-    await vi.advanceTimersByTimeAsync(debounceTimeout)
-
-    const dropdownItems = screen.getAllByLabelText('dropdown-option')
-
-    expect(dropdownItems).toHaveLength(2)
-    expect(dropdownItems[0]).toHaveTextContent('AG')
-    await vi.advanceTimersByTimeAsync(debounceTimeout)
-  })
-
   it('dropdown uses endpoint to fetch Court items based on search string', async () => {
     vi.spyOn(window, 'fetch').mockResolvedValue(
       new Response(

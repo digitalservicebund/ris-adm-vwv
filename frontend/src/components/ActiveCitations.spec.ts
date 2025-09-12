@@ -1,4 +1,4 @@
-import { describe, expect, it, beforeAll, afterAll, beforeEach, vi } from 'vitest'
+import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 import { userEvent } from '@testing-library/user-event'
 import { fireEvent, render, screen, waitFor } from '@testing-library/vue'
 import ActiveCitations from '@/components/ActiveCitations.vue'
@@ -11,6 +11,7 @@ import { config } from '@vue/test-utils'
 import InputText from 'primevue/inputtext'
 import type { Court } from '@/domain/court'
 import type { DocumentType } from '@/domain/documentType'
+import { agAachenFixture, berufsgerichtBremenFixture } from '@/testing/fixtures/court.ts'
 
 function renderComponent(activeCitations?: ActiveCitation[]) {
   const user = userEvent.setup()
@@ -32,7 +33,7 @@ function renderComponent(activeCitations?: ActiveCitation[]) {
                   },
                 },
               },
-              stubActions: false,
+              stubActions: true,
             }),
           ],
         ],
@@ -59,9 +60,9 @@ function generateActiveCitation(options?: {
     uuid: options?.uuid ?? crypto.randomUUID(),
     documentNumber: options?.documentNumber ?? undefined,
     court: options?.court ?? {
+      id: 'court1',
       type: 'type1',
       location: 'location1',
-      label: 'label1',
     },
     decisionDate: options?.decisionDate ?? '2022-02-01',
     fileNumber: options?.fileNumber ?? 'test fileNumber',
@@ -208,19 +209,25 @@ describe('active citations', () => {
   })
 
   it('correctly updates value court input', async () => {
+    const fetchSpy = vi.spyOn(window, 'fetch').mockResolvedValue(
+      new Response(JSON.stringify({ courts: [agAachenFixture, berufsgerichtBremenFixture] }), {
+        status: 200,
+      }),
+    )
     const { user } = renderComponent([generateActiveCitation()])
-
     expect(screen.queryByText(/AG Aachen/)).not.toBeInTheDocument()
 
     const itemHeader = screen.getByTestId('list-entry-0')
     await user.click(itemHeader)
-
-    await user.type(await screen.findByLabelText('Gericht Aktivzitierung'), 'AG')
+    await vi.waitFor(() => expect(fetchSpy).toHaveBeenCalled())
+    const gerichtDropDown = screen.getByLabelText('Gericht *')
+    await user.click(gerichtDropDown)
+    await user.click(screen.getByRole('button', { name: 'Entfernen' }))
+    await user.type(gerichtDropDown, 'AG')
     await waitFor(() => {
-      expect(screen.getAllByLabelText('dropdown-option')[0]).toHaveTextContent('AG Aachen')
+      expect(screen.getByText('AG Aachen')).toBeInTheDocument()
     })
-    const dropdownItems = screen.getAllByLabelText('dropdown-option')
-    await user.click(dropdownItems[0])
+    await user.click(screen.getByText('AG Aachen'))
     const button = screen.getByLabelText('Aktivzitierung speichern')
     await user.click(button)
 
@@ -283,7 +290,7 @@ describe('active citations', () => {
     const { user } = renderComponent([generateActiveCitation()])
 
     expect(
-      screen.getByText('Änderung, label1, 01.02.2022, test fileNumber, documentType1'),
+      screen.getByText('Änderung, type1 location1, 01.02.2022, test fileNumber, documentType1'),
     ).toBeInTheDocument()
     const itemHeader = screen.getByTestId('list-entry-0')
     await user.click(itemHeader)
@@ -428,7 +435,9 @@ describe('active citations', () => {
     // Read from the stub clipboard
     const clipboardText = await navigator.clipboard.readText()
 
-    expect(clipboardText).toBe('Änderung, label1, 01.02.2022, test fileNumber, documentType1')
+    expect(clipboardText).toBe(
+      'Änderung, type1 location1, 01.02.2022, test fileNumber, documentType1',
+    )
   })
 
   it('should copy text of active citation summary', async () => {
@@ -440,7 +449,9 @@ describe('active citations', () => {
     // Read from the stub clipboard
     const clipboardText = await navigator.clipboard.readText()
 
-    expect(clipboardText).toBe('Änderung, label1, 01.02.2022, test fileNumber, documentType1')
+    expect(clipboardText).toBe(
+      'Änderung, type1 location1, 01.02.2022, test fileNumber, documentType1',
+    )
   })
 })
 
