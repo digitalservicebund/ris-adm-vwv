@@ -4,11 +4,13 @@ import static de.bund.digitalservice.ris.adm_vwv.adapter.persistence.Institution
 
 import de.bund.digitalservice.ris.adm_vwv.application.*;
 import de.bund.digitalservice.ris.adm_vwv.application.Page;
+import de.bund.digitalservice.ris.adm_vwv.application.converter.business.NormAbbreviation;
 import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -204,6 +206,33 @@ public class LookupTablesPersistenceService implements LookupTablesPersistencePo
   private Function<RegionEntity, Region> mapRegionEntity() {
     return regionEntity ->
       new Region(regionEntity.getId(), regionEntity.getCode(), regionEntity.getLongText());
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public Page<NormAbbreviation> findNormAbbreviations(@Nonnull NormAbbreviationQuery query) {
+    log.info("Ignoring given query as mocked result is returned always: {}.", query);
+    return new Page<>(
+      List.of(
+        new NormAbbreviation(
+          UUID.fromString("3f7c912-a2d1-4b3e-9d2a-41c2a8e5c1f7"),
+          "SGB 5",
+          "Sozialgesetzbuch (SGB) Fünftes Buch (V)"
+        ),
+        new NormAbbreviation(
+          UUID.fromString("d9a04e5-b7c8-49f2-8a31-7fb024b39ce8"),
+          "KVLG",
+          "Gesetz zur Weiterentwicklung des Rechts der gesetzlichen Krankenversicherung"
+        )
+      ),
+      2,
+      0,
+      2,
+      2,
+      true,
+      true,
+      false
+    );
   }
 
   @Override

@@ -16,6 +16,6 @@ describe('legal periodicals service', () => {
     const { data } = await useFetchLegalPeriodicals()
 
     expect(data.value?.legalPeriodicals).toHaveLength(2)
-    expect(data.value?.legalPeriodicals[0].title).toBe(bundesanzeigerFixture.title)
+    expect(data.value?.legalPeriodicals[0]?.title).toBe(bundesanzeigerFixture.title)
   })
 })
