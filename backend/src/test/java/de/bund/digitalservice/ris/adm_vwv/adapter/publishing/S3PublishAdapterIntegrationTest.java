@@ -2,7 +2,10 @@ package de.bund.digitalservice.ris.adm_vwv.adapter.publishing;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
 
+import de.bund.digitalservice.ris.adm_vwv.application.ValidationFailedException;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +22,7 @@ import org.testcontainers.containers.localstack.LocalStackContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
+import org.xml.sax.SAXParseException;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.core.ResponseBytes;
@@ -58,6 +62,11 @@ class S3PublishAdapterIntegrationTest {
   @TestConfiguration
   static class S3TestConfig {
 
+    @Bean
+    public XmlValidator xmlValidator() {
+      return mock(XmlValidator.class);
+    }
+
     @Bean("privateBsgS3Client")
     @Primary
     public S3Client s3Client() {
@@ -74,9 +83,10 @@ class S3PublishAdapterIntegrationTest {
     }
 
     @Bean(FIRST_PUBLISHER_NAME)
-    public PublishPort firstTestPublisher(S3Client s3Client) {
+    public PublishPort firstTestPublisher(S3Client s3Client, XmlValidator xmlValidator) {
       return new S3PublishAdapter(
         s3Client,
+        xmlValidator,
         FIRST_BUCKET_NAME,
         FIRST_DATATYPE,
         FIRST_PUBLISHER_NAME
@@ -84,9 +94,10 @@ class S3PublishAdapterIntegrationTest {
     }
 
     @Bean(SECOND_PUBLISHER_NAME)
-    public PublishPort secondTestPublisher(S3Client s3Client) {
+    public PublishPort secondTestPublisher(S3Client s3Client, XmlValidator xmlValidator) {
       return new S3PublishAdapter(
         s3Client,
+        xmlValidator,
         SECOND_BUCKET_NAME,
         SECOND_DATATYPE,
         SECOND_PUBLISHER_NAME
@@ -99,6 +110,9 @@ class S3PublishAdapterIntegrationTest {
 
   @Autowired
   private S3Client s3Client;
+
+  @Autowired
+  private XmlValidator xmlValidator;
 
   @DynamicPropertySource
   static void overrideProperties(DynamicPropertyRegistry registry) {
@@ -234,7 +248,9 @@ class S3PublishAdapterIntegrationTest {
     var options = new PublishPort.Options(docNumber, xmlContent, "unknown-publisher");
 
     // when
-    publishPort.publish(options);
+    assertThatThrownBy(() -> publishPort.publish(options))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("No publisher found for target: unknown-publisher");
 
     // then
     // Verify that NO file was created in EITHER bucket
@@ -253,6 +269,32 @@ class S3PublishAdapterIntegrationTest {
     // Verify that NO changelog file was created in EITHER bucket
     assertThat(listObjectsInDirectory(FIRST_BUCKET_NAME, CHANGELOG_DIR)).isEmpty();
     assertThat(listObjectsInDirectory(SECOND_BUCKET_NAME, CHANGELOG_DIR)).isEmpty();
+  }
+
+  @Test
+  void publish_shouldThrowValidationFailedException_whenXmlIsInvalid() throws Exception {
+    // given
+    String docNumber = "doc-invalid-123";
+    String invalidXmlContent = "<invalid>";
+    var options = new PublishPort.Options(docNumber, invalidXmlContent, FIRST_PUBLISHER_NAME);
+
+    doThrow(new SAXParseException("XML is malformed", null, null, 1, 10))
+      .when(xmlValidator)
+      .validate(invalidXmlContent);
+
+    // when / then
+    assertThatThrownBy(() -> publishPort.publish(options))
+      .isInstanceOf(ValidationFailedException.class)
+      .hasMessageContaining(
+        "XML validation failed for document doc-invalid-123 at line 1, column 10"
+      );
+
+    // Verify that no file was created in the bucket
+    GetObjectRequest request = GetObjectRequest.builder()
+      .bucket(FIRST_BUCKET_NAME)
+      .key(String.format("%s.akn.xml", docNumber))
+      .build();
+    assertThatThrownBy(() -> s3Client.getObject(request)).isInstanceOf(S3Exception.class);
   }
 
   private List<S3Object> listObjectsInDirectory(String bucketName, String directoryPrefix) {

@@ -130,7 +130,7 @@ class DocumentationUnitServiceIntegrationTest {
     assertThat(documentationUnit.json()).isNull();
 
     // Publishing to bucket fails
-    doThrow(new RuntimeException("External system is down"))
+    doThrow(new PublishingFailedException("External system is down", null))
       .when(publishPort)
       .publish(any(PublishPort.Options.class));
 

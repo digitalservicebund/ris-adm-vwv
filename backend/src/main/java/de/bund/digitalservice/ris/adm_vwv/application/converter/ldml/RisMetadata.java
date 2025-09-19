@@ -1,9 +1,6 @@
 package de.bund.digitalservice.ris.adm_vwv.application.converter.ldml;
 
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlElementWrapper;
+import jakarta.xml.bind.annotation.*;
 import java.util.List;
 import lombok.*;
 
@@ -12,6 +9,26 @@ import lombok.*;
  */
 @Data
 @XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(
+  propOrder = {
+    "normgeber",
+    "fieldsOfLaw",
+    "entryIntoEffectDate",
+    "expiryDate",
+    "tableOfContentsEntries",
+    "documentType",
+    "zuordnungen",
+    "berufsbilder",
+    "titelAspekte",
+    "definitionen",
+    "dateToQuoteList",
+    "referenceNumbers",
+    "historicAdministrativeData",
+    "region",
+    "historicAbbreviation",
+    "activeReferences",
+  }
+)
 public class RisMetadata {
 
   @XmlElement(namespace = XmlNamespace.RIS_NS)

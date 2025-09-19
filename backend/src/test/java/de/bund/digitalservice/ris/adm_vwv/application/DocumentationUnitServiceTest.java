@@ -2,7 +2,7 @@ package de.bund.digitalservice.ris.adm_vwv.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchException;
-import static org.assertj.core.api.AssertionsForClassTypes.catchThrowable;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
@@ -194,28 +194,40 @@ class DocumentationUnitServiceTest {
   }
 
   @Test
-  void publish_shouldThrowException_whenExternalPublishingFails() {
+  void publish_shouldThrowExceptionAndRollback_whenExternalPublishingFails() {
     // given
-    String docNumber = "doc123";
-    String fakeXml = "<test>xml</test>";
-    var doc = new DocumentationUnit(docNumber, UUID.randomUUID(), null, fakeXml);
-    var content = TestDocumentationUnitContent.create(docNumber, "Lange Überschrift");
-
-    when(documentationUnitPersistencePort.findByDocumentNumber(docNumber)).thenReturn(
-      Optional.of(doc)
+    DocumentationUnit sampleDocUnit = new DocumentationUnit(
+      "KSNR123456789",
+      UUID.randomUUID(),
+      null,
+      null
     );
-    when(ldmlPublishConverterService.convertToLdml(any(), any())).thenReturn(fakeXml);
-    doThrow(new RuntimeException("External system is down"))
-      .when(publishPort)
-      .publish(any(PublishPort.Options.class));
-    when(publishers.get(anyString())).thenReturn(publishPort);
 
     // when
-    Throwable thrown = catchThrowable(() -> documentationUnitService.publish(docNumber, content));
+    when(documentationUnitPersistencePort.create()).thenReturn(sampleDocUnit);
+    when(documentationUnitPersistencePort.findByDocumentNumber(anyString())).thenReturn(
+      Optional.of(sampleDocUnit)
+    );
+
+    DocumentationUnit documentationUnit = documentationUnitService.create();
+    String documentNumber = documentationUnit.documentNumber();
+    assertThat(documentationUnit.json()).isNull();
+
+    doThrow(new PublishingFailedException("External system is down", null))
+      .when(publishPort)
+      .publish(any(PublishPort.Options.class));
 
     // then
-    assertThat(thrown)
-      .isInstanceOf(PublishingFailedException.class)
-      .hasMessageContaining("External publishing failed for document: " + docNumber);
+    assertThatThrownBy(() ->
+      documentationUnitService.publish(
+        documentNumber,
+        TestDocumentationUnitContent.create(documentNumber, "Some Content")
+      )
+    ).isInstanceOf(PublishingFailedException.class);
+
+    Optional<DocumentationUnit> actual = documentationUnitService.findByDocumentNumber(
+      documentNumber
+    );
+    assertThat(actual).isPresent().hasValueSatisfying(dun -> assertThat(dun.json()).isNull());
   }
 }

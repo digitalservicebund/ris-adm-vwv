@@ -95,22 +95,10 @@ public class DocumentationUnitService implements DocumentationUnitPort {
 
     // publish to portal
     // later when we want to publish to other publishers, we can receive them form the method param and select them here
-    try {
-      final String BSG_PUBLISHER_NAME = "privateBsgPublisher";
-      var publishOptions = new PublishPort.Options(documentNumber, xml, BSG_PUBLISHER_NAME);
-      publishPort.publish(publishOptions);
-    } catch (Exception e) {
-      // publishing fails. We return a 503 and rollback the transaction
-      log.error(
-        "Failed to publish document {} to external storage. Rolling back database changes.",
-        documentNumber,
-        e
-      );
-      throw new PublishingFailedException(
-        "External publishing failed for document: " + documentNumber,
-        e
-      );
-    }
+    // If the publishing or validation fails, the transaction is rolled back
+    final String BSG_PUBLISHER_NAME = "privateBsgPublisher";
+    var publishOptions = new PublishPort.Options(documentNumber, xml, BSG_PUBLISHER_NAME);
+    publishPort.publish(publishOptions);
     return convertLdml(publishedDocumentationUnit);
   }
 

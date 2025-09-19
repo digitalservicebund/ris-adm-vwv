@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://ldml.neuris.de/metadata/"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified"
+           targetNamespace="http://ldml.neuris.de/metadata/"
+           version="1.0">
+    <xs:element name="metadata">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="normgeber" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute name="staat" use="required"/>
+                        <xs:attribute name="organ"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="fieldsOfLaw" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="fieldOfLaw" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:simpleContent>
+                                        <xs:extension base="xs:string">
+                                            <xs:attribute name="notation" type="xs:string" use="required"/>
+                                        </xs:extension>
+                                    </xs:simpleContent>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="entryIntoEffectDate" minOccurs="0" type="xs:date"/>
+                <xs:element name="expiryDate" minOccurs="0" type="xs:date"/>
+                <xs:element name="tableOfContentsEntries" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="tableOfContentsEntry" type="xs:string" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="documentType">
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="category" use="required"/>
+                                <xs:attribute name="longTitle" use="required"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="zuordnungen" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="zuordnung" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:attribute name="aspekt" use="required"/>
+                                    <xs:attribute name="begriff" use="required"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="berufsbilder" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="berufsbild" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="titelAspekte" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="titelAspekt" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="definitionen" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="definition" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:attribute name="begriff" type="xs:string" use="required"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="dateToQuoteList" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="dateToQuoteEntry" type="xs:date" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="referenceNumbers" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="referenceNumber" type="xs:string" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="historicAdministrativeData" minOccurs="0">
+                    <xs:complexType mixed="true">
+                        <xs:choice>
+                            <xs:any processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+                        </xs:choice>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="region" minOccurs="0" type="xs:string"/>
+                <xs:element name="historicAbbreviation" minOccurs="0" type="xs:string"/>
+                <xs:element name="activeReferences" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="activeReference" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:simpleContent>
+                                        <xs:extension base="xs:string">
+                                            <xs:attribute name="typeNumber" type="xs:string" use="required"/>
+                                            <xs:attribute name="reference" type="xs:string" use="required"/>
+                                            <xs:attribute name="section" type="xs:string"/>
+                                            <xs:attribute name="paragraph" type="xs:string"/>
+                                            <xs:attribute name="subParagraph" type="xs:string"/>
+                                            <xs:attribute name="position" type="xs:string"/>
+                                            <xs:attribute name="dateOfVersion" type="xs:date"/>
+                                        </xs:extension>
+                                    </xs:simpleContent>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="normReference">
+        <xs:complexType>
+            <xs:attribute name="singleNorm" type="xs:string"/>
+            <xs:attribute name="dateOfRelevance" type="xs:gYear"/>
+            <xs:attribute name="dateOfVersion" type="xs:date"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="caselawReference">
+        <xs:complexType>
+            <xs:attribute name="abbreviation" type="xs:string" use="required"/>
+            <xs:attribute name="court" type="xs:string" use="required"/>
+            <xs:attribute name="courtLocation" type="xs:string"/>
+            <xs:attribute name="date" type="xs:date" use="required"/>
+            <xs:attribute name="referenceNumber" type="xs:string" use="required"/>
+            <xs:attribute name="documentNumber" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

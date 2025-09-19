@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.adm_vwv.config;
 
 import de.bund.digitalservice.ris.adm_vwv.adapter.publishing.PublishPort;
 import de.bund.digitalservice.ris.adm_vwv.adapter.publishing.S3PublishAdapter;
+import de.bund.digitalservice.ris.adm_vwv.adapter.publishing.XmlValidator;
 import jakarta.annotation.Nonnull;
 import java.util.List;
 import java.util.Map;
@@ -25,10 +26,11 @@ public class PublisherConfig {
   @Bean("privateBsgPublisher")
   public PublishPort privateBsgPublisher(
     @Qualifier("privateBsgS3Client") S3Client s3Client,
+    @Qualifier("bsgVwvValidator") XmlValidator validator,
     @Value("${otc.private-bsg-client.bucket-name}") String bucketName,
     @Value("${otc.obs.datatype}") String datatype
   ) {
-    return new S3PublishAdapter(s3Client, bucketName, datatype, "privateBsgPublisher");
+    return new S3PublishAdapter(s3Client, validator, bucketName, datatype, "privateBsgPublisher");
   }
 
   /**
@@ -66,6 +68,7 @@ public class PublisherConfig {
           selectedPublisher.publish(options);
         } else {
           log.error("No publisher found for target '{}'.", target);
+          throw new IllegalArgumentException("No publisher found for target: " + target);
         }
       }
     };
