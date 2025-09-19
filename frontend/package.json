@@ -80,7 +80,7 @@
     "eslint-plugin-playwright": "^2.2.2",
     "eslint-plugin-testing-library": "^7.8.0",
     "eslint-plugin-vue": "^10.4.0",
-    "jsdom": "^26.1.0",
+    "jsdom": "^27.0.0",
     "license-checker-rseidelsohn": "^4.4.2",
     "pinia": "^3.0.3",
     "prettier": "^3.6.2",
