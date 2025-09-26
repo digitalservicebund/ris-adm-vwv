@@ -6,7 +6,7 @@ import IconAdd from '~icons/material-symbols/add'
 <template>
   <div class="flex flex-col gap-16 p-24 bg-white">
     <div class="flex justify-between items-end">
-      <h1 class="ris-heading2-regular">Unselbstständige Literatur</h1>
+      <h1 class="ris-heading2-regular">Übersicht Unselbstständige Literatur</h1>
       <Button label="Neue Dokumentationseinheit">
         <template #icon>
           <IconAdd />

@@ -9,9 +9,12 @@ jobs:
         # Standard, sharded runs
         playwright-project:
           [
-            { name: "chromium", install: "chromium" },
-            { name: "firefox", install: "firefox" },
-            { name: "msedge", install: "msedge chromium" },
+            { name: "chromium-vwv", install: "chromium" },
+            { name: "firefox-vwv", install: "firefox" },
+            { name: "msedge-vwv", install: "msedge chromium" },
+            { name: "chromium-uli", install: "chromium" },
+            { name: "firefox-uli", install: "firefox" },
+            { name: "msedge-uli", install: "msedge chromium" },
           ]
         shardIndex: [1, 2, 3, 4]
         shardTotal: [4]

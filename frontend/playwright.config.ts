@@ -1,7 +1,8 @@
 import process from 'node:process'
 import { defineConfig, devices } from '@playwright/test'
 
-const authFile = './e2e/storageState.json'
+const vwvAuthFile = './frontend/e2e/.auth/vwv.json'
+const uliAuthFile = './frontend/e2e/.auth/uli.json'
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -56,25 +57,39 @@ export default defineConfig({
       name: 'seed data',
       testMatch: 'seed-data.ts',
       use: {
-        storageState: authFile,
+        storageState: vwvAuthFile,
       },
       testIgnore: 'Login.spec.ts',
     },
+
+    /* --- Vwv test projects --- */
     {
       dependencies: ['setup', 'seed data'],
-      name: 'chromium',
+      name: 'chromium-vwv',
+      testMatch: /.*\/vwv\/.*\.spec\.ts/,
       use: {
         ...devices['Desktop Chrome'],
-        storageState: authFile,
+        storageState: vwvAuthFile,
       },
       testIgnore: 'Login.spec.ts',
     },
     {
       dependencies: ['setup', 'seed data'],
-      name: 'firefox',
+      name: 'firefox-vwv',
+      testMatch: /.*\/vwv\/.*\.spec\.ts/,
       use: {
         ...devices['Desktop Firefox'],
-        storageState: authFile,
+        storageState: vwvAuthFile,
+      },
+      testIgnore: 'Login.spec.ts',
+    },
+    {
+      dependencies: ['setup', 'seed data'],
+      name: 'msedge-vwv', // is also using the Chromium engine, but may behave differently still
+      testMatch: /.*\/vwv\/.*\.spec\.ts/,
+      use: {
+        ...devices['Desktop Edge'],
+        storageState: vwvAuthFile,
       },
       testIgnore: 'Login.spec.ts',
     },
@@ -89,12 +104,35 @@ export default defineConfig({
         storageState: authFile,
       },
     },*/
+
+    /* --- ULI test projects --- */
     {
       dependencies: ['setup', 'seed data'],
-      name: 'msedge', // is also using the Chromium engine, but may behave differently still
+      name: 'chromium-uli',
+      testMatch: /.*\/uli\/.*\.spec\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: uliAuthFile,
+      },
+      testIgnore: 'Login.spec.ts',
+    },
+    {
+      dependencies: ['setup', 'seed data'],
+      name: 'firefox-uli',
+      testMatch: /.*\/uli\/.*\.spec\.ts/,
+      use: {
+        ...devices['Desktop Firefox'],
+        storageState: uliAuthFile,
+      },
+      testIgnore: 'Login.spec.ts',
+    },
+    {
+      dependencies: ['setup', 'seed data'],
+      name: 'msedge-uli', // is also using the Chromium engine, but may behave differently still
+      testMatch: /.*\/uli\/.*\.spec\.ts/,
       use: {
         ...devices['Desktop Edge'],
-        storageState: authFile,
+        storageState: uliAuthFile,
       },
       testIgnore: 'Login.spec.ts',
     },
