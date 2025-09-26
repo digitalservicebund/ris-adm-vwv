@@ -18,7 +18,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v5
         with:
-          java-version: "23.0"
+          java-version: "25.0"
           distribution: "temurin"
           cache: gradle
           cache-dependency-path: | # optional
@@ -26,7 +26,7 @@ jobs:
             backend/**/gradle-wrapper.properties
       - name: Run spotlessCheck
         working-directory: ./backend
-        run: ./gradlew spotlessCheck
+        run: ./gradlew spotlessCheck --stackTrace
       - name: On failure send status to Slack
         # only on failure and if on "main" branch
         if: ${{ failure() && github.ref == 'refs/heads/main' }}
@@ -44,7 +44,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v5
         with:
-          java-version: "23.0"
+          java-version: "25.0"
           distribution: "temurin"
           cache: gradle
           cache-dependency-path: | # optional
@@ -73,7 +73,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v5
         with:
-          java-version: "23.0"
+          java-version: "25.0"
           distribution: "temurin"
           cache: gradle
           cache-dependency-path: | # optional
@@ -128,7 +128,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v5
         with:
-          java-version: "23.0"
+          java-version: "25.0"
           distribution: "temurin"
           cache: gradle
           cache-dependency-path: | # optional
@@ -178,7 +178,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v5
         with:
-          java-version: "23.0"
+          java-version: "25.0"
           distribution: "temurin"
           cache: gradle
           cache-dependency-path: | # optional

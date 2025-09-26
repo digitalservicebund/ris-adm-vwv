@@ -30,7 +30,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v5
         with:
-          java-version: "23.0"
+          java-version: "25.0"
           distribution: "temurin"
           cache: gradle
           cache-dependency-path: | # optional
