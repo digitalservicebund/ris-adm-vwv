@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue'
 import { type ValidationError } from '../input/types'
-import ComboboxInput from '@/components/ComboboxInput.vue'
 import InputField, { LabelPosition } from '@/components/input/InputField.vue'
 import Button from 'primevue/button'
 import SingleNormInput from '@/components/SingleNormInput.vue'
@@ -9,15 +8,15 @@ import { useValidationStore } from '@/composables/useValidationStore'
 import LegalForce from '@/domain/legalForce'
 import { type NormAbbreviation } from '@/domain/normAbbreviation'
 import SingleNorm from '@/domain/singleNorm'
-import ComboboxItemService from '@/services/comboboxItemService'
 import IconAdd from '~icons/ic/baseline-add'
 import ActiveReference, {
   ActiveReferenceDocumentType,
-  ActiveReferenceType,
+  ReferenceTypeEnum,
 } from '@/domain/activeReference.ts'
 import RadioButton from 'primevue/radiobutton'
 import labels from '@/components/active-reference/activeReferenceInputLabels.json'
 import NormAbbreviationsDropDown from '@/components/NormAbbreviationsDropDown.vue'
+import ReferenceTypeDropDown from './ReferenceTypeDropDown.vue'
 
 const props = defineProps<{
   modelValue?: ActiveReference
@@ -67,18 +66,10 @@ const normAbbreviation = computed({
   },
 })
 
-const referenceType = computed<
-  { label: string; value: ActiveReferenceType } | undefined,
-  ActiveReferenceType | undefined
->({
-  get: () =>
-    activeReference.value.referenceType
-      ? {
-          label: ActiveReference.referenceTypeLabels.get(activeReference.value.referenceType) ?? '',
-          value: activeReference.value.referenceType,
-        }
-      : undefined,
+const referenceType = computed<ReferenceTypeEnum | undefined>({
+  get: () => activeReference.value.referenceType,
   set: (newValue) => {
+    validationStore.remove('referenceType')
     activeReference.value.referenceType = newValue
   },
 })
@@ -256,16 +247,13 @@ watch(
         label="Art der Verweisung *"
         :validation-error="validationStore.getByField('referenceType')"
       >
-        <ComboboxInput
-          id="active-reference-type-field"
+        <ReferenceTypeDropDown
           v-model="referenceType"
+          :invalid="slotProps.hasError"
           aria-label="Art der Verweisung"
-          :has-error="slotProps.hasError"
-          :item-service="ComboboxItemService.getActiveReferenceTypes"
-          no-clear
           placeholder="Bitte auswählen"
-          @focus="validationStore.remove('referenceType')"
-        ></ComboboxInput>
+          input-id="active-reference-type-field"
+        />
       </InputField>
     </div>
     <div class="flex flex-col gap-24">

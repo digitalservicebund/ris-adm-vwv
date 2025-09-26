@@ -4,6 +4,7 @@ import {
   useInstitutionSearch,
   useNormAbbreviationsSearch,
   usePeriodikumSearch,
+  useReferenceTypeSearch,
   useRegionSearch,
   type AutoCompleteSuggestion,
 } from '@/composables/useAutoComplete'
@@ -14,6 +15,8 @@ import { amtsblattFixture, bundesanzeigerFixture } from '@/testing/fixtures/peri
 import type { Periodikum } from '@/domain/fundstelle'
 import { kvlgFixture, sgb5Fixture } from '@/testing/fixtures/normAbbreviation'
 import type { NormAbbreviation } from '@/domain/normAbbreviation'
+import type { ReferenceType } from '@/domain/referenceType'
+import { anwendungFixture, neuregelungFixture } from '@/testing/fixtures/referenceType'
 
 describe('useAutoComplete', () => {
   // Mock debounce to avoid delay
@@ -234,7 +237,7 @@ describe('useNormAbbreviationsSearch', () => {
     ['abbreviation', 'SGB'],
     ['officialLongTitle', 'Sozialgesetzbuch'],
     ['officialLongTitle', 'Fünftes'],
-  ])('returns filtered periodika by %s', (_, query) => {
+  ])('returns filtered norm abbreviations by %s', (_, query) => {
     const search = useNormAbbreviationsSearch(mockAbbr)
     const results = search(query)
     expect(results).toEqual([
@@ -250,5 +253,36 @@ describe('useNormAbbreviationsSearch', () => {
     const search = useNormAbbreviationsSearch(ref([{ id: 'normTestId', abbreviation: 'normAbbr' }]))
     const results = search('normAbbr')
     expect(results).toEqual([{ id: 'normTestId', label: 'normAbbr' }])
+  })
+})
+
+describe('useReferenceTypeSearch', () => {
+  const mockRefTypes = ref<ReferenceType[]>([anwendungFixture, neuregelungFixture])
+
+  it('returns all abbreviations when query is empty', () => {
+    const search = useReferenceTypeSearch(mockRefTypes)
+    const results = search('')
+    expect(results).toHaveLength(2)
+  })
+
+  it('returns an empty array if no matches', () => {
+    const search = useReferenceTypeSearch(mockRefTypes)
+    const results = search('xyz')
+    expect(results).toEqual([])
+  })
+
+  it.each([
+    ['name', 'anwe'],
+    ['name', 'Anwend'],
+    ['name', 'Anwendung'],
+  ])('returns filtered reference type by %s', (_, query) => {
+    const search = useReferenceTypeSearch(mockRefTypes)
+    const results = search(query)
+    expect(results).toEqual([
+      {
+        id: anwendungFixture.id,
+        label: 'Anwendung',
+      },
+    ])
   })
 })

@@ -1,11 +1,16 @@
 import { userEvent } from '@testing-library/user-event'
 import { render, screen } from '@testing-library/vue'
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
-import ActiveReference, { ActiveReferenceType } from '@/domain/activeReference.ts'
+import ActiveReference, { ReferenceTypeEnum } from '@/domain/activeReference.ts'
 import ActiveReferenceInput from '@/components/active-reference/ActiveReferenceInput.vue'
 import { config } from '@vue/test-utils'
 import InputText from 'primevue/inputtext'
 import { kvlgFixture, sgb5Fixture } from '@/testing/fixtures/normAbbreviation'
+import {
+  anwendungFixture,
+  neuregelungFixture,
+  rechtsgrundlageFixture,
+} from '@/testing/fixtures/referenceType'
 
 function renderComponent(options?: { modelValue?: ActiveReference }) {
   const user = userEvent.setup()
@@ -45,7 +50,7 @@ describe('ActiveReferenceInput', () => {
   it('render values if given', async () => {
     renderComponent({
       modelValue: {
-        referenceType: ActiveReferenceType.ANWENDUNG,
+        referenceType: ReferenceTypeEnum.ANWENDUNG,
         normAbbreviation: { id: '123', abbreviation: 'ABC' },
         singleNorms: [
           {
@@ -75,7 +80,7 @@ describe('ActiveReferenceInput', () => {
   it('renders multiple single norm input groups', async () => {
     renderComponent({
       modelValue: {
-        referenceType: ActiveReferenceType.ANWENDUNG,
+        referenceType: ReferenceTypeEnum.ANWENDUNG,
         normAbbreviation: { id: '123', abbreviation: 'ABC' },
         singleNorms: [
           {
@@ -102,7 +107,7 @@ describe('ActiveReferenceInput', () => {
   it('adds new single norm', async () => {
     const { user } = renderComponent({
       modelValue: {
-        referenceType: ActiveReferenceType.ANWENDUNG,
+        referenceType: ReferenceTypeEnum.ANWENDUNG,
         normAbbreviation: { id: '123', abbreviation: 'ABC' },
         singleNorms: [
           {
@@ -121,7 +126,7 @@ describe('ActiveReferenceInput', () => {
   it('removes single norm', async () => {
     const { user } = renderComponent({
       modelValue: {
-        referenceType: ActiveReferenceType.ANWENDUNG,
+        referenceType: ReferenceTypeEnum.ANWENDUNG,
         normAbbreviation: { id: '123', abbreviation: 'ABC' },
         singleNorms: [
           {
@@ -143,7 +148,7 @@ describe('ActiveReferenceInput', () => {
   it('removes last single norm in list', async () => {
     const { user } = renderComponent({
       modelValue: {
-        referenceType: ActiveReferenceType.ANWENDUNG,
+        referenceType: ReferenceTypeEnum.ANWENDUNG,
         normAbbreviation: { id: '123', abbreviation: 'ABC' },
         singleNorms: [
           {
@@ -162,7 +167,7 @@ describe('ActiveReferenceInput', () => {
   it('validates invalid norm input on blur', async () => {
     const { user } = renderComponent({
       modelValue: {
-        referenceType: ActiveReferenceType.ANWENDUNG,
+        referenceType: ReferenceTypeEnum.ANWENDUNG,
         normAbbreviation: { id: '123', abbreviation: 'ABC' },
       } as ActiveReference,
     })
@@ -178,7 +183,7 @@ describe('ActiveReferenceInput', () => {
   it('validates invalid norm input on mount', async () => {
     renderComponent({
       modelValue: {
-        referenceType: ActiveReferenceType.ANWENDUNG,
+        referenceType: ReferenceTypeEnum.ANWENDUNG,
         normAbbreviation: { id: '123', abbreviation: 'ABC' },
         singleNorms: [
           {
@@ -197,7 +202,7 @@ describe('ActiveReferenceInput', () => {
   it('does not add norm with invalid single norm input', async () => {
     const { user } = renderComponent({
       modelValue: {
-        referenceType: ActiveReferenceType.ANWENDUNG,
+        referenceType: ReferenceTypeEnum.ANWENDUNG,
         normAbbreviation: { id: '123', abbreviation: 'ABC' },
         singleNorms: [
           {
@@ -218,7 +223,7 @@ describe('ActiveReferenceInput', () => {
   it('does not add norm with invalid version date input', async () => {
     const { user } = renderComponent({
       modelValue: {
-        referenceType: ActiveReferenceType.ANWENDUNG,
+        referenceType: ReferenceTypeEnum.ANWENDUNG,
         normAbbreviation: { id: '123', abbreviation: 'ABC' },
       } as ActiveReference,
     })
@@ -236,7 +241,7 @@ describe('ActiveReferenceInput', () => {
   it('does not add norm with incomplete version date input', async () => {
     const { user } = renderComponent({
       modelValue: {
-        referenceType: ActiveReferenceType.ANWENDUNG,
+        referenceType: ReferenceTypeEnum.ANWENDUNG,
         normAbbreviation: { id: '123', abbreviation: 'ABC' },
       } as ActiveReference,
     })
@@ -255,7 +260,7 @@ describe('ActiveReferenceInput', () => {
   it('does not add norm with invalid year input', async () => {
     const { user } = renderComponent({
       modelValue: {
-        referenceType: ActiveReferenceType.ANWENDUNG,
+        referenceType: ReferenceTypeEnum.ANWENDUNG,
         normAbbreviation: { id: '123', abbreviation: 'ABC' },
       } as ActiveReference,
     })
@@ -272,7 +277,20 @@ describe('ActiveReferenceInput', () => {
   })
 
   it('validates empty reference type', async () => {
-    const fetchSpy = vi.spyOn(window, 'fetch').mockResolvedValue(
+    const fetchSpy = vi.spyOn(globalThis, 'fetch')
+
+    fetchSpy.mockResolvedValueOnce(
+      new Response(
+        JSON.stringify({
+          referenceTypes: [anwendungFixture, neuregelungFixture, rechtsgrundlageFixture],
+        }),
+        {
+          status: 200,
+        },
+      ),
+    )
+
+    fetchSpy.mockResolvedValueOnce(
       new Response(JSON.stringify({ normAbbreviations: [sgb5Fixture, kvlgFixture] }), {
         status: 200,
       }),
@@ -280,7 +298,7 @@ describe('ActiveReferenceInput', () => {
 
     const { user } = renderComponent()
 
-    await vi.waitFor(() => expect(fetchSpy).toHaveBeenCalledTimes(1))
+    await vi.waitFor(() => expect(fetchSpy).toHaveBeenCalledTimes(2))
 
     const abbreviationField = screen.getByLabelText('RIS-Abkürzung')
     await user.type(abbreviationField, 'SGB')
@@ -305,7 +323,7 @@ describe('ActiveReferenceInput', () => {
   it('new input removes error message', async () => {
     const { user } = renderComponent({
       modelValue: {
-        referenceType: ActiveReferenceType.ANWENDUNG,
+        referenceType: ReferenceTypeEnum.ANWENDUNG,
         normAbbreviation: { id: '123', abbreviation: 'ABC' },
         singleNorms: [
           {
@@ -329,7 +347,20 @@ describe('ActiveReferenceInput', () => {
   })
 
   it('correctly updates the value of ris abbreviation input', async () => {
-    const fetchSpy = vi.spyOn(window, 'fetch').mockResolvedValue(
+    const fetchSpy = vi.spyOn(globalThis, 'fetch')
+
+    fetchSpy.mockResolvedValueOnce(
+      new Response(
+        JSON.stringify({
+          referenceTypes: [anwendungFixture, neuregelungFixture, rechtsgrundlageFixture],
+        }),
+        {
+          status: 200,
+        },
+      ),
+    )
+
+    fetchSpy.mockResolvedValueOnce(
       new Response(JSON.stringify({ normAbbreviations: [sgb5Fixture, kvlgFixture] }), {
         status: 200,
       }),
@@ -337,13 +368,11 @@ describe('ActiveReferenceInput', () => {
 
     const { user, emitted } = renderComponent()
 
-    await vi.waitFor(() => expect(fetchSpy).toHaveBeenCalledTimes(1))
+    await vi.waitFor(() => expect(fetchSpy).toHaveBeenCalledTimes(2))
 
     const referenceTypeField = screen.getByLabelText('Art der Verweisung')
     await user.type(referenceTypeField, 'A')
-    const referenceTypeDropdownItems = screen.getAllByLabelText('dropdown-option') as HTMLElement[]
-    expect(referenceTypeDropdownItems[0]).toHaveTextContent('Anwendung')
-    await user.click(referenceTypeDropdownItems[0]!)
+    await user.click(screen.getByText('Anwendung'))
 
     const abbreviationField = screen.getByLabelText('RIS-Abkürzung')
     await user.type(abbreviationField, 'SGB')
@@ -355,7 +384,7 @@ describe('ActiveReferenceInput', () => {
       [
         {
           referenceDocumentType: 'norm',
-          referenceType: ActiveReferenceType.ANWENDUNG,
+          referenceType: ReferenceTypeEnum.ANWENDUNG,
           normAbbreviation: {
             id: 'sgb5TestId',
             abbreviation: 'SGB 5',
@@ -371,7 +400,7 @@ describe('ActiveReferenceInput', () => {
   it('correctly updates the value of the single norm input', async () => {
     const { user } = renderComponent({
       modelValue: {
-        referenceType: ActiveReferenceType.ANWENDUNG,
+        referenceType: ReferenceTypeEnum.ANWENDUNG,
         normAbbreviation: { id: '123', abbreviation: 'ABC' },
       } as ActiveReference,
     })
@@ -384,7 +413,7 @@ describe('ActiveReferenceInput', () => {
   it('correctly updates the value of the version date input', async () => {
     const { user } = renderComponent({
       modelValue: {
-        referenceType: ActiveReferenceType.ANWENDUNG,
+        referenceType: ReferenceTypeEnum.ANWENDUNG,
         normAbbreviation: { id: '123', abbreviation: 'ABC' },
       } as ActiveReference,
     })
@@ -398,7 +427,7 @@ describe('ActiveReferenceInput', () => {
   it('correctly updates the value of the version date input', async () => {
     const { user } = renderComponent({
       modelValue: {
-        referenceType: ActiveReferenceType.ANWENDUNG,
+        referenceType: ReferenceTypeEnum.ANWENDUNG,
         normAbbreviation: { id: '123', abbreviation: 'ABC' },
       } as ActiveReference,
     })
@@ -412,7 +441,7 @@ describe('ActiveReferenceInput', () => {
   it('emits add event', async () => {
     const { user, emitted } = renderComponent({
       modelValue: {
-        referenceType: ActiveReferenceType.ANWENDUNG,
+        referenceType: ReferenceTypeEnum.ANWENDUNG,
         normAbbreviation: { id: '123', abbreviation: 'ABC' },
       } as ActiveReference,
     })
@@ -426,7 +455,7 @@ describe('ActiveReferenceInput', () => {
   it('emits delete event', async () => {
     const { user, emitted } = renderComponent({
       modelValue: {
-        referenceType: ActiveReferenceType.ANWENDUNG,
+        referenceType: ReferenceTypeEnum.ANWENDUNG,
         normAbbreviation: { id: '123', abbreviation: 'ABC' },
       } as ActiveReference,
     })
@@ -440,7 +469,7 @@ describe('ActiveReferenceInput', () => {
   it('emits cancel edit', async () => {
     const { user, emitted } = renderComponent({
       modelValue: {
-        referenceType: ActiveReferenceType.ANWENDUNG,
+        referenceType: ReferenceTypeEnum.ANWENDUNG,
         normAbbreviation: { id: '123', abbreviation: 'ABC' },
       } as ActiveReference,
     })
@@ -452,7 +481,20 @@ describe('ActiveReferenceInput', () => {
   })
 
   it('removes entry on cancel edit, when not previously saved yet', async () => {
-    const fetchSpy = vi.spyOn(window, 'fetch').mockResolvedValue(
+    const fetchSpy = vi.spyOn(globalThis, 'fetch')
+
+    fetchSpy.mockResolvedValueOnce(
+      new Response(
+        JSON.stringify({
+          referenceTypes: [anwendungFixture, neuregelungFixture, rechtsgrundlageFixture],
+        }),
+        {
+          status: 200,
+        },
+      ),
+    )
+
+    fetchSpy.mockResolvedValueOnce(
       new Response(JSON.stringify({ normAbbreviations: [sgb5Fixture, kvlgFixture] }), {
         status: 200,
       }),
@@ -460,7 +502,7 @@ describe('ActiveReferenceInput', () => {
 
     const { user, emitted } = renderComponent()
 
-    await vi.waitFor(() => expect(fetchSpy).toHaveBeenCalledTimes(1))
+    await vi.waitFor(() => expect(fetchSpy).toHaveBeenCalledTimes(2))
 
     const abbreviationField = screen.getByLabelText('RIS-Abkürzung')
     await user.type(abbreviationField, 'SGB')
@@ -474,7 +516,20 @@ describe('ActiveReferenceInput', () => {
   })
 
   it('removes multiple single norms on change to Verwaltungsvorschrift', async () => {
-    const fetchSpy = vi.spyOn(window, 'fetch').mockResolvedValue(
+    const fetchSpy = vi.spyOn(globalThis, 'fetch')
+
+    fetchSpy.mockResolvedValueOnce(
+      new Response(
+        JSON.stringify({
+          referenceTypes: [anwendungFixture, neuregelungFixture, rechtsgrundlageFixture],
+        }),
+        {
+          status: 200,
+        },
+      ),
+    )
+
+    fetchSpy.mockResolvedValueOnce(
       new Response(JSON.stringify({ normAbbreviations: [sgb5Fixture, kvlgFixture] }), {
         status: 200,
       }),
@@ -483,13 +538,11 @@ describe('ActiveReferenceInput', () => {
     // given
     const { user } = renderComponent()
 
-    await vi.waitFor(() => expect(fetchSpy).toHaveBeenCalledTimes(1))
+    await vi.waitFor(() => expect(fetchSpy).toHaveBeenCalledTimes(2))
 
     const referenceTypeField = screen.getByLabelText('Art der Verweisung')
     await user.type(referenceTypeField, 'A')
-    const referenceTypeDropdownItems = screen.getAllByLabelText('dropdown-option') as HTMLElement[]
-    expect(referenceTypeDropdownItems[0]).toHaveTextContent('Anwendung')
-    await user.click(referenceTypeDropdownItems[0]!)
+    await user.click(screen.getByText('Anwendung'))
 
     const abbreviationField = screen.getByLabelText('RIS-Abkürzung')
     await user.type(abbreviationField, 'SGB')
@@ -513,21 +566,31 @@ describe('ActiveReferenceInput', () => {
   })
 
   it('Restore single norm on change to Verwaltungsvorschrift after removing all single norms', async () => {
-    // given
-    const fetchSpy = vi.spyOn(window, 'fetch').mockResolvedValue(
+    const fetchSpy = vi.spyOn(globalThis, 'fetch')
+
+    fetchSpy.mockResolvedValueOnce(
+      new Response(
+        JSON.stringify({
+          referenceTypes: [anwendungFixture, neuregelungFixture, rechtsgrundlageFixture],
+        }),
+        {
+          status: 200,
+        },
+      ),
+    )
+
+    fetchSpy.mockResolvedValueOnce(
       new Response(JSON.stringify({ normAbbreviations: [sgb5Fixture, kvlgFixture] }), {
         status: 200,
       }),
     )
 
     const { user } = renderComponent()
-    await vi.waitFor(() => expect(fetchSpy).toHaveBeenCalledTimes(1))
+    await vi.waitFor(() => expect(fetchSpy).toHaveBeenCalledTimes(2))
 
     const referenceTypeField = screen.getByLabelText('Art der Verweisung')
     await user.type(referenceTypeField, 'A')
-    const referenceTypeDropdownItems = screen.getAllByLabelText('dropdown-option') as HTMLElement[]
-    expect(referenceTypeDropdownItems[0]).toHaveTextContent('Anwendung')
-    await user.click(referenceTypeDropdownItems[0]!)
+    await user.click(screen.getByText('Anwendung'))
     const abbreviationField = screen.getByLabelText('RIS-Abkürzung')
     await user.type(abbreviationField, 'SGB')
     await user.click(screen.getByText('SGB 5'))
@@ -541,7 +604,20 @@ describe('ActiveReferenceInput', () => {
   })
 
   it('removes singleNorm and dateOfRelevance on change to Verwaltungsvorschrift', async () => {
-    const fetchSpy = vi.spyOn(window, 'fetch').mockResolvedValue(
+    const fetchSpy = vi.spyOn(globalThis, 'fetch')
+
+    fetchSpy.mockResolvedValueOnce(
+      new Response(
+        JSON.stringify({
+          referenceTypes: [anwendungFixture, neuregelungFixture, rechtsgrundlageFixture],
+        }),
+        {
+          status: 200,
+        },
+      ),
+    )
+
+    fetchSpy.mockResolvedValueOnce(
       new Response(JSON.stringify({ normAbbreviations: [sgb5Fixture, kvlgFixture] }), {
         status: 200,
       }),
@@ -550,13 +626,11 @@ describe('ActiveReferenceInput', () => {
     // given
     const { user } = renderComponent()
 
-    await vi.waitFor(() => expect(fetchSpy).toHaveBeenCalledTimes(1))
+    await vi.waitFor(() => expect(fetchSpy).toHaveBeenCalledTimes(2))
 
     const referenceTypeField = screen.getByLabelText('Art der Verweisung')
     await user.type(referenceTypeField, 'A')
-    const referenceTypeDropdownItems = screen.getAllByLabelText('dropdown-option') as HTMLElement[]
-    expect(referenceTypeDropdownItems[0]).toHaveTextContent('Anwendung')
-    await user.click(referenceTypeDropdownItems[0]!)
+    await user.click(screen.getByText('Anwendung'))
 
     const abbreviationField = screen.getByLabelText('RIS-Abkürzung')
     await user.type(abbreviationField, 'SGB')

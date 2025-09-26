@@ -4,7 +4,6 @@ import { computed, ref } from 'vue'
 import type { ComboboxInputModelType, ComboboxItem } from '@/components/input/types'
 import type { ComboboxResult } from '@/domain/comboboxResult.ts'
 import type { CitationType } from '@/domain/citationType'
-import ActiveReference, { ActiveReferenceType } from '@/domain/activeReference.ts'
 import type { FieldOfLaw } from '@/domain/fieldOfLaw'
 import errorMessages from '@/i18n/errors.json'
 import type { DocumentType } from '@/domain/documentType'
@@ -83,7 +82,6 @@ function fetchFromEndpoint(
 
 export type ComboboxItemService = {
   getDocumentTypes: (filter: Ref<string | undefined>) => UseFetchReturn<ComboboxItem[]>
-  getActiveReferenceTypes: (filter: Ref<string | undefined>) => ComboboxResult<ComboboxItem[]>
   getCitationTypes: (filter: Ref<string | undefined>) => ComboboxResult<ComboboxItem[]>
   getFieldOfLawSearchByIdentifier: (
     filter: Ref<string | undefined>,
@@ -93,27 +91,6 @@ export type ComboboxItemService = {
 const service: ComboboxItemService = {
   getDocumentTypes: (filter: Ref<string | undefined>) =>
     fetchFromEndpoint(Endpoint.documentTypes, filter, { usePagination: false }),
-  getActiveReferenceTypes: (filter: Ref<string | undefined>) => {
-    const items = ref(
-      Object.values(ActiveReferenceType).map(
-        (referenceType) =>
-          <ComboboxItem>{
-            label: ActiveReference.referenceTypeLabels.get(referenceType),
-            value: referenceType,
-          },
-      ),
-    )
-    const execute = async () => {
-      return service.getActiveReferenceTypes(filter)
-    }
-    const result: ComboboxResult<ComboboxItem[]> = {
-      data: items,
-      execute: execute,
-      canAbort: computed(() => false),
-      abort: () => {},
-    }
-    return result
-  },
   getCitationTypes: (filter: Ref<string | undefined>) => {
     const citationTypeValues = [
       {

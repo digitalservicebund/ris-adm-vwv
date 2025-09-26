@@ -1,7 +1,7 @@
 import NormReference from '@/domain/normReference.ts'
 import type EditableListItem from '@/domain/editableListItem.ts'
 
-export enum ActiveReferenceType {
+export enum ReferenceTypeEnum {
   ANWENDUNG = 'anwendung',
   NEUREGELUNG = 'neuregelung',
   RECHTSGRUNDLAGE = 'rechtsgrundlage',
@@ -12,18 +12,18 @@ export enum ActiveReferenceDocumentType {
   ADMINISTRATIVE_REGULATION = 'administrative_regulation',
 }
 
+export const referenceTypeToLabel = {
+  [ReferenceTypeEnum.ANWENDUNG]: 'Anwendung',
+  [ReferenceTypeEnum.NEUREGELUNG]: 'Neuregelung',
+  [ReferenceTypeEnum.RECHTSGRUNDLAGE]: 'Rechtsgrundlage',
+}
+
 export default class ActiveReference extends NormReference {
   /**
    * Reference document type is either NORM or ADMINISTRATIVE_REGULATION
    */
   public referenceDocumentType: ActiveReferenceDocumentType = ActiveReferenceDocumentType.NORM
-  public referenceType?: ActiveReferenceType
-
-  static readonly referenceTypeLabels = new Map<ActiveReferenceType, string>([
-    [ActiveReferenceType.ANWENDUNG, 'Anwendung'],
-    [ActiveReferenceType.NEUREGELUNG, 'Neuregelung'],
-    [ActiveReferenceType.RECHTSGRUNDLAGE, 'Rechtsgrundlage'],
-  ])
+  public referenceType?: ReferenceTypeEnum
 
   constructor(data: Partial<ActiveReference> = {}) {
     super(data)
@@ -42,7 +42,7 @@ export default class ActiveReference extends NormReference {
 
   get renderReferenceType(): string {
     if (this.referenceType) {
-      return ActiveReference.referenceTypeLabels.get(this.referenceType) ?? ''
+      return referenceTypeToLabel[this.referenceType] ?? ''
     }
     return ''
   }

@@ -81,7 +81,7 @@ test.describe('RubrikenPage - Verweise (on Norm) with mocked routes', () => {
       await page.goto('/documentUnit/KSNR054920707/rubriken')
       const referenceTypeElement = page
         .getByTestId('activeReferences')
-        .getByRole('textbox', { name: 'Art der Verweisung' })
+        .getByRole('combobox', { name: 'Art der Verweisung' })
       await expect(referenceTypeElement).toHaveCount(1)
       await expect(page.getByText('Art der Verweisung *')).toBeVisible()
       await expect(page.getByTestId('activeReferences').getByText('RIS-Abkürzung *')).toBeVisible()
@@ -198,7 +198,7 @@ test.describe('RubrikenPage - Verweise (on Norm) with mocked routes', () => {
       await page.goto('/documentUnit/KSNR054920707/rubriken')
       const referenceTypeElement = page
         .getByTestId('activeReferences')
-        .getByRole('textbox', { name: 'Art der Verweisung' })
+        .getByRole('combobox', { name: 'Art der Verweisung' })
       await expect(referenceTypeElement).toHaveCount(1)
       const activeReferenceElement = page
         .getByTestId('activeReferences')
@@ -239,7 +239,7 @@ test.describe('RubrikenPage - Verweise (on Norm) with mocked routes', () => {
       // when
       const referenceTypeElement = page
         .getByTestId('activeReferences')
-        .getByRole('textbox', { name: 'Art der Verweisung' })
+        .getByRole('combobox', { name: 'Art der Verweisung' })
       await referenceTypeElement.click()
       await page.getByText('Anwendung').click()
       await page
@@ -283,7 +283,7 @@ test.describe('RubrikenPage - Verweise (on Verwaltungsvorschrift) with mocked ro
       await page.getByRole('radio', { name: 'Verwaltungsvorschrift auswählen' }).click()
       const referenceTypeElement = page
         .getByTestId('activeReferences')
-        .getByRole('textbox', { name: 'Art der Verweisung' })
+        .getByRole('combobox', { name: 'Art der Verweisung' })
       await expect(referenceTypeElement).toHaveCount(1)
       const activeReferenceElement = page
         .getByTestId('activeReferences')
@@ -333,7 +333,7 @@ test.describe('RubrikenPage - Verweise (on Verwaltungsvorschrift) with mocked ro
       await expect(page.getByRole('link', { name: 'Rubriken' })).toHaveCount(1)
       const referenceTypeElement = page
         .getByTestId('activeReferences')
-        .getByRole('textbox', { name: 'Art der Verweisung' })
+        .getByRole('combobox', { name: 'Art der Verweisung' })
       await expect(referenceTypeElement).toHaveCount(1)
       const activeReferenceElement = page
         .getByTestId('activeReferences')
@@ -377,11 +377,8 @@ test.describe('RubrikenPage - Verweise (on Verwaltungsvorschrift) with mocked ro
       await page.goto('/documentUnit/KSNR054920707/fundstellen')
       await page.getByRole('link', { name: 'Rubriken' }).click()
       await page.getByRole('radio', { name: 'Verwaltungsvorschrift auswählen' }).click()
-      await page.getByRole('textbox', { name: 'Art der Verweisung' }).click()
-      await page
-        .getByRole('button', { name: 'dropdown-option' })
-        .filter({ hasText: 'Anwendung' })
-        .click()
+      await page.getByRole('combobox', { name: 'Art der Verweisung' }).click()
+      await page.getByRole('option', { name: 'Anwendung' }).click()
       await page
         .getByTestId('activeReferences')
         .getByRole('combobox', { name: 'RIS-Abkürzung' })
@@ -410,11 +407,8 @@ test.describe('RubrikenPage - Verweise (on Verwaltungsvorschrift) with mocked ro
 
       // when
       await page.getByRole('radio', { name: 'Verwaltungsvorschrift auswä' }).click()
-      await page.getByRole('textbox', { name: 'Art der Verweisung' }).click()
-      await page
-        .getByRole('button', { name: 'dropdown-option' })
-        .filter({ hasText: 'Anwendung' })
-        .click()
+      await page.getByRole('combobox', { name: 'Art der Verweisung' }).click()
+      await page.getByRole('option', { name: 'Anwendung' }).click()
       await page
         .getByTestId('activeReferences')
         .getByRole('combobox', { name: 'RIS-Abkürzung' })
@@ -454,7 +448,7 @@ test.describe('RubrikenPage - Verweise (on Verwaltungsvorschrift)', () => {
     await expect(page.getByRole('link', { name: 'Rubriken' })).toHaveCount(1)
     const referenceTypeElement = page
       .getByTestId('activeReferences')
-      .getByRole('textbox', { name: 'Art der Verweisung' })
+      .getByRole('combobox', { name: 'Art der Verweisung' })
     await expect(referenceTypeElement).toHaveCount(1)
     const activeReferenceElement = page
       .getByTestId('activeReferences')

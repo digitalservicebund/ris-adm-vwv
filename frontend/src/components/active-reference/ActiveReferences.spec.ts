@@ -6,13 +6,18 @@ import { type NormAbbreviation } from '@/domain/normAbbreviation'
 import SingleNorm from '@/domain/singleNorm'
 import ActiveReference, {
   ActiveReferenceDocumentType,
-  ActiveReferenceType,
+  ReferenceTypeEnum,
 } from '@/domain/activeReference.ts'
 import { createTestingPinia } from '@pinia/testing'
 import type { DocumentUnit } from '@/domain/documentUnit.ts'
 import { config } from '@vue/test-utils'
 import InputText from 'primevue/inputtext'
 import { kvlgFixture, sgb5Fixture } from '@/testing/fixtures/normAbbreviation'
+import {
+  anwendungFixture,
+  neuregelungFixture,
+  rechtsgrundlageFixture,
+} from '@/testing/fixtures/referenceType'
 
 function renderComponent(activeReferences?: ActiveReference[]) {
   const user = userEvent.setup()
@@ -43,13 +48,13 @@ function renderComponent(activeReferences?: ActiveReference[]) {
 
 function generateActiveReference(options?: {
   referenceDocumentType?: ActiveReferenceDocumentType
-  referenceType?: ActiveReferenceType
+  referenceType?: ReferenceTypeEnum
   normAbbreviation?: NormAbbreviation
   singleNorms?: SingleNorm[]
 }) {
   return new ActiveReference({
     referenceDocumentType: options?.referenceDocumentType ?? ActiveReferenceDocumentType.NORM,
-    referenceType: options?.referenceType ?? ActiveReferenceType.ANWENDUNG,
+    referenceType: options?.referenceType ?? ReferenceTypeEnum.ANWENDUNG,
     normAbbreviation: options?.normAbbreviation ?? sgb5Fixture,
     singleNorms: options?.singleNorms ?? [],
   })
@@ -105,7 +110,20 @@ describe('ActiveReferences', () => {
   })
 
   it('validates against duplicate entries in new entries', async () => {
-    const fetchSpy = vi.spyOn(window, 'fetch').mockResolvedValue(
+    const fetchSpy = vi.spyOn(globalThis, 'fetch')
+
+    fetchSpy.mockResolvedValueOnce(
+      new Response(
+        JSON.stringify({
+          referenceTypes: [anwendungFixture, neuregelungFixture, rechtsgrundlageFixture],
+        }),
+        {
+          status: 200,
+        },
+      ),
+    )
+
+    fetchSpy.mockResolvedValueOnce(
       new Response(JSON.stringify({ normAbbreviations: [sgb5Fixture, kvlgFixture] }), {
         status: 200,
       }),
@@ -117,7 +135,7 @@ describe('ActiveReferences', () => {
       }),
     ])
     await user.click(screen.getByLabelText('Weitere Angabe'))
-    await vi.waitFor(() => expect(fetchSpy).toHaveBeenCalledTimes(1))
+    await vi.waitFor(() => expect(fetchSpy).toHaveBeenCalledTimes(2))
 
     const abbreviationField = screen.getByLabelText('RIS-Abkürzung')
     await user.type(abbreviationField, 'SGB')
@@ -126,7 +144,20 @@ describe('ActiveReferences', () => {
   })
 
   it('validates against duplicate entries in existing entries', async () => {
-    const fetchSpy = vi.spyOn(window, 'fetch').mockResolvedValue(
+    const fetchSpy = vi.spyOn(globalThis, 'fetch')
+
+    fetchSpy.mockResolvedValueOnce(
+      new Response(
+        JSON.stringify({
+          referenceTypes: [anwendungFixture, neuregelungFixture, rechtsgrundlageFixture],
+        }),
+        {
+          status: 200,
+        },
+      ),
+    )
+
+    fetchSpy.mockResolvedValueOnce(
       new Response(JSON.stringify({ normAbbreviations: [sgb5Fixture, kvlgFixture] }), {
         status: 200,
       }),
@@ -134,10 +165,10 @@ describe('ActiveReferences', () => {
 
     const { user } = renderComponent([generateActiveReference()])
     await user.click(screen.getByTestId('list-entry-0'))
-    await vi.waitFor(() => expect(fetchSpy).toHaveBeenCalledTimes(1))
+    await vi.waitFor(() => expect(fetchSpy).toHaveBeenCalledTimes(2))
 
     const abbreviationField = screen.getByLabelText('RIS-Abkürzung')
-    await user.click(screen.getByRole('button', { name: 'Entfernen' }))
+    await user.clear(abbreviationField)
     await user.type(abbreviationField, 'SGB')
     await waitFor(() => {
       expect(screen.getByText('SGB 5')).toBeVisible()
@@ -219,7 +250,7 @@ describe('ActiveReferences', () => {
   it('render summary with one single norms', async () => {
     renderComponent([
       generateActiveReference({
-        referenceType: ActiveReferenceType.RECHTSGRUNDLAGE,
+        referenceType: ReferenceTypeEnum.RECHTSGRUNDLAGE,
         normAbbreviation: {
           id: 'normAbbrTestId',
           abbreviation: '1000g-BefV',

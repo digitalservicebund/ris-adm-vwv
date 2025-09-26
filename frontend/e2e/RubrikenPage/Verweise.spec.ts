@@ -18,11 +18,11 @@ test.describe('Verweise: Verwaltungsvorschrift und Norm', () => {
     // given
     await page.goto('/documentUnit/KSNR054920707/rubriken')
     await page.getByRole('radio', { name: 'Verwaltungsvorschrift auswä' }).click()
-    await page.getByRole('textbox', { name: 'Art der Verweisung' }).click()
     await page
-      .getByRole('button', { name: 'dropdown-option' })
-      .filter({ hasText: 'Anwendung' })
+      .getByTestId('activeReferences')
+      .getByRole('combobox', { name: 'Art der Verweisung' })
       .click()
+    await page.getByRole('option', { name: 'Anwendung' }).click()
     await page
       .getByTestId('activeReferences')
       .getByRole('combobox', { name: 'RIS-Abkürzung' })
@@ -40,11 +40,11 @@ test.describe('Verweise: Verwaltungsvorschrift und Norm', () => {
   }) => {
     // given
     await page.goto('/documentUnit/KSNR054920707/rubriken')
-    await page.getByRole('textbox', { name: 'Art der Verweisung' }).click()
     await page
-      .getByRole('button', { name: 'dropdown-option' })
-      .filter({ hasText: 'Anwendung' })
+      .getByTestId('activeReferences')
+      .getByRole('combobox', { name: 'Art der Verweisung' })
       .click()
+    await page.getByRole('option', { name: 'Anwendung' }).click()
     await page
       .getByTestId('activeReferences')
       .getByRole('combobox', { name: 'RIS-Abkürzung' })

@@ -6,6 +6,7 @@ import de.bund.digitalservice.ris.adm_vwv.application.*;
 import de.bund.digitalservice.ris.adm_vwv.application.Page;
 import de.bund.digitalservice.ris.adm_vwv.application.converter.business.Court;
 import de.bund.digitalservice.ris.adm_vwv.application.converter.business.NormAbbreviation;
+import de.bund.digitalservice.ris.adm_vwv.application.converter.business.ReferenceType;
 import jakarta.annotation.Nonnull;
 import java.util.*;
 import java.util.function.Function;
@@ -208,7 +209,10 @@ public class LookupTablesPersistenceService implements LookupTablesPersistencePo
   @Override
   @Transactional(readOnly = true)
   public Page<NormAbbreviation> findNormAbbreviations(@Nonnull NormAbbreviationQuery query) {
-    log.info("Ignoring given query as mocked result is returned always: {}.", query);
+    log.info(
+      "Ignoring given query as mocked norm abbreviations result is always returned: {}.",
+      query
+    );
     return new Page<>(
       List.of(
         new NormAbbreviation(
@@ -261,7 +265,7 @@ public class LookupTablesPersistenceService implements LookupTablesPersistencePo
   @Override
   @Transactional(readOnly = true)
   public Page<Court> findCourts(@Nonnull CourtQuery query) {
-    log.info("Ignoring given query as mocked result is returned always: {}.", query);
+    log.info("Ignoring given query as mocked courts result is always returned: {}.", query);
     return new Page<>(
       List.of(
         new Court(UUID.fromString("0e1b035-a7f4-4d88-b5c0-a7d0466b8752"), "AG", "Aachen"),
@@ -275,6 +279,32 @@ public class LookupTablesPersistenceService implements LookupTablesPersistencePo
       0,
       2,
       2,
+      true,
+      true,
+      false
+    );
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public Page<ReferenceType> findReferenceTypes(@Nonnull ReferenceTypeQuery query) {
+    log.info(
+      "Ignoring given query as mocked reference types result is always returned: {}.",
+      query
+    );
+    return new Page<>(
+      List.of(
+        new ReferenceType(UUID.fromString("3b0c6c8c-bb5d-4c18-9d1d-6d3c93e88f45"), "anwendung"),
+        new ReferenceType(UUID.fromString("c8a27a4a-79d9-4f28-b462-47eeb03b6b6f"), "neuregelung"),
+        new ReferenceType(
+          UUID.fromString("5e7c24f7-85f4-4e89-9113-4d5eae1b29d3"),
+          "rechtsgrundlage"
+        )
+      ),
+      3,
+      0,
+      3,
+      3,
       true,
       true,
       false
