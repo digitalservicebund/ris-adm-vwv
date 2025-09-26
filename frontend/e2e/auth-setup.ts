@@ -26,16 +26,16 @@ async function performLogin(page: Page, username: string, password: string) {
 
 // Setup for vwv user
 setup('authenticate as vwv user', async ({ page }) => {
-  console.log('--- Starting Setup: Authentication vwv user ---')
+  console.info('--- Starting Setup: Authentication vwv user ---')
   await performLogin(page, 'test', 'test')
   await page.context().storageState({ path: vwvAuthFile })
-  console.log('--- Authentication successful. State saved. ---')
+  console.info('--- Authentication successful. State saved. ---')
 })
 
 // Setup for uli user
 setup('authenticate as uli user', async ({ page }) => {
-  console.log('--- Starting Setup: Authentication uli user ---')
+  console.info('--- Starting Setup: Authentication uli user ---')
   await performLogin(page, 'testbag', 'test')
   await page.context().storageState({ path: uliAuthFile })
-  console.log('--- Authentication successful. State saved. ---')
+  console.info('--- Authentication successful. State saved. ---')
 })

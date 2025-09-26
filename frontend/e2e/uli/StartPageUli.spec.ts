@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test'
 
 test.describe('StartPage ULI', () => {
   test(
-    'shows the title "Unselbstständige Literatur", the user data, a logout and create document buttons',
+    'shows the title "Unselbstständige Literatur", the user data, a logout and a "create document" buttons',
     { tag: ['@RISDEV-9370'] },
     async ({ page }) => {
       // Action
