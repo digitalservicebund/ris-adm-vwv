@@ -1,11 +1,11 @@
 import { test, expect } from '@playwright/test'
-import testData from './test-data.json' with { type: 'json' }
-import messages from '../src/i18n/messages.json' with { type: 'json' }
+import testData from '../test-data.json' with { type: 'json' }
+import messages from '../../src/i18n/messages.json' with { type: 'json' }
 
 // See here how to get started:
 // https://playwright.dev/docs/intro
 
-test.describe('StartPage', () => {
+test.describe('StartPage VwV', () => {
   test(
     'Visiting the app root url, it shows the title "Rechtsinformationen [...]", an icon and user data',
     { tag: ['@RISDEV-6041', '@RISDEV-8587'] },
