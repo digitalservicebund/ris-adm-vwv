@@ -9,7 +9,7 @@ plugins {
   id("jacoco")
   id("org.sonarqube") version "6.3.1.5724"
   id("com.github.jk1.dependency-license-report") version "2.9"
-  id("com.diffplug.spotless") version "7.2.1"
+  id("com.diffplug.spotless") version "8.0.0"
   id("checkstyle")
   id("io.franzbecker.gradle-lombok") version "5.0.0"
 }
