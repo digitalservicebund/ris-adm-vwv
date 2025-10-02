@@ -5,7 +5,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import de.bund.digitalservice.ris.adm_vwv.application.*;
-import de.bund.digitalservice.ris.adm_vwv.config.SecurityConfiguration;
+import de.bund.digitalservice.ris.adm_vwv.config.security.SecurityConfiguration;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
@@ -21,7 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(controllers = LegalPeriodicalController.class)
 @Import(SecurityConfiguration.class)
-@WithMockUser(roles = "adm_vwv_user")
+@WithMockUser(roles = "adm_user")
 class LegalPeriodicalControllerTest {
 
   @Autowired

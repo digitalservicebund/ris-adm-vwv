@@ -6,7 +6,7 @@ test.describe('AbgabePage', () => {
     { tag: ['@RISDEV-8436'] },
     async ({ page }) => {
       // given
-      await page.goto('/documentUnit/KSNR999999999')
+      await page.goto('/verwaltungsvorschriften/documentUnit/KSNR999999999')
 
       // when
       await page.getByText('Abgabe').click()
@@ -27,7 +27,7 @@ test.describe('AbgabePage', () => {
     { tag: ['@RISDEV-8436'] },
     async ({ page }) => {
       // given
-      await page.goto('/documentUnit/KSNR999999999/rubriken')
+      await page.goto('/verwaltungsvorschriften/documentUnit/KSNR999999999/rubriken')
       await expect(page.getByText('Amtl. Langüberschrift *')).toHaveCount(1)
       await page.getByText('Amtl. Langüberschrift *').fill('')
       await expect(page.getByRole('button', { name: 'Speichern' })).toBeVisible()

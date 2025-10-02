@@ -31,7 +31,7 @@ function getLabel(field: string): string {
       <ul class="list-disc list-inside ml-16 mb-24">
         <li v-for="field in missingFields" :key="field">{{ getLabel(field) }}</li>
       </ul>
-      <router-link :to="{ name: 'documentUnit-documentNumber-rubriken' }">
+      <router-link :to="{ name: 'vwv-documentUnit-documentNumber-rubriken' }">
         <Button label="Rubriken bearbeiten" aria-label="Rubriken bearbeiten" severity="secondary" />
       </router-link>
     </div>

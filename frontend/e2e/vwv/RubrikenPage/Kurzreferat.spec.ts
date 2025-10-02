@@ -129,7 +129,7 @@ test.describe('RubrikenPage - Kurzreferat - Bestandsdaten', () => {
       // given
 
       // when
-      await page.goto('/documentUnit/KSNR999999999/rubriken')
+      await page.goto('/verwaltungsvorschriften/documentUnit/KSNR999999999/rubriken')
 
       // then
       await expect(page.getByText('Kurzreferat Zeile 1')).toHaveCount(1)

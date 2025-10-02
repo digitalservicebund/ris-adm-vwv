@@ -30,7 +30,7 @@ public class DocumentationUnitController {
     "zitierdaten"
   );
 
-  private final DocumentationUnitPort documentationUnitPort;
+  private final DocumentationUnitService documentationUnitService;
 
   /**
    * Returns information on all documentation units as required by the
@@ -71,15 +71,16 @@ public class DocumentationUnitController {
       usePagination
     );
 
-    var paginatedDocumentationUnits = documentationUnitPort.findDocumentationUnitOverviewElements(
-      new DocumentationUnitQuery(
-        StringUtils.trimToNull(documentNumber),
-        StringUtils.trimToNull(langueberschrift),
-        StringUtils.trimToNull(fundstellen),
-        StringUtils.trimToNull(zitierdaten),
-        queryOptions
-      )
-    );
+    var paginatedDocumentationUnits =
+      documentationUnitService.findDocumentationUnitOverviewElements(
+        new DocumentationUnitQuery(
+          StringUtils.trimToNull(documentNumber),
+          StringUtils.trimToNull(langueberschrift),
+          StringUtils.trimToNull(fundstellen),
+          StringUtils.trimToNull(zitierdaten),
+          queryOptions
+        )
+      );
     return ResponseEntity.ok(
       new DocumentationUnitsOverviewResponse(
         paginatedDocumentationUnits.content(),
@@ -96,7 +97,7 @@ public class DocumentationUnitController {
    */
   @GetMapping("api/documentation-units/{documentNumber}")
   public ResponseEntity<DocumentationUnit> find(@PathVariable String documentNumber) {
-    return documentationUnitPort
+    return documentationUnitService
       .findByDocumentNumber(documentNumber)
       .map(ResponseEntity::ok)
       .orElse(ResponseEntity.notFound().build());
@@ -111,7 +112,7 @@ public class DocumentationUnitController {
   @PostMapping("api/documentation-units")
   @ResponseStatus(HttpStatus.CREATED)
   public DocumentationUnit create() {
-    return documentationUnitPort.create();
+    return documentationUnitService.create();
   }
 
   /**
@@ -126,7 +127,7 @@ public class DocumentationUnitController {
     @PathVariable String documentNumber,
     @RequestBody JsonNode documentationUnit
   ) {
-    return documentationUnitPort
+    return documentationUnitService
       .update(documentNumber, documentationUnit.toString())
       .map(ResponseEntity::ok)
       .orElse(ResponseEntity.notFound().build());
@@ -176,7 +177,7 @@ public class DocumentationUnitController {
     @PathVariable String documentNumber,
     @RequestBody @Valid DocumentationUnitContent documentationUnitContent
   ) {
-    Optional<DocumentationUnit> optionalDocumentationUnit = documentationUnitPort.publish(
+    Optional<DocumentationUnit> optionalDocumentationUnit = documentationUnitService.publish(
       documentNumber,
       documentationUnitContent
     );

@@ -9,7 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import de.bund.digitalservice.ris.adm_vwv.application.*;
 import de.bund.digitalservice.ris.adm_vwv.application.converter.business.DocumentationUnitContent;
-import de.bund.digitalservice.ris.adm_vwv.config.SecurityConfiguration;
+import de.bund.digitalservice.ris.adm_vwv.config.security.SecurityConfiguration;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -32,7 +32,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(controllers = DocumentationUnitController.class)
-@WithMockUser(roles = "adm_vwv_user")
+@WithMockUser(roles = "adm_user")
 @Import(SecurityConfiguration.class)
 class DocumentationUnitControllerTest {
 
@@ -40,7 +40,7 @@ class DocumentationUnitControllerTest {
   private MockMvc mockMvc;
 
   @MockitoBean
-  private DocumentationUnitPort documentationUnitPort;
+  private DocumentationUnitService documentationUnitService;
 
   @Test
   @DisplayName("Request GET returns HTTP 200 and data from mocked documentation unit port")
@@ -48,7 +48,7 @@ class DocumentationUnitControllerTest {
     // given
     String documentNumber = "KSNR054920707";
     String json = "{\"test\":\"content\"}";
-    given(documentationUnitPort.findByDocumentNumber(documentNumber)).willReturn(
+    given(documentationUnitService.findByDocumentNumber(documentNumber)).willReturn(
       Optional.of(new DocumentationUnit(documentNumber, UUID.randomUUID(), json))
     );
 
@@ -68,7 +68,9 @@ class DocumentationUnitControllerTest {
   void find_notFound() throws Exception {
     // given
     String documentNumber = "KSNR000000001";
-    given(documentationUnitPort.findByDocumentNumber(documentNumber)).willReturn(Optional.empty());
+    given(documentationUnitService.findByDocumentNumber(documentNumber)).willReturn(
+      Optional.empty()
+    );
 
     // when
     mockMvc
@@ -82,7 +84,7 @@ class DocumentationUnitControllerTest {
   void create() throws Exception {
     // given
     UUID id = UUID.randomUUID();
-    given(documentationUnitPort.create()).willReturn(
+    given(documentationUnitService.create()).willReturn(
       new DocumentationUnit("KSNR054920707", id, null)
     );
 
@@ -101,7 +103,7 @@ class DocumentationUnitControllerTest {
     // given
     String documentNumber = "KSNR054920707";
     String json = "{\"test\":\"content\"}";
-    given(documentationUnitPort.update(documentNumber, json)).willReturn(
+    given(documentationUnitService.update(documentNumber, json)).willReturn(
       Optional.of(new DocumentationUnit(documentNumber, UUID.randomUUID(), json))
     );
 
@@ -126,7 +128,7 @@ class DocumentationUnitControllerTest {
     // given
     String documentNumber = "KSNR000000001";
     String json = "{\"test\":\"unsuccessful\"}";
-    given(documentationUnitPort.update(documentNumber, json)).willReturn(Optional.empty());
+    given(documentationUnitService.update(documentNumber, json)).willReturn(Optional.empty());
 
     // when
     mockMvc
@@ -144,7 +146,7 @@ class DocumentationUnitControllerTest {
 
     @BeforeEach
     void beforeEach() {
-      given(documentationUnitPort.findDocumentationUnitOverviewElements(any())).willReturn(
+      given(documentationUnitService.findDocumentationUnitOverviewElements(any())).willReturn(
         TestPage.create(
           List.of(
             new DocumentationUnitOverviewElement(
@@ -252,7 +254,9 @@ class DocumentationUnitControllerTest {
         queryOptions
       );
 
-      given(documentationUnitPort.findDocumentationUnitOverviewElements(expectedQuery)).willReturn(
+      given(
+        documentationUnitService.findDocumentationUnitOverviewElements(expectedQuery)
+      ).willReturn(
         TestPage.create(
           List.of(
             new DocumentationUnitOverviewElement(
@@ -292,7 +296,7 @@ class DocumentationUnitControllerTest {
       throws Exception {
       // given
       given(
-        documentationUnitPort.findDocumentationUnitOverviewElements(
+        documentationUnitService.findDocumentationUnitOverviewElements(
           any(DocumentationUnitQuery.class)
         )
       ).willReturn(TestPage.create(List.of()));
@@ -306,7 +310,7 @@ class DocumentationUnitControllerTest {
       ArgumentCaptor<DocumentationUnitQuery> queryCaptor = ArgumentCaptor.forClass(
         DocumentationUnitQuery.class
       );
-      verify(documentationUnitPort).findDocumentationUnitOverviewElements(queryCaptor.capture());
+      verify(documentationUnitService).findDocumentationUnitOverviewElements(queryCaptor.capture());
 
       DocumentationUnitQuery capturedQuery = queryCaptor.getValue();
       assertThat(capturedQuery.queryOptions().sortByProperty()).isEqualTo(expectedSortProperty);
@@ -349,7 +353,7 @@ class DocumentationUnitControllerTest {
         }""";
 
       given(
-        documentationUnitPort.publish(any(String.class), any(DocumentationUnitContent.class))
+        documentationUnitService.publish(any(String.class), any(DocumentationUnitContent.class))
       ).willReturn(
         Optional.of(new DocumentationUnit(documentNumber, UUID.randomUUID(), validJsonRequest))
       );
@@ -464,7 +468,7 @@ class DocumentationUnitControllerTest {
         }""";
 
       given(
-        documentationUnitPort.publish(any(String.class), any(DocumentationUnitContent.class))
+        documentationUnitService.publish(any(String.class), any(DocumentationUnitContent.class))
       ).willReturn(Optional.empty());
 
       // when
@@ -500,7 +504,7 @@ class DocumentationUnitControllerTest {
         }""";
 
       given(
-        documentationUnitPort.publish(any(String.class), any(DocumentationUnitContent.class))
+        documentationUnitService.publish(any(String.class), any(DocumentationUnitContent.class))
       ).willThrow(
         new PublishingFailedException("External system unavailable", new RuntimeException())
       );

@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import de.bund.digitalservice.ris.adm_vwv.application.*;
 import de.bund.digitalservice.ris.adm_vwv.test.TestFile;
+import de.bund.digitalservice.ris.adm_vwv.test.WithMockAdmUser;
 import jakarta.persistence.TypedQuery;
 import java.time.Year;
 import java.util.List;
@@ -74,6 +75,7 @@ class DocumentationUnitPersistenceServiceIntegrationTest {
   }
 
   @Test
+  @WithMockAdmUser
   void create() {
     // given
 

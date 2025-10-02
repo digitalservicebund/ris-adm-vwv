@@ -5,7 +5,8 @@ test.describe('Login flow', () => {
     'redirects to the original sub-URL after logging in',
     { tag: ['@RISDEV-8587'] },
     async ({ page }) => {
-      const protectedUrl = 'http://localhost:5173/documentUnit/KSNR999999999/fundstellen'
+      const protectedUrl =
+        'http://localhost:5173/verwaltungsvorschriften/documentUnit/KSNR999999999/fundstellen'
 
       await page.goto(protectedUrl)
       const loginFormLocator = page.getByLabel('Username or email')
@@ -20,8 +21,7 @@ test.describe('Login flow', () => {
 
       await expect(page).toHaveURL(new RegExp(protectedUrl))
 
-      const fundstellenLocator = page.getByTestId('documentUnit-documentNumber-fundstellen')
-      await expect(fundstellenLocator).toBeVisible()
+      await expect(page.getByRole('heading', { name: 'Fundstellen' })).toBeVisible()
     },
   )
 

@@ -20,7 +20,7 @@ test.describe('RubrikenPage - Sachgebiete', () => {
       { tag: ['@RISDEV-6076'] },
       async ({ page }) => {
         // given, when
-        await page.goto('/documentUnit/KSNR054920707/rubriken')
+        await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/rubriken')
 
         // then
         await expect(page.getByRole('heading', { name: 'Sachgebiete' })).toHaveCount(1)
@@ -33,7 +33,7 @@ test.describe('RubrikenPage - Sachgebiete', () => {
       { tag: ['@RISDEV-6315'] },
       async ({ page }) => {
         // given
-        await page.goto('/documentUnit/KSNR054920707/rubriken')
+        await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/rubriken')
         // when
         await page.getByRole('button', { name: 'Sachgebiete hinzufügen' }).click()
         // then
@@ -46,7 +46,7 @@ test.describe('RubrikenPage - Sachgebiete', () => {
       { tag: ['@RISDEV-6315'] },
       async ({ page }) => {
         // given
-        await page.goto('/documentUnit/KSNR054920707/rubriken')
+        await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/rubriken')
         // when
         await page.getByRole('button', { name: 'Sachgebiete hinzufügen' }).click()
         await page.getByLabel('Sachgebietsuche auswählen').click()
@@ -64,7 +64,7 @@ test.describe('RubrikenPage - Sachgebiete', () => {
       { tag: ['@RISDEV-6315'] },
       async ({ page }) => {
         // given
-        await page.goto('/documentUnit/KSNR054920707/rubriken')
+        await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/rubriken')
         // when
         await page.getByRole('button', { name: 'Sachgebiete hinzufügen' }).click()
         await page.getByLabel('Sachgebietsuche auswählen').click()
@@ -80,7 +80,7 @@ test.describe('RubrikenPage - Sachgebiete', () => {
       { tag: ['@RISDEV-6315'] },
       async ({ page }) => {
         // given
-        await page.goto('/documentUnit/KSNR054920707/rubriken')
+        await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/rubriken')
         // when
         await page.getByRole('button', { name: 'Sachgebiete hinzufügen' }).click()
         await page.getByLabel('Sachgebietsuche auswählen').click()
@@ -100,7 +100,7 @@ test.describe('RubrikenPage - Sachgebiete', () => {
       { tag: ['@RISDEV-6315'] },
       async ({ page }) => {
         // given
-        await page.goto('/documentUnit/KSNR054920707/rubriken')
+        await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/rubriken')
         // when
         await page.getByRole('button', { name: 'Sachgebiete hinzufügen' }).click()
         await page.getByLabel('Sachgebietsuche auswählen').click()
@@ -121,7 +121,7 @@ test.describe('RubrikenPage - Sachgebiete', () => {
       { tag: ['@RISDEV-6315'] },
       async ({ page }) => {
         // given
-        await page.goto('/documentUnit/KSNR054920707/rubriken')
+        await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/rubriken')
 
         // when
         await page.getByRole('button', { name: 'Sachgebiete hinzufügen' }).click()
@@ -142,7 +142,7 @@ test.describe('RubrikenPage - Sachgebiete', () => {
       { tag: ['@RISDEV-6315'] },
       async ({ page }) => {
         // given
-        await page.goto('/documentUnit/KSNR054920707/rubriken')
+        await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/rubriken')
 
         // when
         await page.getByRole('button', { name: 'Sachgebiete hinzufügen' }).click()
@@ -167,7 +167,7 @@ test.describe('RubrikenPage - Sachgebiete', () => {
       { tag: ['@RISDEV-6315'] },
       async ({ page }) => {
         // given
-        await page.goto('/documentUnit/KSNR054920707/rubriken')
+        await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/rubriken')
 
         // when
         await page.getByRole('button', { name: 'Sachgebiete hinzufügen' }).click()
@@ -189,7 +189,7 @@ test.describe('RubrikenPage - Sachgebiete', () => {
       { tag: ['@RISDEV-6315'] },
       async ({ page }) => {
         // given
-        await page.goto('/documentUnit/KSNR054920707/rubriken')
+        await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/rubriken')
 
         // when
         await page.getByRole('button', { name: 'Sachgebiete hinzufügen' }).click()
@@ -215,7 +215,7 @@ test.describe('RubrikenPage - Sachgebiete', () => {
       { tag: ['@RISDEV-6315'] },
       async ({ page }) => {
         // given
-        await page.goto('/documentUnit/KSNR054920707/rubriken')
+        await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/rubriken')
 
         // when
         await page.getByRole('button', { name: 'Sachgebiete hinzufügen' }).click()
@@ -242,7 +242,7 @@ test.describe('RubrikenPage - Sachgebiete', () => {
       { tag: ['@RISDEV-6315'] },
       async ({ page }) => {
         // given
-        await page.goto('/documentUnit/KSNR054920707/rubriken')
+        await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/rubriken')
 
         // when
         await page.getByRole('button', { name: 'Sachgebiete hinzufügen' }).click()
@@ -259,7 +259,7 @@ test.describe('RubrikenPage - Sachgebiete', () => {
       { tag: ['@RISDEV-6315'] },
       async ({ page }) => {
         // given
-        await page.goto('/documentUnit/KSNR054920707/rubriken')
+        await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/rubriken')
 
         // when
         await page.getByRole('button', { name: 'Sachgebiete hinzufügen' }).click()
@@ -277,7 +277,7 @@ test.describe('RubrikenPage - Sachgebiete', () => {
       { tag: ['@RISDEV-6315'] },
       async ({ page }) => {
         // given
-        await page.goto('/documentUnit/KSNR054920707/rubriken')
+        await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/rubriken')
 
         // when
         await page.getByRole('button', { name: 'Sachgebiete hinzufügen' }).click()
@@ -298,7 +298,7 @@ test.describe('RubrikenPage - Sachgebiete', () => {
       { tag: ['@RISDEV-6315'] },
       async ({ page }) => {
         // given
-        await page.goto('/documentUnit/KSNR054920707/rubriken')
+        await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/rubriken')
 
         // when
         await page.getByRole('button', { name: 'Sachgebiete hinzufügen' }).click()
@@ -318,7 +318,7 @@ test.describe('RubrikenPage - Sachgebiete', () => {
       { tag: ['@RISDEV-6315'] },
       async ({ page }) => {
         // given
-        await page.goto('/documentUnit/KSNR054920707/rubriken')
+        await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/rubriken')
 
         // when
         await page.getByRole('button', { name: 'Sachgebiete hinzufügen' }).click()
@@ -342,7 +342,7 @@ test.describe('RubrikenPage - Sachgebiete', () => {
       { tag: ['@RISDEV-6315'] },
       async ({ page }) => {
         // given
-        await page.goto('/documentUnit/KSNR054920707/rubriken')
+        await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/rubriken')
 
         // when
         await page.getByRole('button', { name: 'Sachgebiete hinzufügen' }).click()
@@ -365,7 +365,7 @@ test.describe('RubrikenPage - Sachgebiete', () => {
       { tag: ['@RISDEV-6315'] },
       async ({ page }) => {
         // given
-        await page.goto('/documentUnit/KSNR054920707/rubriken')
+        await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/rubriken')
 
         // when
         await page.getByRole('button', { name: 'Sachgebiete hinzufügen' }).click()
@@ -384,7 +384,7 @@ test.describe('RubrikenPage - Sachgebiete', () => {
       { tag: ['@RISDEV-7584'] },
       async ({ page }) => {
         // given
-        await page.goto('/documentUnit/KSNR054920707/rubriken')
+        await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/rubriken')
 
         // when
         await page.getByRole('button', { name: 'Sachgebiete hinzufügen' }).click()
@@ -403,7 +403,7 @@ test.describe('RubrikenPage - Sachgebiete', () => {
       { tag: ['@RISDEV-6315'] },
       async ({ page }) => {
         // given
-        await page.goto('/documentUnit/KSNR054920707/rubriken')
+        await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/rubriken')
 
         // when
         await page.getByRole('button', { name: 'Sachgebiete hinzufügen' }).click()
@@ -424,7 +424,7 @@ test.describe('RubrikenPage - Sachgebiete', () => {
       { tag: ['@RISDEV-6315'] },
       async ({ page }) => {
         // given
-        await page.goto('/documentUnit/KSNR054920707/rubriken')
+        await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/rubriken')
 
         // when
         await page.getByRole('button', { name: 'Sachgebiete hinzufügen' }).click()
@@ -446,7 +446,7 @@ test.describe('RubrikenPage - Sachgebiete', () => {
       { tag: ['@RISDEV-6315'] },
       async ({ page }) => {
         // given
-        await page.goto('/documentUnit/KSNR054920707/rubriken')
+        await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/rubriken')
 
         // when
         await page.getByRole('button', { name: 'Sachgebiete hinzufügen' }).click()
@@ -472,7 +472,7 @@ test.describe('RubrikenPage - Sachgebiete', () => {
 
     test('Direct input - search and choose item', { tag: ['@RISDEV-6315'] }, async ({ page }) => {
       // given
-      await page.goto('/documentUnit/KSNR054920707/rubriken')
+      await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/rubriken')
 
       // when
       await page.getByRole('button', { name: 'Sachgebiete hinzufügen' }).click()
@@ -556,7 +556,7 @@ test.describe('RubrikenPage - Sachgebiete - Bestandsdaten', () => {
       // given
 
       // when
-      await page.goto('/documentUnit/KSNR999999999/rubriken')
+      await page.goto('/verwaltungsvorschriften/documentUnit/KSNR999999999/rubriken')
 
       // then
       // when notation is NEW then there are two buttons, one to remove the entry and one that links into the tree

@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 
 import de.bund.digitalservice.ris.adm_vwv.application.*;
+import de.bund.digitalservice.ris.adm_vwv.application.DocumentType;
 import de.bund.digitalservice.ris.adm_vwv.application.converter.business.Court;
 import de.bund.digitalservice.ris.adm_vwv.application.converter.business.NormAbbreviation;
 import de.bund.digitalservice.ris.adm_vwv.application.converter.business.VerweisTyp;

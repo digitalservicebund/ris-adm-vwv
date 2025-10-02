@@ -11,5 +11,5 @@ import org.springframework.security.test.context.support.WithSecurityContext;
 public @interface WithMockJwt {
   String value() default "6efd8630-721e-47a7-856e-8b89723dc9d4";
 
-  String[] roles() default { "ROLE_adm_vwv_user" };
+  String[] roles() default { "ROLE_adm_user" };
 }

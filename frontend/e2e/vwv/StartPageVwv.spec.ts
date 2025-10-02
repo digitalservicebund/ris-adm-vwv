@@ -29,7 +29,7 @@ test.describe('StartPage VwV', () => {
       // user icon
       await expect(page.getByTestId('iconPermIdentity')).toHaveCount(1)
       await expect(page.getByText('vorname nachname')).toBeVisible()
-      await expect(page.getByText('adm_vwv_user')).toHaveCount(1)
+      await expect(page.getByText('adm_user')).toHaveCount(1)
       await expect(page.getByText('Übersicht Verwaltungsvorschriften')).toHaveCount(1)
       await expect(page.getByRole('button', { name: 'Neue Dokumentationseinheit' })).toHaveCount(1)
       await expect(page.getByRole('button', { name: 'Log out' })).toHaveCount(1)
@@ -58,7 +58,9 @@ test.describe('StartPage VwV', () => {
 
       // Assert
       // this needs to change when KSNR are generated dynamically
-      await expect(page).toHaveURL('/documentUnit/KSNR054920707/fundstellen')
+      await expect(page).toHaveURL(
+        '/verwaltungsvorschriften/documentUnit/KSNR054920707/fundstellen',
+      )
     },
   )
 

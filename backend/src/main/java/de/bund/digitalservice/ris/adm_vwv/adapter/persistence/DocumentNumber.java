@@ -2,29 +2,40 @@ package de.bund.digitalservice.ris.adm_vwv.adapter.persistence;
 
 import java.text.DecimalFormat;
 import java.time.Year;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
-class DocumentNumber {
-
-  private static final String VALID_DOCUMENT_NUMBER_PATTERN = "KSNR\\d{10}";
-  private static final String DOCUMENT_NUMBER_PREFIX = "KSNR";
+/**
+ * Represents a document number series to generate the next number in the sequence.
+ *
+ * @param prefix The office-specific prefix (e.g., KALU, STLU).
+ * @param year The current year.
+ * @param latestNumber The last persisted number for this series, or null if none exists (6-digits).
+ */
+public record DocumentNumber(String prefix, Year year, String latestNumber) {
   private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("000000");
+  private static final String VALID_DOCUMENT_NUMBER_PATTERN = "[A-Z]{4}\\d{10}";
 
-  private final Year year;
-  private final String lastestDocumentNumber;
-
+  /**
+   * Creates the next document number in the series.
+   *
+   * @return The newly generated document number string.
+   * @throws IllegalArgumentException if the latestNumber does not match the expected prefix and year.
+   */
   public String create() {
-    String prefix = DOCUMENT_NUMBER_PREFIX + year.getValue();
+    String fullPrefix = prefix() + year().getValue();
     int number = 0;
-    if (lastestDocumentNumber != null) {
-      if (!lastestDocumentNumber.matches(VALID_DOCUMENT_NUMBER_PATTERN)) {
+
+    if (latestNumber() != null) {
+      if (!latestNumber().startsWith(fullPrefix)) {
         throw new IllegalArgumentException(
-          "Invalid last document number: " + lastestDocumentNumber
+          "Invalid last document number: " + latestNumber() + " does not match prefix " + fullPrefix
         );
       }
-      number = Integer.parseInt(lastestDocumentNumber.substring(prefix.length()));
+      if (!latestNumber().matches(VALID_DOCUMENT_NUMBER_PATTERN)) {
+        throw new IllegalArgumentException("Invalid last document number: " + latestNumber());
+      }
+      number = Integer.parseInt(latestNumber().substring(fullPrefix.length()));
     }
-    return prefix + DECIMAL_FORMAT.format(++number);
+
+    return fullPrefix + DECIMAL_FORMAT.format(++number);
   }
 }

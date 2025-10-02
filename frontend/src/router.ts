@@ -1,22 +1,23 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import StartPageVwv from './routes/vwv/documentUnit/StartPageVwv.vue'
+import { ROUTE_NAMES, ROUTE_PATHS } from '@/constants/routes'
+import { useAuthentication } from '@/services/auth'
+import { roleToHomeRouteMap, USER_ROLES } from '@/config/roles'
 import ErrorNotFound from './routes/ErrorNotFound.vue'
-import DocumentUnitWrapper from './routes/vwv/documentUnit/[documentNumber].vue'
 import AbgabePage from './routes/vwv/documentUnit/[documentNumber]/AbgabePage.vue'
 import RubrikenPage from './routes/vwv/documentUnit/[documentNumber]/RubrikenPage.vue'
 import FundstellenPage from '@/routes/vwv/documentUnit/[documentNumber]/FundstellenPage.vue'
-import New from '@/routes/vwv/documentUnit/new.vue'
-import { useAuthentication } from '@/services/auth.ts'
+import NewDocument from '@/routes/NewDocument.vue'
 import Forbidden from '@/routes/Forbidden.vue'
-import StartPageUli from '@/routes/uli/StartPageUli.vue'
-import { roleToHomeRouteMap, USER_ROLES } from '@/config/roles.ts'
+import StartPageTemplate from './routes/StartPage.vue'
+import DocumentUnits from './components/document-units/DocumentUnits.vue'
+import EditDocument from './routes/EditDocument.vue'
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
-      path: '/',
-      name: 'RootRedirect',
+      path: ROUTE_PATHS.ROOT,
+      name: ROUTE_NAMES.ROOT_REDIRECT,
       redirect: () => {
         const auth = useAuthentication()
         const userRoles = auth.getRealmRoles()
@@ -28,66 +29,103 @@ const router = createRouter({
           }
         }
         // Fallback for users with no matching role or anonymous users
-        return { path: '/forbidden' }
+        return { path: ROUTE_PATHS.FORBIDDEN }
       },
     },
     {
-      path: '/verwaltungsvorschriften',
-      name: 'StartPageVwv',
-      component: StartPageVwv,
+      path: ROUTE_PATHS.VWV.BASE,
       meta: {
-        requiresRole: USER_ROLES.VWV_USER,
+        requiresRole: [USER_ROLES.ADM_USER, USER_ROLES.ADM_VWV_USER],
       },
-    },
-    {
-      path: '/documentUnit/new',
-      name: 'documentUnit-new',
-      component: New,
-    },
-    {
-      path: '/literatur-unselbstaendig',
-      name: 'StartPageUli',
-      component: StartPageUli,
-      meta: {
-        requiresRole: USER_ROLES.LIT_BAG_USER,
-      },
-    },
-    {
-      path: '/documentUnit/:documentNumber',
-      name: 'documentUnit-documentNumber',
-      component: DocumentUnitWrapper,
-      props: true,
-      redirect: { name: 'documentUnit-documentNumber-fundstellen' },
       children: [
         {
-          path: '/documentUnit/:documentNumber/fundstellen',
-          name: 'documentUnit-documentNumber-fundstellen',
-          props: true,
-          component: FundstellenPage,
+          path: '',
+          component: StartPageTemplate,
+          props: { title: 'Übersicht Verwaltungsvorschriften' },
+          children: [
+            {
+              path: '',
+              name: ROUTE_NAMES.VWV.START_PAGE,
+              component: DocumentUnits,
+            },
+          ],
         },
         {
-          path: '/documentUnit/:documentNumber/rubriken',
-          name: 'documentUnit-documentNumber-rubriken',
-          props: true,
-          component: RubrikenPage,
+          path: ROUTE_PATHS.VWV.DOCUMENT_UNIT.NEW,
+          name: ROUTE_NAMES.VWV.DOCUMENT_UNIT.NEW,
+          component: NewDocument,
         },
         {
-          path: '/documentUnit/:documentNumber/abgabe',
-          name: 'documentUnit-documentNumber-abgabe',
+          path: ROUTE_PATHS.VWV.DOCUMENT_UNIT.EDIT,
+          name: ROUTE_NAMES.VWV.DOCUMENT_UNIT.EDIT,
+          component: EditDocument,
           props: true,
-          component: AbgabePage,
+          redirect: { name: ROUTE_NAMES.VWV.DOCUMENT_UNIT.FUNDSTELLEN },
+          children: [
+            {
+              path: ROUTE_PATHS.VWV.DOCUMENT_UNIT.FUNDSTELLEN,
+              name: ROUTE_NAMES.VWV.DOCUMENT_UNIT.FUNDSTELLEN,
+              props: true,
+              component: FundstellenPage,
+            },
+            {
+              path: ROUTE_PATHS.VWV.DOCUMENT_UNIT.RUBRIKEN,
+              name: ROUTE_NAMES.VWV.DOCUMENT_UNIT.RUBRIKEN,
+              props: true,
+              component: RubrikenPage,
+            },
+            {
+              path: ROUTE_PATHS.VWV.DOCUMENT_UNIT.ABGABE,
+              name: ROUTE_NAMES.VWV.DOCUMENT_UNIT.ABGABE,
+              props: true,
+              component: AbgabePage,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      path: ROUTE_PATHS.ULI.BASE,
+      meta: {
+        requiresRole: USER_ROLES.LITERATURE_USER,
+      },
+      children: [
+        {
+          path: '',
+          name: ROUTE_NAMES.ULI.START_PAGE,
+          component: StartPageTemplate,
+          props: { title: 'Übersicht Unselbstständige Literatur' },
+        },
+        {
+          path: ROUTE_PATHS.ULI.DOCUMENT_UNIT.NEW,
+          name: ROUTE_NAMES.ULI.DOCUMENT_UNIT.NEW,
+          component: NewDocument,
+        },
+        {
+          path: ROUTE_PATHS.ULI.DOCUMENT_UNIT.EDIT,
+          name: ROUTE_NAMES.ULI.DOCUMENT_UNIT.EDIT,
+          component: EditDocument,
+          props: true,
+          redirect: { name: ROUTE_NAMES.ULI.DOCUMENT_UNIT.RUBRIKEN },
+          children: [
+            {
+              path: ROUTE_PATHS.ULI.DOCUMENT_UNIT.RUBRIKEN,
+              name: ROUTE_NAMES.ULI.DOCUMENT_UNIT.RUBRIKEN,
+              component: { template: '<div />' },
+            },
+          ],
         },
       ],
     },
     {
       // cf. https://router.vuejs.org/guide/essentials/dynamic-matching.html
       path: '/:pathMatch(.*)*',
-      name: 'Error 404 not found',
+      name: ROUTE_NAMES.NOT_FOUND,
       component: ErrorNotFound,
     },
     {
-      path: '/forbidden',
-      name: 'Forbidden',
+      path: ROUTE_PATHS.FORBIDDEN,
+      name: ROUTE_NAMES.FORBIDDEN,
       component: Forbidden,
     },
   ],
@@ -95,14 +133,16 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const auth = useAuthentication()
-  const requiredRole = to.meta.requiresRole as string | undefined
+  const requiredRoles = to.meta.requiresRole as string[] | undefined
 
-  if (requiredRole && auth.isAuthenticated()) {
-    if (auth.hasRealmRole(requiredRole)) {
+  if (requiredRoles && requiredRoles.length > 0 && auth.isAuthenticated()) {
+    const hasRequiredRole = requiredRoles.some((role) => auth.hasRealmRole(role))
+
+    if (hasRequiredRole) {
       next()
     } else {
       // User does not have the required role, redirect to the 'Forbidden' page
-      next({ name: 'Forbidden' })
+      next({ name: ROUTE_NAMES.FORBIDDEN })
     }
   } else {
     // bareId / keycloak manages it

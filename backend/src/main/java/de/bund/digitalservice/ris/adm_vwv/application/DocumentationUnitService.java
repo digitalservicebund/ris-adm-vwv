@@ -2,10 +2,12 @@ package de.bund.digitalservice.ris.adm_vwv.application;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.bund.digitalservice.ris.adm_vwv.adapter.persistence.DocumentationUnitPersistenceService;
 import de.bund.digitalservice.ris.adm_vwv.adapter.publishing.PublishPort;
 import de.bund.digitalservice.ris.adm_vwv.application.converter.LdmlConverterService;
 import de.bund.digitalservice.ris.adm_vwv.application.converter.LdmlPublishConverterService;
 import de.bund.digitalservice.ris.adm_vwv.application.converter.business.DocumentationUnitContent;
+import de.bund.digitalservice.ris.adm_vwv.config.security.UserDocumentDetails;
 import jakarta.annotation.Nonnull;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -19,17 +21,23 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class DocumentationUnitService implements DocumentationUnitPort {
+public class DocumentationUnitService {
 
-  private final DocumentationUnitPersistencePort documentationUnitPersistencePort;
+  private final DocumentationUnitPersistenceService documentationUnitPersistenceService;
   private final LdmlConverterService ldmlConverterService;
   private final LdmlPublishConverterService ldmlPublishConverterService;
   private final ObjectMapper objectMapper;
   private final PublishPort publishPort;
 
-  @Override
+  /**
+   * Finds a DocumentationUnit by its document number.
+   * If the found unit exists with XML but no JSON, it is converted before being returned.
+   *
+   * @param documentNumber The document number to search for.
+   * @return An {@link Optional} containing the DocumentationUnit, or an empty Optional if not found.
+   */
   public Optional<DocumentationUnit> findByDocumentNumber(@Nonnull String documentNumber) {
-    var optionalDocumentationUnit = documentationUnitPersistencePort.findByDocumentNumber(
+    var optionalDocumentationUnit = documentationUnitPersistenceService.findByDocumentNumber(
       documentNumber
     );
     if (
@@ -57,23 +65,32 @@ public class DocumentationUnitService implements DocumentationUnitPort {
     }
   }
 
-  @Override
   public DocumentationUnit create() {
-    return documentationUnitPersistencePort.create();
+    return documentationUnitPersistenceService.create();
   }
 
-  @Override
   public Optional<DocumentationUnit> update(@Nonnull String documentNumber, @Nonnull String json) {
-    return Optional.ofNullable(documentationUnitPersistencePort.update(documentNumber, json));
+    return Optional.ofNullable(documentationUnitPersistenceService.update(documentNumber, json));
   }
 
+  /**
+   * Updates and publishes a DocumentationUnit with new content.
+   * <p>
+   * The update is persisted to the database and then published to an external bucket.
+   * The {@link UserDocumentDetails} decide to which bucket to publish (to be implemented):
+   * {@code UserDocumentDetails details = (UserDocumentDetails) authentication.getPrincipal()}
+   * This entire operation is transactional and will be rolled back if any step fails.
+   *
+   * @param documentNumber The identifier of the documentation unit to publish.
+   * @param documentationUnitContent The new content for the unit.
+   * @return An {@link Optional} with the updated unit, or empty if the document number was not found.
+   */
   @Transactional
-  @Override
   public Optional<DocumentationUnit> publish(
     @Nonnull String documentNumber,
     @Nonnull DocumentationUnitContent documentationUnitContent
   ) {
-    var optionalDocumentationUnit = documentationUnitPersistencePort.findByDocumentNumber(
+    var optionalDocumentationUnit = documentationUnitPersistenceService.findByDocumentNumber(
       documentNumber
     );
 
@@ -87,7 +104,7 @@ public class DocumentationUnitService implements DocumentationUnitPort {
       documentationUnit.xml()
     );
     String json = convertToJson(documentationUnitContent);
-    DocumentationUnit publishedDocumentationUnit = documentationUnitPersistencePort.publish(
+    DocumentationUnit publishedDocumentationUnit = documentationUnitPersistenceService.publish(
       documentNumber,
       json,
       xml
@@ -106,10 +123,9 @@ public class DocumentationUnitService implements DocumentationUnitPort {
     return convertLdml(publishedDocumentationUnit);
   }
 
-  @Override
   public Page<DocumentationUnitOverviewElement> findDocumentationUnitOverviewElements(
     @Nonnull DocumentationUnitQuery queryOptions
   ) {
-    return documentationUnitPersistencePort.findDocumentationUnitOverviewElements(queryOptions);
+    return documentationUnitPersistenceService.findDocumentationUnitOverviewElements(queryOptions);
   }
 }

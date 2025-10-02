@@ -19,7 +19,7 @@ test.describe('RubrikenPage - Verweise: Norm', () => {
       { tag: ['@RISDEV-6075'] },
       async ({ page }) => {
         // given
-        await page.goto('/documentUnit/KSNR054920707/fundstellen')
+        await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/fundstellen')
         await page.getByRole('link', { name: 'Rubriken' }).click()
         await expect(page.getByRole('link', { name: 'Rubriken' })).toHaveCount(1)
         await expect(page.getByTestId('normReferences').getByText('RIS-Abkürzung *')).toBeVisible()
@@ -51,7 +51,7 @@ test.describe('RubrikenPage - Verweise: Norm', () => {
 
     test('Add two norms, delete the first item', { tag: ['@RISDEV-6075'] }, async ({ page }) => {
       // given
-      await page.goto('/documentUnit/KSNR054920707/fundstellen')
+      await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/fundstellen')
       await page.getByRole('link', { name: 'Rubriken' }).click()
       await expect(page.getByRole('link', { name: 'Rubriken' })).toHaveCount(1)
       await expect(
@@ -88,7 +88,7 @@ test.describe('RubrikenPage - Verweise: Norm', () => {
       { tag: ['@RISDEV-7907'] },
       async ({ page }) => {
         // given
-        await page.goto('/documentUnit/KSNR054920707/fundstellen')
+        await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/fundstellen')
         await page.getByRole('link', { name: 'Rubriken' }).click()
         await expect(page.getByRole('link', { name: 'Rubriken' })).toHaveCount(1)
         await expect(
@@ -132,7 +132,7 @@ test.describe('RubrikenPage - Verweise: Norm', () => {
       { tag: ['@RISDEV-7907'] },
       async ({ page }) => {
         // given
-        await page.goto('/documentUnit/KSNR054920707/fundstellen')
+        await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/fundstellen')
         await page.getByRole('link', { name: 'Rubriken' }).click()
         await expect(page.getByRole('link', { name: 'Rubriken' })).toHaveCount(1)
         await expect(
@@ -175,7 +175,7 @@ test.describe('RubrikenPage - Verweise: Norm', () => {
       { tag: ['@RISDEV-7907'] },
       async ({ page }) => {
         // given
-        await page.goto('/documentUnit/KSNR054920707/fundstellen')
+        await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/fundstellen')
         await page.getByRole('link', { name: 'Rubriken' }).click()
         await expect(page.getByRole('link', { name: 'Rubriken' })).toHaveCount(1)
         await expect(
@@ -245,7 +245,7 @@ test.describe('RubrikenPage - Verweise: Norm - Bestandsdaten', () => {
       // given
 
       // when
-      await page.goto('/documentUnit/KSNR999999999/rubriken')
+      await page.goto('/verwaltungsvorschriften/documentUnit/KSNR999999999/rubriken')
 
       // then
       await expect(page.getByText('PhanGB, § 1a Abs 1, 02.02.2022, 2011')).toHaveCount(1)

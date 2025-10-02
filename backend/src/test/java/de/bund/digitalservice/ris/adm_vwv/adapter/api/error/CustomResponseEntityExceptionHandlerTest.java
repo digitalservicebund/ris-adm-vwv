@@ -6,7 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import de.bund.digitalservice.ris.adm_vwv.adapter.api.WithMockJwt;
-import de.bund.digitalservice.ris.adm_vwv.config.SecurityConfiguration;
+import de.bund.digitalservice.ris.adm_vwv.config.security.SecurityConfiguration;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

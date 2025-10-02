@@ -14,7 +14,7 @@ test.describe('RubrikenPage - Aktivzitierung - Mocked routes', () => {
   })
 
   test('Add an active citation, edit and save', { tag: ['@RISDEV-6077'] }, async ({ page }) => {
-    await page.goto('/documentUnit/KSNR054920707/fundstellen')
+    await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/fundstellen')
     await page.getByRole('link', { name: 'Rubriken' }).click()
     const artDerZitierungInput = page.getByText('Art der Zitierung *')
     await expect(artDerZitierungInput).toHaveCount(1)
@@ -92,7 +92,7 @@ test.describe('RubrikenPage - Aktivzitierung - Mocked routes', () => {
     'Add two active citations, delete the first item',
     { tag: ['@RISDEV-6077'] },
     async ({ page }) => {
-      await page.goto('/documentUnit/KSNR054920707/fundstellen')
+      await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/fundstellen')
       await page.getByRole('link', { name: 'Rubriken' }).click()
 
       await page.getByRole('textbox', { name: 'Art der Zitierung' }).click()
@@ -137,7 +137,7 @@ test.describe('RubrikenPage - Aktivzitierung - Mocked routes', () => {
     'Search active citation, take it, change type, save, search again and cancel because already added',
     { tag: ['@RISDEV-6077'] },
     async ({ page }) => {
-      await page.goto('/documentUnit/KSNR054920707/fundstellen')
+      await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/fundstellen')
       await page.getByRole('link', { name: 'Rubriken' }).click()
 
       await page.getByRole('textbox', { name: 'Art der Zitierung' }).click()
@@ -210,7 +210,7 @@ test.describe('RubrikenPage - Aktivzitierung - Mocked routes', () => {
       })
 
       // given
-      await page.goto('/documentUnit/KSNR054920707/fundstellen')
+      await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/fundstellen')
       await page.getByRole('link', { name: 'Rubriken' }).click()
       const artDerZitierungInput = page.getByText('Art der Zitierung *')
       await artDerZitierungInput.click()
@@ -278,7 +278,7 @@ test.describe('RubrikenPage - Aktivzitierung - Bestandsdaten', () => {
       // given
 
       // when
-      await page.goto('/documentUnit/KSNR999999999/rubriken')
+      await page.goto('/verwaltungsvorschriften/documentUnit/KSNR999999999/rubriken')
       await page.waitForURL(/documentUnit/)
 
       // then

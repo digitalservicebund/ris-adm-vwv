@@ -16,7 +16,7 @@ test.describe('Verweise: Verwaltungsvorschrift und Norm', () => {
     page,
   }) => {
     // given
-    await page.goto('/documentUnit/KSNR054920707/rubriken')
+    await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/rubriken')
     await page.getByRole('radio', { name: 'Verwaltungsvorschrift auswä' }).click()
     await page
       .getByTestId('activeReferences')
@@ -39,7 +39,7 @@ test.describe('Verweise: Verwaltungsvorschrift und Norm', () => {
     page,
   }) => {
     // given
-    await page.goto('/documentUnit/KSNR054920707/rubriken')
+    await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/rubriken')
     await page
       .getByTestId('activeReferences')
       .getByRole('combobox', { name: 'Art der Verweisung' })

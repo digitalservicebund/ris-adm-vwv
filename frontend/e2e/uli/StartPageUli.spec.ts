@@ -14,7 +14,7 @@ test.describe('StartPage ULI', () => {
       // user icon
       await expect(page.getByTestId('iconPermIdentity')).toHaveCount(1)
       await expect(page.getByText('bag nachname')).toBeVisible()
-      await expect(page.getByText('adm_lit_bag_user')).toHaveCount(1)
+      await expect(page.getByText('literature_user')).toHaveCount(1)
       await expect(page.getByText('Übersicht Unselbstständige Literatur')).toHaveCount(1)
       await expect(page.getByRole('button', { name: 'Neue Dokumentationseinheit' })).toHaveCount(1)
       await expect(page.getByRole('button', { name: 'Log out' })).toHaveCount(1)

@@ -61,7 +61,7 @@ test.describe('RubrikenPage - Langüberschrift - Bestandsdaten', () => {
       // given
 
       // when
-      await page.goto('/documentUnit/KSNR999999999/rubriken')
+      await page.goto('/verwaltungsvorschriften/documentUnit/KSNR999999999/rubriken')
 
       // then
       await expect(page.getByRole('textbox', { name: 'Amtl. Langüberschrift *' })).toHaveValue(

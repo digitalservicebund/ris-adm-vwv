@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, type Ref, onMounted, onBeforeUnmount, watch } from 'vue'
+import { ref, type Ref, onMounted, onBeforeUnmount, watch, computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
 import DocumentUnitInfoPanel from '@/components/DocumentUnitInfoPanel.vue'
@@ -7,11 +7,12 @@ import FlexContainer from '@/components/FlexContainer.vue'
 import NavbarSide from '@/components/NavbarSide.vue'
 import SideToggle from '@/components/SideToggle.vue'
 import { useDocumentUnitStore } from '@/stores/documentUnitStore'
-import { useAdmVwvMenuItems } from '@/composables/useAdmVwvMenuItems'
+import { getAdmVwvMenuItems, getUliMenuItems } from '@/utils/menuItems'
 import type { DocumentUnit } from '@/domain/documentUnit'
 import ExtraContentSidePanel from '@/components/ExtraContentSidePanel.vue'
 import { useToast } from 'primevue'
 import errorMessages from '@/i18n/errors.json'
+import { ROUTE_NAMES } from '@/constants/routes'
 
 const props = defineProps<{
   documentNumber: string
@@ -19,6 +20,7 @@ const props = defineProps<{
 
 const toast = useToast()
 
+// Use specific store for uli documents
 const store = useDocumentUnitStore()
 
 const { documentUnit, error } = storeToRefs(store) as {
@@ -27,7 +29,11 @@ const { documentUnit, error } = storeToRefs(store) as {
 }
 
 const route = useRoute()
-const menuItems = useAdmVwvMenuItems(props.documentNumber, route.query)
+const menuItems = computed(() =>
+  route.name === ROUTE_NAMES.ULI.DOCUMENT_UNIT.RUBRIKEN
+    ? getUliMenuItems(props.documentNumber, route.query)
+    : getAdmVwvMenuItems(props.documentNumber, route.query),
+)
 
 const showNavigationPanelRef: Ref<boolean> = ref(route.query.showNavigationPanel !== 'false')
 

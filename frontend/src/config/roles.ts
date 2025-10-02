@@ -1,9 +1,14 @@
+import { ROUTE_NAMES } from '@/constants/routes'
+
 export const USER_ROLES = {
-  VWV_USER: 'adm_vwv_user',
-  LIT_BAG_USER: 'adm_lit_bag_user',
+  ADM_USER: 'adm_user',
+  ADM_VWV_USER: 'adm_vwv_user',
+  LITERATURE_USER: 'literature_user',
 } as const
 
 export const roleToHomeRouteMap: Record<string, string> = {
-  [USER_ROLES.VWV_USER]: 'StartPageVwv',
-  [USER_ROLES.LIT_BAG_USER]: 'StartPageUli',
+  [USER_ROLES.ADM_USER]: ROUTE_NAMES.VWV.START_PAGE,
+  // This role should be removed once roles are defined in bareid
+  [USER_ROLES.ADM_VWV_USER]: ROUTE_NAMES.VWV.START_PAGE,
+  [USER_ROLES.LITERATURE_USER]: ROUTE_NAMES.ULI.START_PAGE,
 }

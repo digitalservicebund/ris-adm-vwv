@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bund.digitalservice.ris.adm_vwv.application.*;
 import de.bund.digitalservice.ris.adm_vwv.application.converter.LdmlConverterService;
 import de.bund.digitalservice.ris.adm_vwv.application.converter.business.DocumentationUnitContent;
+import de.bund.digitalservice.ris.adm_vwv.config.security.UserDocumentDetails;
 import jakarta.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
@@ -21,6 +22,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.retry.support.RetryTemplate;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class DocumentationUnitPersistenceService implements DocumentationUnitPersistencePort {
+public class DocumentationUnitPersistenceService {
 
   static final String ENTRY_SEPARATOR = "$µµµµµ$";
 
@@ -42,7 +45,12 @@ public class DocumentationUnitPersistenceService implements DocumentationUnitPer
   private final ObjectMapper objectMapper;
   private final LdmlConverterService ldmlConverterService;
 
-  @Override
+  /**
+   * Finds a document by its number.
+   *
+   * @param documentNumber The document number
+   * @return an {@link Optional} containing the found {@link DocumentationUnit}, or empty if not found.
+   */
   @Transactional(readOnly = true)
   public Optional<DocumentationUnit> findByDocumentNumber(@Nonnull String documentNumber) {
     return documentationUnitRepository
@@ -57,7 +65,11 @@ public class DocumentationUnitPersistenceService implements DocumentationUnitPer
       );
   }
 
-  @Override
+  /**
+   * Creates a new DocumentationUnit based on the authenticated user's details.
+   *
+   * @return The newly created and persisted {@link DocumentationUnit}.
+   */
   public DocumentationUnit create() {
     // Issue for the very first documentation unit of a new year: If for this year
     // there is no
@@ -75,8 +87,11 @@ public class DocumentationUnitPersistenceService implements DocumentationUnitPer
     RetryTemplate retryTemplate = RetryTemplate.builder()
       .retryOn(DataIntegrityViolationException.class)
       .build();
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    UserDocumentDetails details = (UserDocumentDetails) authentication.getPrincipal();
+
     DocumentationUnit documentationUnit = retryTemplate.execute(_ ->
-      documentationUnitCreationService.create()
+      documentationUnitCreationService.create(details.office(), details.type())
     );
     log.info(
       "New documentation unit created with document number: {}",
@@ -85,7 +100,14 @@ public class DocumentationUnitPersistenceService implements DocumentationUnitPer
     return documentationUnit;
   }
 
-  @Override
+  /**
+   * Updates a documentation unit by document number and returns the updated documentation unit.
+   *
+   * @param documentNumber The document number to identify the documentation unit
+   * @param json The json string to update
+   * @return The updated documentation unit or an empty optional, if there is no documentation unit
+   *     with the given document number
+   */
   @Transactional
   public DocumentationUnit update(@Nonnull String documentNumber, @Nonnull String json) {
     return documentationUnitRepository
@@ -102,7 +124,17 @@ public class DocumentationUnitPersistenceService implements DocumentationUnitPer
       .orElse(null);
   }
 
-  @Override
+  /**
+   * Updates the content of a specific documentation unit and regenerates its search index.
+   * <p>
+   * This entire operation is performed within a single database transaction. If the unit is not found,
+   * this method returns {@code null}.
+   *
+   * @param documentNumber The unique identifier of the documentation unit to update.
+   * @param json The new JSON content for the unit.
+   * @param xml The new XML content for the unit.
+   * @return The updated {@link DocumentationUnit}, or {@code null} if the document number does not exist.
+   */
   @Transactional
   public DocumentationUnit publish(
     @Nonnull String documentNumber,
@@ -124,7 +156,11 @@ public class DocumentationUnitPersistenceService implements DocumentationUnitPer
       .orElse(null);
   }
 
-  @Override
+  /**
+   * Returns paginated documentation units overview elements.
+   * @param query The query
+   * @return Page object with documentation unit overview elements and pagination data
+   */
   @Transactional(readOnly = true)
   public Page<DocumentationUnitOverviewElement> findDocumentationUnitOverviewElements(
     @Nonnull DocumentationUnitQuery query

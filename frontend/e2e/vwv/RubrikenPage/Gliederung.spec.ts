@@ -126,7 +126,7 @@ test.describe('RubrikenPage - Gliederung - Bestandsdaten', () => {
       // given
 
       // when
-      await page.goto('/documentUnit/KSNR999999999/rubriken')
+      await page.goto('/verwaltungsvorschriften/documentUnit/KSNR999999999/rubriken')
 
       // then
       await expect(page.getByText('TOC entry 1')).toHaveCount(1)

@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { type DocumentUnit } from '../src/domain/documentUnit.js'
+import { type DocumentUnit } from '../../src/domain/documentUnit.js'
 
 // See here how to get started:
 // https://playwright.dev/docs/intro
@@ -21,7 +21,7 @@ test.describe('FundstellenPage', () => {
     async ({ page }) => {
       // Arrange
       // Action
-      await page.goto('/documentUnit/KSNR054920707/fundstellen')
+      await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/fundstellen')
 
       // Assert
       await expect(page.getByText('Fundstellen')).toHaveCount(2)
@@ -40,7 +40,7 @@ test.describe('FundstellenPage', () => {
     { tag: ['@RISDEV-6042'] },
     async ({ page }) => {
       // Arrange
-      await page.goto('/documentUnit/KSNR054920707/fundstellen')
+      await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/fundstellen')
 
       // Action
       await page.getByRole('combobox', { name: 'Periodikum' }).fill('Die')
@@ -58,7 +58,7 @@ test.describe('FundstellenPage', () => {
     { tag: ['@RISDEV-6042'] },
     async ({ page }) => {
       // Arrange
-      await page.goto('/documentUnit/KSNR054920707/fundstellen')
+      await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/fundstellen')
 
       // Action
       await page.getByRole('combobox', { name: 'Periodikum' }).fill('Die')
@@ -78,7 +78,7 @@ test.describe('FundstellenPage', () => {
     { tag: ['@RISDEV-6312'] },
     async ({ page }) => {
       // Arrange
-      await page.goto('/documentUnit/KSNR054920707/fundstellen')
+      await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/fundstellen')
 
       // Action
       await page.getByRole('combobox', { name: 'Periodikum' }).fill('Die')
@@ -94,7 +94,7 @@ test.describe('FundstellenPage', () => {
     { tag: ['@RISDEV-6042'] },
     async ({ page }) => {
       // Arrange
-      await page.goto('/documentUnit/KSNR054920707/fundstellen')
+      await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/fundstellen')
 
       // Action
       await page.getByRole('combobox', { name: 'Periodikum' }).fill('Die')
@@ -126,7 +126,7 @@ test.describe('FundstellenPage', () => {
     { tag: ['@RISDEV-7978'] },
     async ({ page }) => {
       // Arrange
-      await page.goto('/documentUnit/KSNR054920707/fundstellen')
+      await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/fundstellen')
 
       // When
       await page.getByRole('combobox', { name: 'Periodikum' }).fill('Die')
@@ -221,7 +221,7 @@ test.describe('FundstellenPageSaveAndLoad', () => {
       await page.getByRole('button', { name: 'Speichern', exact: true }).click()
       await page.goto('/')
       await expect(page.getByText('Neue Dokumentationseinheit')).toBeVisible()
-      await page.goto('/documentUnit/KSNR054920707/fundstellen')
+      await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/fundstellen')
 
       // Assert
       await expect(page.getByText('ABc 1991, Seite 92')).toHaveCount(1)
@@ -235,7 +235,7 @@ test.describe('FundstellenPage - Bestandsdaten', () => {
     { tag: ['@RISDEV-7639'] },
     async ({ page }) => {
       // given
-      await page.goto('/documentUnit/KSNR999999999/fundstellen')
+      await page.goto('/verwaltungsvorschriften/documentUnit/KSNR999999999/fundstellen')
 
       // then
       await expect(page.getByText('Das Periodikum 2021, Seite 15')).toHaveCount(1)
@@ -249,7 +249,7 @@ test.describe('FundstellenPage - Bestandsdaten', () => {
       // given
 
       // when
-      await page.goto('/documentUnit/KSNR999999999')
+      await page.goto('/verwaltungsvorschriften/documentUnit/KSNR999999999')
 
       // then
       await expect(page).toHaveURL(/\/documentUnit\/KSNR999999999\/fundstellen/)

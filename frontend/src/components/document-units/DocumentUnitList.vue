@@ -59,7 +59,7 @@ const zitierdatenLabel = (zitierdaten: string[]) =>
       <template #body="{ data }">
         <router-link
           :to="{
-            name: 'documentUnit-documentNumber',
+            name: 'vwv-documentUnit-documentNumber',
             params: { documentNumber: data.documentNumber },
           }"
         >

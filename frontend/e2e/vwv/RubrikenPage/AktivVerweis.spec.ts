@@ -18,7 +18,7 @@ test.describe('RubrikenPage - Verweise with mocked routes', () => {
     { tag: ['@RISDEV-7908'] },
     async ({ page }) => {
       // given
-      await page.goto('/documentUnit/KSNR054920707/rubriken')
+      await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/rubriken')
       await expect(page.getByRole('radio', { name: 'Norm auswählen' })).toBeVisible()
       await expect(
         page.getByRole('radio', { name: 'Verwaltungsvorschrift auswählen' }),
@@ -78,7 +78,7 @@ test.describe('RubrikenPage - Verweise (on Norm) with mocked routes', () => {
     { tag: ['@RISDEV-7908'] },
     async ({ page }) => {
       // given
-      await page.goto('/documentUnit/KSNR054920707/rubriken')
+      await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/rubriken')
       const verweisTypElement = page
         .getByTestId('activeReferences')
         .getByRole('combobox', { name: 'Art der Verweisung' })
@@ -152,7 +152,7 @@ test.describe('RubrikenPage - Verweise (on Norm) with mocked routes', () => {
     { tag: ['@RISDEV-7908'] },
     async ({ page }) => {
       // given
-      await page.goto('/documentUnit/KSNR054920707/rubriken')
+      await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/rubriken')
 
       // when
       await page
@@ -195,7 +195,7 @@ test.describe('RubrikenPage - Verweise (on Norm) with mocked routes', () => {
     { tag: ['@RISDEV-7908'] },
     async ({ page }) => {
       // given
-      await page.goto('/documentUnit/KSNR054920707/rubriken')
+      await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/rubriken')
       const verweisTypElement = page
         .getByTestId('activeReferences')
         .getByRole('combobox', { name: 'Art der Verweisung' })
@@ -234,7 +234,7 @@ test.describe('RubrikenPage - Verweise (on Norm) with mocked routes', () => {
     { tag: ['@RISDEV-7908'] },
     async ({ page }) => {
       // given
-      await page.goto('/documentUnit/KSNR054920707/rubriken')
+      await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/rubriken')
 
       // when
       const verweisTypElement = page
@@ -279,7 +279,7 @@ test.describe('RubrikenPage - Verweise (on Verwaltungsvorschrift) with mocked ro
     { tag: ['@RISDEV-6074'] },
     async ({ page }) => {
       // given
-      await page.goto('/documentUnit/KSNR054920707/rubriken')
+      await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/rubriken')
       await page.getByRole('radio', { name: 'Verwaltungsvorschrift auswählen' }).click()
       const verweisTypElement = page
         .getByTestId('activeReferences')
@@ -328,7 +328,7 @@ test.describe('RubrikenPage - Verweise (on Verwaltungsvorschrift) with mocked ro
     { tag: ['@RISDEV-6074'] },
     async ({ page }) => {
       // given
-      await page.goto('/documentUnit/KSNR054920707/fundstellen')
+      await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/fundstellen')
       await page.getByRole('link', { name: 'Rubriken' }).click()
       await expect(page.getByRole('link', { name: 'Rubriken' })).toHaveCount(1)
       const verweisTypElement = page
@@ -374,7 +374,7 @@ test.describe('RubrikenPage - Verweise (on Verwaltungsvorschrift) with mocked ro
     { tag: ['@RISDEV-6074'] },
     async ({ page }) => {
       // given
-      await page.goto('/documentUnit/KSNR054920707/fundstellen')
+      await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/fundstellen')
       await page.getByRole('link', { name: 'Rubriken' }).click()
       await page.getByRole('radio', { name: 'Verwaltungsvorschrift auswählen' }).click()
       await page.getByRole('combobox', { name: 'Art der Verweisung' }).click()
@@ -403,7 +403,7 @@ test.describe('RubrikenPage - Verweise (on Verwaltungsvorschrift) with mocked ro
     { tag: ['@RISDEV-7908'] },
     async ({ page }) => {
       // given
-      await page.goto('/documentUnit/KSNR054920707/rubriken')
+      await page.goto('/verwaltungsvorschriften/documentUnit/KSNR054920707/rubriken')
 
       // when
       await page.getByRole('radio', { name: 'Verwaltungsvorschrift auswä' }).click()
@@ -488,7 +488,7 @@ test.describe('RubrikenPage - Verweise - Bestandsdaten', () => {
       // given
 
       // when
-      await page.goto('/documentUnit/KSNR999999999/rubriken')
+      await page.goto('/verwaltungsvorschriften/documentUnit/KSNR999999999/rubriken')
 
       // then
       await expect(page.getByText('Rechtsgrundlage | PhanGB, § 1a Abs 1')).toHaveCount(1)

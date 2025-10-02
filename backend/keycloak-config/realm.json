@@ -51,6 +51,21 @@
             "access.token.claim": "true",
             "claim.name": "groups"
           }
+        },
+        {
+          "id": "a5c98d62-4321-4fde-9876-12345abcdef",
+          "name": "role",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-realm-role-mapper",
+          "consentRequired": false,
+          "config": {
+            "multivalued": "false",
+            "userinfo.token.claim": "true",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "role",
+            "jsonType.label": "String"
+          }
         }
       ]
     }
@@ -72,7 +87,7 @@
         }
       ],
       "realmRoles": [
-        "adm_vwv_user"
+        "adm_user"
       ]
     },
     {
@@ -91,7 +106,53 @@
         }
       ],
       "realmRoles": [
-        "adm_lit_bag_user"
+        "literature_user"
+      ],
+      "groups": [
+        "/literature/BAG"
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "name": "BSG",
+      "path": "/BSG",
+      "subGroups": []
+    },
+    {
+      "name": "BAG",
+      "path": "/BAG",
+      "subGroups": []
+    },
+    {
+      "name": "BFH",
+      "path": "/BFH",
+      "subGroups": []
+    },
+    {
+      "name": "BVERFG",
+      "path": "/BVERFG",
+      "subGroups": []
+    },
+    {
+      "name": "BVERWG",
+      "path": "/BVERWG",
+      "subGroups": []
+    },
+    {
+      "name": "literature",
+      "path": "/literature",
+      "subGroups": [
+        {
+          "name": "BAG",
+          "path": "/literature/BAG",
+          "subGroups": []
+        },
+        {
+          "name": "BSG",
+          "path": "/literature/BSG",
+          "subGroups": []
+        }
       ]
     }
   ]
