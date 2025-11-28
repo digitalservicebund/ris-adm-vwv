@@ -5,7 +5,7 @@ import {
   useGetUliDocUnit,
   usePutPublishUliDocUnit,
   usePutUliDocUnit,
-} from '@/services/documentUnitService'
+} from '@/services/literature/literatureDocumentUnitService'
 import { missingUliDocumentUnitFields } from '@/utils/validators'
 
 export const useUliDocumentUnitStore = defineStore('uliDocumentUnit', () => {

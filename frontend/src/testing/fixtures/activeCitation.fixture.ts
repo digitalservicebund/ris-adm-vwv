@@ -1,3 +1,5 @@
+import { zitierArtAbgrenzungFixture } from './zitierArt.fixture'
+
 export const activeCitationFixture = {
   uuid: crypto.randomUUID(),
   court: {
@@ -12,9 +14,5 @@ export const activeCitationFixture = {
     abbreviation: 'documentTypeShortcut1',
     name: 'documentType1',
   },
-  citationType: {
-    uuid: '123',
-    jurisShortcut: 'Änderung',
-    label: 'Änderung',
-  },
+  citationType: zitierArtAbgrenzungFixture,
 }

@@ -5,12 +5,12 @@ import { until } from '@vueuse/core'
 import { useToast } from 'primevue'
 import errorMessages from '@/i18n/errors.json'
 import { ROUTE_PATHS } from '@/constants/routes'
-import {
-  usePostAdmDocUnit,
-  usePostUliDocUnit,
-  usePostSliDocUnit,
-} from '@/services/documentUnitService.ts'
+import { usePostAdmDocUnit } from '@/services/adm/admDocumentUnitService'
 import { DocumentCategory } from '@/domain/documentType'
+import {
+  usePostSliDocUnit,
+  usePostUliDocUnit,
+} from '@/services/literature/literatureDocumentUnitService'
 
 const toast = useToast()
 const router = useRouter()

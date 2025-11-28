@@ -2,7 +2,7 @@
 import type { AdmDocUnitListItem, AdmDocUnitSearchParams } from '@/domain/adm/admDocumentUnit'
 import { watch } from 'vue'
 import DocumentUnitList from './DocumentUnitList.vue'
-import { useGetAdmPaginatedDocUnits } from '@/services/documentUnitService'
+import { useGetAdmPaginatedDocUnits } from '@/services/adm/admDocumentUnitService'
 import { RisPaginator } from '@digitalservicebund/ris-ui/components'
 import { usePagination } from '@/composables/usePagination'
 import { useToast, type PageState } from 'primevue'

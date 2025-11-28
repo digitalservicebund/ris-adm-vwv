@@ -5,7 +5,7 @@ import {
   useGetAdmDocUnit,
   usePutAdmDocUnit,
   usePutPublishAdmDocUnit,
-} from '@/services/documentUnitService'
+} from '@/services/adm/admDocumentUnitService'
 import { missingAdmDocumentUnitFields } from '@/utils/validators'
 
 export const useAdmDocUnitStore = defineStore('admDocumentUnit', () => {

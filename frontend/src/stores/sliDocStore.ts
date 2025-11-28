@@ -4,7 +4,7 @@ import {
   useGetSliDocUnit,
   usePutSliDocUnit,
   usePutPublishSliDocUnit,
-} from '@/services/documentUnitService'
+} from '@/services/literature/literatureDocumentUnitService'
 import { missingSliDocumentUnitFields } from '@/utils/validators'
 import type { SliDocumentationUnit } from '@/domain/sli/sliDocumentUnit'
 
