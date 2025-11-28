@@ -71,7 +71,7 @@ dependencies {
 
   implementation("com.google.protobuf:protobuf-java:4.33.1")
   implementation("org.bitbucket.b_c:jose4j:0.9.6")
-  implementation("org.bouncycastle:bcpkix-jdk18on:1.82")
+  implementation("org.bouncycastle:bcpkix-jdk18on:1.83")
   implementation("org.apache.commons:commons-lang3:$commonsLang3")
   implementation("org.apache.commons:commons-text:$commonsTextVersion")
   implementation("jakarta.xml.bind:jakarta.xml.bind-api")
