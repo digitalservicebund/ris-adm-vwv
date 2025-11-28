@@ -14,7 +14,7 @@ import { until } from '@vueuse/core'
 import ActiveCitation from '@/domain/activeCitation'
 import { activeCitationFixture } from '@/testing/fixtures/activeCitation.fixture'
 
-describe('documentUnitService', () => {
+describe('admDocumentUnitService', () => {
   beforeEach(() => {
     vi.resetAllMocks()
     vi.resetModules()

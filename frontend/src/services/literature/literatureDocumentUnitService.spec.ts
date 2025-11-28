@@ -8,10 +8,12 @@ import {
   usePutPublishSliDocUnit,
   usePutUliDocUnit,
   usePutSliDocUnit,
+  useGetSliPaginatedDocUnits,
 } from '@/services/literature/literatureDocumentUnitService'
 import { until } from '@vueuse/core'
+import { ref } from 'vue'
 
-describe('documentUnitService', () => {
+describe('literatureDocumentUnitService', () => {
   beforeEach(() => {
     vi.resetAllMocks()
     vi.resetModules()
@@ -370,5 +372,21 @@ describe('documentUnitService', () => {
     await execute()
 
     expect(data.value).toEqual(null)
+  })
+
+  it('gets a paginated list of sli doc units', async () => {
+    const fetchSpy = vi
+      .spyOn(window, 'fetch')
+      .mockResolvedValue(new Response(JSON.stringify({}), { status: 200 }))
+
+    const { error, isFetching } = useGetSliPaginatedDocUnits(ref(5), 100, ref(undefined))
+    await vi.waitFor(() => expect(fetchSpy).toHaveBeenCalledTimes(1))
+
+    expect(isFetching.value).toBe(false)
+    expect(fetchSpy).toHaveBeenCalledWith(
+      '/api/literature/sli/documentation-units?pageNumber=5&pageSize=100&sortByProperty=documentNumber&sortDirection=DESC',
+      expect.anything(),
+    )
+    expect(error.value).toBeFalsy()
   })
 })

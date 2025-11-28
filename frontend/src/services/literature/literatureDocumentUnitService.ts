@@ -1,7 +1,14 @@
 import { useApiFetch } from '../apiService'
 import { type UseFetchReturn } from '@vueuse/core'
 import type { UliDocumentationUnit, UliDocumentUnitResponse } from '@/domain/uli/uliDocumentUnit'
-import type { SliDocumentationUnit, SliDocumentUnitResponse } from '@/domain/sli/sliDocumentUnit'
+import type {
+  PaginatedSliDocUnitListResponse,
+  SliDocumentationUnit,
+  SliDocumentUnitResponse,
+  SliDocUnitSearchParams,
+} from '@/domain/sli/sliDocumentUnit'
+import { computed, type Ref } from 'vue'
+import { buildUrlWithParams } from '@/utils/urlHelpers'
 
 const LITERATURE_DOCUMENTATION_UNITS_URL = '/literature/documentation-units'
 const ULI_LITERATURE_DOCUMENTATION_UNITS_URL = '/literature/uli/documentation-units'
@@ -101,6 +108,27 @@ export function usePutSliDocUnit(
   })
     .json()
     .put(documentUnit)
+}
+
+export function useGetSliPaginatedDocUnits(
+  pageNumber: Ref<number>,
+  pageSize: number,
+  search: Ref<SliDocUnitSearchParams | undefined>,
+): UseFetchReturn<PaginatedSliDocUnitListResponse> {
+  const urlWithParams = computed(() =>
+    buildUrlWithParams(`${SLI_LITERATURE_DOCUMENTATION_UNITS_URL}`, {
+      pageNumber: pageNumber.value.toString(),
+      pageSize: pageSize.toString(),
+      titel: search?.value?.titel?.toString(),
+      veroeffentlichungsjahr: search?.value?.veroeffentlichungsjahr?.toString(),
+      dokumenttypen: search?.value?.dokumenttypen?.join(),
+      zitierdaten: search?.value?.verfasser?.join(),
+      sortByProperty: 'documentNumber',
+      sortDirection: 'DESC',
+    }),
+  )
+
+  return useApiFetch(urlWithParams).json()
 }
 
 function mapResponseToSliDocUnit(data: SliDocumentUnitResponse): SliDocumentationUnit {
