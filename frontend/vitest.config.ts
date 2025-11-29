@@ -48,11 +48,8 @@ export default mergeConfig(
 
           // Views are too complex too set up and mock in unit tests, we're covering
           // those with E2E test instead. (App is also a view)
-          'src/views/**/*',
+          'src/**/*.view.vue',
           'src/App.vue',
-
-          // App content we're not interested in covering with unit tests
-          'src/routes/**/*',
 
           // If necessary to use e.g. guards, we'll have a router-guards file that
           // then should be tested

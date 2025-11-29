@@ -3,7 +3,7 @@ import { type Component, computed } from 'vue'
 import IconChevronLeft from '~icons/ic/baseline-chevron-left'
 import IconChevronRight from '~icons/ic/baseline-chevron-right'
 import ToolTip from '@/components/ToolTip.vue'
-import { OpeningDirection } from '@/components/enumDisplayMode'
+import { OpeningDirection } from '@/views/adm/documentUnit/[documentNumber]/rubriken/components/enumDisplayMode'
 
 interface Props {
   isExpanded?: boolean

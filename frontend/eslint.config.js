@@ -41,7 +41,7 @@ export default [
   },
 
   {
-    files: ["src/routes/**/*.vue"],
+    files: ["src/views/**/*.vue"],
     rules: {
       "vue/multi-word-component-names": "off",
     },
